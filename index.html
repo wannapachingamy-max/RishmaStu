@@ -1,0 +1,1666 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RishmaStu - Freelance Illustrator</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans Thai', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#ffffff',
+                        secondary: '#eff6ff', 
+                        accent: '#bfdbfe', 
+                        highlight: '#fde047', 
+                        textMain: '#1e293b', 
+                        textMuted: '#64748b', 
+                        
+                        statusGreen: '#86efac',
+                        statusYellow: '#fde047', 
+                        statusRed: '#fca5a5', 
+                    },
+                    animation: {
+                        'glow-yellow': 'glowYellow 2s infinite',
+                        'fade-in': 'fadeIn 0.3s ease-out',
+                    },
+                    keyframes: {
+                        glowYellow: {
+                            '0%, 100%': { boxShadow: '0 0 5px rgba(253, 224, 71, 0.4)', borderColor: 'rgba(250, 204, 21, 0.5)' },
+                            '50%': { boxShadow: '0 0 15px rgba(253, 224, 71, 0.8)', borderColor: 'rgba(250, 204, 21, 1)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background-color: #fafafa;
+            color: #1f2937;
+        }
+        .hide-scroll::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scroll {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 8px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 8px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(224, 242, 254, 0.5);
+        }
+        
+        .can-cant-table th, .can-cant-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e0f2fe; 
+            text-align: left;
+        }
+        .can-cant-table th {
+            font-weight: 600;
+            color: #0369a1; 
+            background-color: #f0f9ff; 
+        }
+        .can-cant-table tr:last-child td {
+            border-bottom: none;
+        }
+        .can-cant-table td:first-child {
+            border-right: 1px dashed #bae6fd; 
+        }
+
+        .queue-table th {
+            text-align: center;
+            vertical-align: middle;
+            border-right: 1px solid #e2e8f0; 
+            border-bottom: 2px solid #cbd5e1; 
+        }
+        .queue-table td {
+            text-align: center;
+            vertical-align: middle;
+            border-right: 1px solid #e2e8f0; 
+            border-bottom: 1px solid #e2e8f0; 
+        }
+        .queue-table th:last-child, .queue-table td:last-child {
+            border-right: none;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <nav class="fixed w-full top-0 z-50 glass-nav transition-all duration-300">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="navigate('home')">
+                    <span class="font-bold text-xl tracking-tight text-sky-600">Rishma<span class="text-textMain">Stu</span></span>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8 items-center">
+                    <button onclick="navigate('home')" class="nav-link text-textMain hover:text-sky-500 font-medium transition-colors" data-i18n="navHome">หน้าหลัก</button>
+                    <button onclick="navigate('commission')" class="nav-link text-textMain hover:text-sky-500 font-medium transition-colors">Commission</button>
+                    <button onclick="navigate('queue')" class="nav-link text-textMain hover:text-sky-500 font-medium transition-colors" data-i18n="navQueue">คิวงาน</button>
+                    <button onclick="navigate('terms')" class="nav-link text-textMain hover:text-sky-500 font-medium transition-colors" data-i18n="navTerms">ข้อตกลง</button>
+                    <button onclick="navigate('shop')" class="nav-link text-textMain hover:text-sky-500 font-medium transition-colors" data-i18n="navShop">สินค้า</button>
+                    <button onclick="navigate('admin')" class="nav-link text-gray-400 hover:text-sky-500 text-sm transition-colors" title="ตั้งค่าระบบ"><i class="fa-solid fa-gear"></i></button>
+                    
+                    <!-- Language Toggle -->
+                    <button onclick="toggleLanguage()" class="flex items-center space-x-1 bg-secondary rounded-full px-3 py-1 text-sm text-sky-700 hover:bg-sky-100 transition-colors">
+                        <i class="fa-solid fa-globe"></i>
+                        <span id="langText">TH</span>
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center space-x-4">
+                    <button onclick="toggleLanguage()" class="flex items-center space-x-1 text-sm text-sky-700">
+                        <span id="langTextMobile">TH</span>
+                    </button>
+                    <button id="mobileMenuBtn" onclick="toggleMobileMenu()" class="text-textMain hover:text-sky-500 focus:outline-none">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu Panel -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-accent absolute w-full shadow-lg">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <button onclick="navigate('home'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-textMain hover:bg-secondary hover:text-sky-600" data-i18n="navHome">หน้าหลัก</button>
+                <button onclick="navigate('commission'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-textMain hover:bg-secondary hover:text-sky-600">Commission</button>
+                <button onclick="navigate('queue'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-textMain hover:bg-secondary hover:text-sky-600" data-i18n="navQueue">คิวงาน</button>
+                <button onclick="navigate('terms'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-textMain hover:bg-secondary hover:text-sky-600" data-i18n="navTerms">ข้อตกลง</button>
+                <button onclick="navigate('shop'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-textMain hover:bg-secondary hover:text-sky-600" data-i18n="navShop">สินค้า</button>
+                <button onclick="navigate('admin'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:bg-secondary hover:text-sky-600">จัดการข้อมูล (Admin)</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full">
+        
+        <!-- ==================== HOME ==================== -->
+        <section id="view-home" class="view-section animate-fade-in space-y-10">
+            <!-- Profile Info -->
+            <div class="bg-white rounded-3xl p-8 shadow-sm border border-accent flex flex-col md:flex-row items-center md:items-start gap-8">
+                <div class="w-40 h-40 flex-shrink-0">
+                    <img src="https://placehold.co/400x400/e0f2fe/0369a1?text=RishmaStu" alt="Profile" class="w-full h-full object-cover rounded-full shadow-md border-4 border-white">
+                </div>
+                <div class="flex-1 text-center md:text-left">
+                    <h1 class="text-3xl font-bold text-textMain mb-2">RishmaStu</h1>
+                    <p class="text-lg text-textMuted mb-1" data-i18n="homeRole">Full-time freelance illustrator</p>
+                    <p class="text-textMuted mb-4">ปริ๊น นพสรณ์ ธนะกิตติภูมิ</p>
+                    
+                    <!-- Commission Status -->
+                    <div class="inline-flex items-center px-4 py-2 rounded-full font-medium text-sm mb-4" id="commissionStatusBadge">
+                        <!-- Filled by JS -->
+                    </div>
+
+                    <div class="bg-secondary p-4 rounded-2xl text-sm text-sky-800 leading-relaxed">
+                        <i class="fa-solid fa-certificate text-sky-500 mr-2"></i>
+                        <span data-i18n="homeTaxNote">เราได้ขึ้นทะเบียนศิลปินเรียบร้อยแล้ว ลูกค้าที่จ้างต่อไปสามารถขอใบเสร็จนำค่าซื้องานศิลปะมาหักลดหย่อนภาษีตามจำนวนที่จ่ายจริงได้แล้วน้า 🧾✨</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Social Links & Donate -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-accent">
+                    <h2 class="text-xl font-semibold mb-4 flex items-center"><i class="fa-solid fa-link text-sky-400 mr-2"></i> <span data-i18n="homeLinks">ช่องทางการติดตาม</span></h2>
+                    <div class="space-y-3">
+                        <a href="https://twitter.com" target="_blank" class="flex items-center justify-between p-3 rounded-xl bg-gray-50 hover:bg-sky-50 border border-transparent hover:border-sky-100 transition-all group">
+                            <div class="flex items-center space-x-3">
+                                <i class="fa-brands fa-twitter text-xl text-[#1DA1F2]"></i>
+                                <span class="font-medium group-hover:text-sky-600 transition-colors">Twitter (X)</span>
+                            </div>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-xs text-gray-300 group-hover:text-sky-400"></i>
+                        </a>
+                        <a href="https://facebook.com" target="_blank" class="flex items-center justify-between p-3 rounded-xl bg-gray-50 hover:bg-sky-50 border border-transparent hover:border-sky-100 transition-all group">
+                            <div class="flex items-center space-x-3">
+                                <i class="fa-brands fa-facebook text-xl text-[#1877F2]"></i>
+                                <span class="font-medium group-hover:text-sky-600 transition-colors">Facebook Page</span>
+                            </div>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-xs text-gray-300 group-hover:text-sky-400"></i>
+                        </a>
+                        <a href="https://linktr.ee" target="_blank" class="flex items-center justify-between p-3 rounded-xl bg-gray-50 hover:bg-sky-50 border border-transparent hover:border-sky-100 transition-all group">
+                            <div class="flex items-center space-x-3">
+                                <i class="fa-solid fa-tree text-xl text-green-500"></i>
+                                <span class="font-medium group-hover:text-sky-600 transition-colors">Linktree (All Links)</span>
+                            </div>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-xs text-gray-300 group-hover:text-sky-400"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-accent flex flex-col justify-center items-center text-center">
+                    <h2 class="text-xl font-semibold mb-2" data-i18n="homeSupport">สนับสนุนผลงาน</h2>
+                    <p class="text-textMuted text-sm mb-6" data-i18n="homeSupportDesc">หากชื่นชอบผลงาน สามารถสนับสนุนค่ากาแฟเล็กๆ น้อยๆ ได้นะครับ ☕️</p>
+                    <button onclick="window.open('https://ko-fi.com', '_blank')" class="bg-yellow-300 hover:bg-yellow-400 text-yellow-900 font-semibold py-3 px-8 rounded-full shadow-sm hover:shadow transition-all flex items-center space-x-2">
+                        <i class="fa-solid fa-heart text-red-500"></i>
+                        <span>Donate / Tip</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Work Experience -->
+            <div class="bg-white rounded-3xl p-8 shadow-sm border border-accent">
+                <h2 class="text-2xl font-bold mb-6 text-textMain" data-i18n="homeExp">ประสบการณ์ทำงาน</h2>
+                <div class="relative border-l-2 border-sky-100 ml-3 md:ml-4 space-y-8">
+                    <!-- Exp Item 1 -->
+                    <div class="relative pl-6 md:pl-8">
+                        <div class="absolute w-4 h-4 bg-sky-400 rounded-full -left-[9px] top-1 border-4 border-white shadow-sm"></div>
+                        <h3 class="font-bold text-lg">Freelance Illustrator</h3>
+                        <p class="text-sm text-sky-600 mb-2 font-medium">พ.ศ. 2563 – ปัจจุบัน</p>
+                        <p class="text-textMuted text-sm">รับวาดภาพประกอบ ออกแบบคาแรคเตอร์ และงานศิลปะอื่นๆ</p>
+                    </div>
+                    <!-- Exp Item 2 -->
+                    <div class="relative pl-6 md:pl-8">
+                        <div class="absolute w-4 h-4 bg-sky-200 rounded-full -left-[9px] top-1 border-4 border-white shadow-sm"></div>
+                        <h3 class="font-bold text-lg">ขึ้นทะเบียนศิลปินผู้เป็นเจ้าของงานศิลปะด้านทัศนศิลป์</h3>
+                        <p class="text-sm text-sky-600 mb-2 font-medium">ครั้งที่ 14 / 2569</p>
+                        <button onclick="window.open('https://facebook.com', '_blank')" class="text-sm text-blue-500 hover:underline"><i class="fa-solid fa-arrow-up-right-from-square mr-1"></i>ดูโพสต์ประกาศ</button>
+                    </div>
+                    <!-- Exp Item 3 -->
+                    <div class="relative pl-6 md:pl-8">
+                        <div class="absolute w-4 h-4 bg-gray-200 rounded-full -left-[9px] top-1 border-4 border-white shadow-sm"></div>
+                        <h3 class="font-bold text-lg">Outsource 2D Artist (Unannounced Game)</h3>
+                        <p class="text-sm text-gray-500 mb-2 font-medium">Sunny Syrup Studio | ก.ย. 2569</p>
+                    </div>
+                    <!-- Exp Item 4 -->
+                    <div class="relative pl-6 md:pl-8">
+                        <div class="absolute w-4 h-4 bg-gray-200 rounded-full -left-[9px] top-1 border-4 border-white shadow-sm"></div>
+                        <h3 class="font-bold text-lg">Trainee</h3>
+                        <p class="text-sm text-gray-500 mb-2 font-medium">KP Learning Space | มี.ค. – มิ.ย. 2567</p>
+                    </div>
+                     <!-- Exp Item 5 -->
+                     <div class="relative pl-6 md:pl-8">
+                        <div class="absolute w-4 h-4 bg-gray-200 rounded-full -left-[9px] top-1 border-4 border-white shadow-sm"></div>
+                        <h3 class="font-bold text-lg">คณะสถาปัตยกรรมศาสตร์ สาขาการออกแบบกราฟิกและมัลติมีเดีย</h3>
+                        <p class="text-sm text-gray-500 mb-2 font-medium">มหาวิทยาลัยขอนแก่น | พ.ศ. 2564 – 2568</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== COMMISSION ==================== -->
+        <section id="view-commission" class="view-section hidden animate-fade-in space-y-8">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-textMain mb-4">Commission Info</h1>
+                <p class="text-textMuted max-w-2xl mx-auto" data-i18n="comIntro">ยินดีต้อนรับสู่ส่วนรับงานวาดครับ กรุณาอ่านรายละเอียดและข้อตกลงเบื้องต้นก่อนทำการบรีฟงานนะครับ</p>
+            </div>
+
+            <!-- How to Brief & Can/Can't -->
+            <div class="space-y-6">
+                <!-- How to Brief -->
+                <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-accent">
+                    <h2 class="text-2xl font-bold mb-2 flex items-center text-sky-700"><i class="fa-solid fa-list-check mr-3"></i> How to Brief ❓</h2>
+                    <p class="text-red-500 font-medium text-sm mb-6">*ไม่รับออกแบบตัวละครที่ให้คิดเองทั้งหมดตั้งแต่คอนเซ็ปต์*</p>
+                    
+                    <ol class="list-decimal list-outside ml-5 space-y-4 text-sm text-textMain leading-relaxed">
+                        <li class="pl-2">
+                            <span class="font-medium">รูปตัวละครที่อยากจ้าง</span> / หากไม่มีรูป กรุณาส่งรายละเอียดตัวละคร เช่น ทรงผม สีผม ชุด เป็นต้น
+                        </li>
+                        <li class="pl-2">
+                            <span class="font-medium">ท่าทาง / มุมกล้อง / สีหน้าของตัวละคร</span> หากมีนิสัยคร่าวๆ จะทำให้วาดออกมาได้ตรงมากขึ้น
+                            <ul class="list-disc list-outside ml-5 mt-1 text-textMuted">
+                                <li>ถ้าคิดท่าทางไม่ออก ให้บรรยายแนวคิด / อารมณ์ของภาพที่อยากได้</li>
+                            </ul>
+                        </li>
+                        <li class="pl-2">
+                            <span class="font-medium">ภาพพื้นหลังที่อยากจ้าง</span> <span class="text-red-500">*หากไม่รับพื้นหลัง ไม่ต้องบรีฟ*</span>
+                            <ul class="list-disc list-outside ml-5 mt-1 text-textMuted">
+                                <li>โทนสี / รายละเอียดพื้นหลังที่อยากจ้าง</li>
+                            </ul>
+                        </li>
+                        <li class="pl-2">
+                            <span class="font-medium">ขนาดของงานที่อยากได้</span> หากไม่ระบุ เราจะทำการสุ่ม
+                        </li>
+                        <li class="pl-2">
+                            <span class="font-medium">นำงานไปทำสิ่งพิมพ์หรือไม่</span> หากใช่ เราจะตั้งค่าสี CMYK ซึ่งเป็นสีที่ใช้ในงานพิมพ์
+                            <ul class="list-disc list-outside ml-5 mt-1 text-textMuted">
+                                <li>หากเปลี่ยนค่าสีในภายหลังอาจจะคิดค่าใช้จ่ายเพิ่มตามรายละเอียดสีที่ต้องเปลี่ยน</li>
+                            </ul>
+                        </li>
+                        <li class="pl-2">
+                            <span class="font-medium">งานนี้เป็นงานเชิงพาณิชย์หรือใช้ส่วนตัว</span>
+                            <ul class="list-disc list-outside ml-5 mt-1 text-textMuted">
+                                <li>งานเชิงพาณิชย์จะมีราคาคูณ 2 จากราคาปกติ</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+
+                <!-- Can / Can't -->
+                <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-accent">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold mb-1 text-textMain">Can & Can't</h2>
+                        <p class="text-sky-600 font-medium">Human / Humanoid / Furry Commission</p>
+                        <p class="text-sm text-textMuted">คอมมิชชั่นคน / ครึ่งคนครึ่งสัตว์ / มนุษย์สัตว์</p>
+                    </div>
+
+                    <div class="overflow-x-auto mb-8 rounded-xl border border-accent custom-scroll">
+                        <table class="w-full text-sm text-left can-cant-table min-w-[600px]">
+                            <thead>
+                                <tr>
+                                    <th class="w-1/2 rounded-tl-xl"><i class="fa-solid fa-circle-check text-green-500 mr-2"></i>Can (รับวาด)</th>
+                                    <th class="w-1/2 rounded-tr-xl"><i class="fa-solid fa-circle-xmark text-red-500 mr-2"></i>Can't (ไม่รับวาด)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-textMain">
+                                <tr>
+                                    <td>OC / Female / Male / LGBTQ+</td>
+                                    <td>Horror (Ghost) <span class="text-textMuted text-xs ml-1">เฉพาะผี</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Fan art <span class="text-textMuted text-xs ml-1">(Personal use)</span></td>
+                                    <td>Fan art <span class="text-textMuted text-xs ml-1">(Commercial use)</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Blood / Gore / Bone / Skeleton <br><span class="text-textMuted text-xs">(เลือด/กระดูก/โครงกระดูก/เครื่องใน)</span></td>
+                                    <td>Entrails <span class="text-textMuted text-xs ml-1">(เครื่องใน)</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Mimi , Kemono , Furry / Uncle , Muscle</td>
+                                    <td>จิ้งจก ตุ๊กแก</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Additional Pricing Info -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-secondary rounded-2xl p-4 border border-sky-100">
+                            <h3 class="font-bold text-sky-800 mb-2 flex items-center"><i class="fa-solid fa-tag mr-2"></i> Usage Multiply</h3>
+                            <ul class="text-sm text-sky-700 space-y-1">
+                                <li>• Commercial use <span class="font-semibold text-sky-900 ml-1">x2</span></li>
+                                <li>• งาน cover เพลง ไม่แสวงผลกำไร <span class="font-semibold text-sky-900 ml-1">x1.5</span></li>
+                            </ul>
+                        </div>
+                        <div class="bg-yellow-50 rounded-2xl p-4 border border-yellow-100">
+                            <h3 class="font-bold text-yellow-800 mb-2 flex items-center"><i class="fa-solid fa-image mr-2"></i> Background Add-on</h3>
+                            <ul class="text-sm text-yellow-700 space-y-1">
+                                <li>• พื้นหลังสีพื้น, คลุมโทน <span class="font-semibold text-yellow-900 ml-1">+50฿</span></li>
+                                <li>• พื้นหลังปกติราคาที่ <span class="font-semibold text-yellow-900 ml-1">300฿ - 2000฿</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categories Grid -->
+            <div>
+                <h2 class="text-2xl font-bold mb-6 text-textMain">Categories</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="commissionCategories">
+                    <!-- Rendered by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== QUEUE ==================== -->
+        <section id="view-queue" class="view-section hidden animate-fade-in space-y-8 max-w-6xl mx-auto">
+            
+            <div class="text-center mb-6">
+                <h1 class="text-3xl md:text-4xl font-bold text-textMain mb-2 tracking-wide font-['Noto_Sans_Thai']">คิวงาน Rish Studio</h1>
+                <p class="text-lg text-textMuted mb-4">ปริ๊นตัวน้อย กับกองนิยายของเขา</p>
+                <div class="inline-flex items-center px-6 py-2 rounded-full font-bold text-sm tracking-widest bg-green-100 text-green-700 border border-green-200 uppercase">
+                    - OPEN -
+                </div>
+            </div>
+
+            <!-- Color Legend -->
+            <div class="bg-white p-5 rounded-3xl shadow-sm border border-accent text-sm text-gray-700 mx-auto max-w-2xl font-medium space-y-3">
+                <div class="flex items-center gap-3">
+                    <div class="w-6 h-6 rounded bg-statusGreen border border-green-300 shadow-sm shrink-0"></div>
+                    <span>= จ่ายแล้ว / เสร็จแล้ว [ 100% paid / Finished ]</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="w-6 h-6 rounded bg-statusYellow border border-yellow-300 shadow-sm shrink-0"></div>
+                    <span>= มัดจำ / กำลังทำ [ 50% paid / WIP ]</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="w-6 h-6 rounded bg-statusRed border border-red-300 shadow-sm shrink-0"></div>
+                    <span>= ยังไม่จ่าย / ไม่มี / งานช้า [ 0% paid / Lated ]</span>
+                </div>
+            </div>
+
+            <p class="text-sm font-semibold text-yellow-600 flex items-center mb-2 px-2">
+                <i class="fa-solid fa-star text-xs mr-2"></i> งานสีต่องานสี งานย่อยต่องานย่อย <i class="fa-solid fa-star text-xs ml-2"></i>
+            </p>
+
+            <!-- Queue Tabs Navigation -->
+            <div class="flex flex-wrap gap-2 mb-2 p-2 bg-white rounded-2xl shadow-sm border border-gray-100 w-fit mx-auto justify-center">
+                <button onclick="switchQueueTab('main')" id="qTabBtn-main" class="queue-tab-btn px-6 py-2.5 rounded-xl font-bold text-sm transition-all bg-sky-500 text-white shadow-sm">
+                    <i class="fa-solid fa-list-ol mr-2"></i> คิวหลัก
+                </button>
+                <button onclick="switchQueueTab('sub')" id="qTabBtn-sub" class="queue-tab-btn px-6 py-2.5 rounded-xl font-bold text-sm transition-all bg-transparent text-gray-500 hover:bg-gray-100">
+                    <i class="fa-solid fa-list-ul mr-2"></i> คิวย่อย
+                </button>
+                <button onclick="switchQueueTab('pending')" id="qTabBtn-pending" class="queue-tab-btn px-6 py-2.5 rounded-xl font-bold text-sm transition-all bg-transparent text-gray-500 hover:bg-gray-100">
+                    <i class="fa-regular fa-circle mr-2"></i> ตกค้าง / บรีฟชำระ
+                </button>
+            </div>
+
+            <!-- TAB CONTENT: Main Queue Table -->
+            <div id="qTab-main" class="queue-tab-content block bg-white rounded-3xl shadow-sm border border-accent overflow-hidden mb-8 animate-fade-in">
+                <div class="overflow-x-auto custom-scroll">
+                    <table class="w-full text-sm queue-table min-w-[900px]">
+                        <thead class="bg-gray-50 text-gray-700 font-semibold font-['Noto_Sans_Thai'] text-base">
+                            <tr>
+                                <th class="p-3 w-12">Q</th>
+                                <th class="p-3 text-left w-48">รายชื่อคิว<br><span class="text-xs font-normal text-gray-500">(Customer List)</span></th>
+                                <th class="p-3 w-32">ประเภทงาน<br><span class="text-xs font-normal text-gray-500">(Type)</span></th>
+                                <th class="p-3 w-20">จำนวน<br><span class="text-xs font-normal text-gray-500">(Piece)</span></th>
+                                <th class="p-3 w-32">สถานะการจ่ายเงิน<br><span class="text-xs font-normal text-gray-500">(Payment Status)</span></th>
+                                <th class="p-3 w-32">บรีฟของลูกค้า<br><span class="text-xs font-normal text-gray-500">(Customer brief)</span></th>
+                                <th class="p-3 w-40">Deadline / หมายเหตุ</th>
+                                <th class="p-3 w-32">สถานะงาน<br><span class="text-xs font-normal text-gray-500">(Working Status)</span></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody-main" class="bg-white text-gray-800 font-medium">
+                            <!-- Rendered by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB CONTENT: Sub Queue Table -->
+            <div id="qTab-sub" class="queue-tab-content hidden bg-white rounded-3xl shadow-sm border border-accent overflow-hidden mb-8 animate-fade-in">
+                <div class="overflow-x-auto custom-scroll">
+                    <table class="w-full text-sm queue-table min-w-[900px]">
+                        <thead class="bg-gray-50 text-gray-700 font-semibold font-['Noto_Sans_Thai'] text-base">
+                            <tr>
+                                <th class="p-3 w-12">Q</th>
+                                <th class="p-3 text-left w-48">รายชื่อคิวย่อย<br><span class="text-xs font-normal text-gray-500">(Customer List)</span></th>
+                                <th class="p-3 w-32">ประเภทงาน<br><span class="text-xs font-normal text-gray-500">(Type)</span></th>
+                                <th class="p-3 w-20">จำนวน<br><span class="text-xs font-normal text-gray-500">(Piece)</span></th>
+                                <th class="p-3 w-32">สถานะการจ่ายเงิน<br><span class="text-xs font-normal text-gray-500">(Payment Status)</span></th>
+                                <th class="p-3 w-32">บรีฟของลูกค้า<br><span class="text-xs font-normal text-gray-500">(Customer brief)</span></th>
+                                <th class="p-3 w-40">Deadline หรือ เวลาโดยประมาณ</th>
+                                <th class="p-3 w-32">สถานะงาน<br><span class="text-xs font-normal text-gray-500">(Working Status)</span></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody-sub" class="bg-white text-gray-800 font-medium">
+                            <!-- Rendered by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB CONTENT: Pending/Late Queue Table -->
+            <div id="qTab-pending" class="queue-tab-content hidden bg-white rounded-3xl shadow-sm border border-red-200 overflow-hidden animate-fade-in">
+                <div class="overflow-x-auto custom-scroll">
+                    <table class="w-full text-sm queue-table min-w-[900px]">
+                        <thead class="bg-red-50 text-red-800 font-semibold font-['Noto_Sans_Thai'] text-base">
+                            <tr>
+                                <th class="p-3 w-12">Q</th>
+                                <th class="p-3 text-left w-48">รายชื่อ<br><span class="text-xs font-normal text-red-500">(Customer List)</span></th>
+                                <th class="p-3 w-32">ประเภทงาน<br><span class="text-xs font-normal text-red-500">(Type)</span></th>
+                                <th class="p-3 w-20">จำนวน<br><span class="text-xs font-normal text-red-500">(Piece)</span></th>
+                                <th class="p-3 w-32">สถานะการจ่ายเงิน<br><span class="text-xs font-normal text-red-500">(Payment Status)</span></th>
+                                <th class="p-3 w-32">บรีฟของลูกค้า<br><span class="text-xs font-normal text-red-500">(Customer brief)</span></th>
+                                <th class="p-3 w-40">Deadline หรือ เวลาโดยประมาณ</th>
+                                <th class="p-3 w-32">สถานะงาน<br><span class="text-xs font-normal text-red-500">(Working Status)</span></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody-pending" class="bg-white text-gray-800 font-medium">
+                            <!-- Rendered by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ==================== TERMS ==================== -->
+        <section id="view-terms" class="view-section hidden animate-fade-in">
+            <div class="max-w-3xl mx-auto">
+                <div class="text-center mb-8">
+                    <h1 class="text-3xl font-bold text-textMain mb-4" data-i18n="termsTitle">ข้อตกลงจ้างงาน (T.O.S)</h1>
+                    <p class="text-textMuted">กรุณาอ่านและทำความเข้าใจก่อนทำการจ้างงาน เพื่อความสบายใจของทั้งสองฝ่าย</p>
+                </div>
+
+                <div class="space-y-4" id="termsAccordion">
+                    <!-- Accordion Item 1 -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-accent overflow-hidden">
+                        <button class="w-full px-6 py-4 text-left font-semibold text-lg flex justify-between items-center focus:outline-none hover:bg-secondary transition-colors" onclick="toggleAccordion(this)">
+                            1. ขั้นตอนการทำงานและการชำระเงิน
+                            <i class="fa-solid fa-chevron-down text-sky-500 transition-transform duration-300"></i>
+                        </button>
+                        <div class="px-6 pb-4 hidden text-textMain text-sm leading-relaxed border-t border-accent pt-4">
+                            <ul class="list-decimal list-inside space-y-2">
+                                <li>ส่งบรีฟงานเพื่อประเมินราคา หากตกลงจะแจ้งคิวและวันเริ่มงาน</li>
+                                <li>เมื่อถึงคิว จะทำการร่างภาพ (Sketch) ให้ตรวจสอบ สามารถแก้ไขได้ 2 ครั้ง</li>
+                                <li><strong>ชำระเงินเต็มจำนวน</strong> หรือมัดจำ 50% หลังจากยืนยันภาพร่างก่อนลงสีจริง</li>
+                                <li>อัปเดตงานในขั้นตอนลงสีพื้น (Base Color) และเก็บรายละเอียด</li>
+                                <li>ส่งมอบงานไฟล์ดิจิทัล (PNG/JPG) ทาง Google Drive</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Accordion Item 2 -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-accent overflow-hidden">
+                        <button class="w-full px-6 py-4 text-left font-semibold text-lg flex justify-between items-center focus:outline-none hover:bg-secondary transition-colors" onclick="toggleAccordion(this)">
+                            2. ลิขสิทธิ์และการนำไปใช้งาน
+                            <i class="fa-solid fa-chevron-down text-sky-500 transition-transform duration-300"></i>
+                        </button>
+                        <div class="px-6 pb-4 hidden text-textMain text-sm leading-relaxed border-t border-accent pt-4">
+                            <ul class="list-disc list-inside space-y-2">
+                                <li><strong>ลิขสิทธิ์ภาพยังคงเป็นของนักวาด (RishmaStu)</strong> เสมอ เว้นแต่จะตกลงซื้อขาด (Commercial x3 ขึ้นไป)</li>
+                                <li>ไม่อนุญาตให้นำไปดัดแปลง ลบเครดิต หรือแอบอ้างว่าเป็นผลงานของตนเอง</li>
+                                <li>ไม่อนุญาตให้นำผลงานไปใช้ฝึก AI (AI Training) ในทุกกรณี</li>
+                                <li>นักวาดมีสิทธิ์นำผลงานไปลงเป็นพอร์ตโฟลิโอ (หากต้องการให้ปกปิด หรือกำหนดวันเผยแพร่ กรุณาแจ้งล่วงหน้า)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Accordion Item 3 -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-accent overflow-hidden">
+                        <button class="w-full px-6 py-4 text-left font-semibold text-lg flex justify-between items-center focus:outline-none hover:bg-secondary transition-colors" onclick="toggleAccordion(this)">
+                            3. เรทราคา Commercial Use / นำไปใช้ประโยชน์
+                            <i class="fa-solid fa-chevron-down text-sky-500 transition-transform duration-300"></i>
+                        </button>
+                        <div class="px-6 pb-4 hidden text-textMain text-sm leading-relaxed border-t border-accent pt-4">
+                            <div class="bg-secondary p-4 rounded-xl mb-3">
+                                <p class="font-semibold text-sky-800 mb-1">Commercial Use (เชิงพาณิชย์) : ราคาเริ่มต้น x 2</p>
+                                <p class="text-xs text-sky-600">เช่น นำไปทำสินค้าขาย, โปรโมทนิยายติดเหรียญ, โปรโมทแบรนด์, ปกคลิป Youtube ที่เปิดสร้างรายได้, Vtube Model</p>
+                            </div>
+                            <div class="bg-secondary p-4 rounded-xl">
+                                <p class="font-semibold text-sky-800 mb-1">Music Cover (ไม่แสวงผลกำไร) : ราคาเริ่มต้น x 1.5</p>
+                                <p class="text-xs text-sky-600">สำหรับทำปกเพลง Cover ลง Youtube แต่ไม่ได้เปิดสร้างรายได้ (หากเปิดรายได้นับเป็น Commercial)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== SHOP ==================== -->
+        <section id="view-shop" class="view-section hidden animate-fade-in space-y-8">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-textMain mb-4" data-i18n="shopTitle">สินค้า (Shop)</h1>
+                <p class="text-textMuted">สินค้าพร้อมส่งและพรีออเดอร์จาก RishmaStu</p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="productGrid">
+                <!-- Rendered by JS -->
+            </div>
+        </section>
+
+        <!-- ==================== ADMIN ==================== -->
+        <section id="view-admin" class="view-section hidden animate-fade-in space-y-8 max-w-6xl mx-auto">
+            <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6 relative" role="alert">
+                <strong class="font-bold">Admin Mode (Mockup):</strong>
+                <span class="block sm:inline"> ข้อมูลในหน้านี้จะอัปเดตไปยังหน้าเว็บจริงทันที และสามารถเพิ่มลบได้ไม่จำกัด (ข้อมูลจะรีเซ็ตเมื่อโหลดหน้าเว็บใหม่)</span>
+            </div>
+
+            <!-- Admin Tabs -->
+            <div class="flex space-x-2 border-b border-gray-200 mb-6 overflow-x-auto hide-scroll">
+                <button onclick="switchAdminTab('general')" id="tabBtn-general" class="admin-tab-btn whitespace-nowrap py-2 px-4 font-semibold text-sky-600 border-b-2 border-sky-600">ตั้งค่าทั่วไป</button>
+                <button onclick="switchAdminTab('queue')" id="tabBtn-queue" class="admin-tab-btn whitespace-nowrap py-2 px-4 font-semibold text-gray-500 hover:text-sky-600 border-b-2 border-transparent">จัดการคิว (Table Format)</button>
+                <button onclick="switchAdminTab('content')" id="tabBtn-content" class="admin-tab-btn whitespace-nowrap py-2 px-4 font-semibold text-gray-500 hover:text-sky-600 border-b-2 border-transparent">จัดการ Commission / สินค้า</button>
+            </div>
+
+            <!-- Tab Content: General -->
+            <div id="adminTab-general" class="admin-tab-content block space-y-6">
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-accent">
+                    <h2 class="text-xl font-bold mb-4">ตั้งค่าสถานะ (Commission Status)</h2>
+                    <div class="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
+                        <select id="adminStatusSelect" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 p-2.5 min-w-[200px]">
+                            <option value="open">🟢 เปิดรับงาน (Open)</option>
+                            <option value="closed">🔴 ปิดรับงาน (Closed)</option>
+                            <option value="busy">🟡 คิวเต็ม (Full)</option>
+                        </select>
+                        <button onclick="adminSaveStatus()" class="bg-sky-500 hover:bg-sky-600 text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-colors w-full sm:w-auto"><i class="fa-solid fa-save mr-2"></i>บันทึกสถานะ</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Content: Queue -->
+            <div id="adminTab-queue" class="admin-tab-content hidden space-y-6">
+                <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                    
+                    <!-- Add/Edit Queue Form -->
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-accent h-fit xl:col-span-1 order-2 xl:order-1">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xl font-bold text-sky-800" id="aqFormTitle"><i class="fa-solid fa-plus-circle mr-2"></i>เพิ่มคิวใหม่</h2>
+                        </div>
+                        <form onsubmit="adminSaveQueue(event)" id="adminQueueForm" class="space-y-4">
+                            <input type="hidden" id="aqId" value="">
+                            
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="col-span-2">
+                                    <label class="block text-xs font-bold text-gray-700 mb-1">หมวดหมู่คิว</label>
+                                    <select id="aqType" class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm focus:ring-sky-500 focus:border-sky-500">
+                                        <option value="main">คิวหลัก (Main)</option>
+                                        <option value="sub">คิวย่อย (Sub)</option>
+                                        <option value="pending">ตกค้าง (Pending)</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-span-2">
+                                    <label class="block text-xs font-bold text-gray-700 mb-1">ชื่อลูกค้า (Client)</label>
+                                    <input type="text" id="aqClient" required class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm focus:ring-sky-500 focus:border-sky-500">
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 mb-1">ประเภทงาน (Type)</label>
+                                    <input type="text" id="aqJobType" class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm focus:ring-sky-500 focus:border-sky-500">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 mb-1">จำนวน (Piece)</label>
+                                    <input type="text" id="aqPieces" class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm focus:ring-sky-500 focus:border-sky-500">
+                                </div>
+                            </div>
+
+                            <div class="border-t border-gray-200 pt-3 mt-3">
+                                <label class="block text-xs font-bold text-gray-700 mb-1">สถานะการจ่ายเงิน (Payment)</label>
+                                <div class="flex gap-2">
+                                    <select id="aqPayColor" class="bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm w-24">
+                                        <option value="none">สีขาว</option>
+                                        <option value="green">เขียว</option>
+                                        <option value="yellow">เหลือง</option>
+                                        <option value="red">แดง</option>
+                                    </select>
+                                    <input type="text" id="aqPayText" placeholder="ข้อความ..." class="flex-1 bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm">
+                                </div>
+                            </div>
+
+                            <div class="border-t border-gray-200 pt-3 mt-3">
+                                <label class="block text-xs font-bold text-gray-700 mb-1">บรีฟลูกค้า (Brief)</label>
+                                <div class="flex gap-2">
+                                    <select id="aqBriefColor" class="bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm w-24">
+                                        <option value="none">สีขาว</option>
+                                        <option value="green" selected>เขียว</option>
+                                        <option value="yellow">เหลือง</option>
+                                        <option value="red">แดง</option>
+                                    </select>
+                                    <input type="text" id="aqBriefText" placeholder="ข้อความ..." class="flex-1 bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm">
+                                </div>
+                            </div>
+
+                            <div class="border-t border-gray-200 pt-3 mt-3">
+                                <label class="block text-xs font-bold text-gray-700 mb-1">สถานะงาน (Working Status)</label>
+                                <div class="flex gap-2">
+                                    <select id="aqWorkColor" class="bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm w-24">
+                                        <option value="none">สีขาว</option>
+                                        <option value="green">เขียว</option>
+                                        <option value="yellow">เหลือง</option>
+                                        <option value="red">แดง</option>
+                                    </select>
+                                    <input type="text" id="aqWorkText" placeholder="ข้อความ (เช่น ตัดเส้น2)" class="flex-1 bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm">
+                                </div>
+                            </div>
+
+                            <div class="border-t border-gray-200 pt-3 mt-3">
+                                <label class="block text-xs font-bold text-gray-700 mb-1">Deadline / หมายเหตุ</label>
+                                <input type="text" id="aqDeadline" class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm focus:ring-sky-500 focus:border-sky-500">
+                            </div>
+                            
+                            <div class="flex space-x-2 pt-4">
+                                <button type="submit" id="btnSubmitQueue" class="flex-1 bg-sky-500 hover:bg-sky-600 text-white px-4 py-2.5 rounded-lg text-sm font-bold transition-colors shadow-sm">บันทึกคิว</button>
+                                <button type="button" onclick="adminResetQueueForm()" class="px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm font-bold transition-colors">ยกเลิก</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Queue List Preview (Admin side) -->
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-accent xl:col-span-2 order-1 xl:order-2">
+                        <h2 class="text-xl font-bold mb-4">รายการคิวทั้งหมดในระบบ</h2>
+                        <div class="overflow-x-auto custom-scroll max-h-[700px]">
+                            <table class="w-full text-sm text-left border-collapse">
+                                <thead class="text-xs text-gray-700 bg-gray-50 uppercase sticky top-0 z-10 border-b border-gray-200">
+                                    <tr>
+                                        <th class="px-4 py-3">หมวด</th>
+                                        <th class="px-4 py-3">ลูกค้า</th>
+                                        <th class="px-4 py-3">งาน/จำนวน</th>
+                                        <th class="px-4 py-3 text-center">จ่ายเงิน/บรีฟ/สถานะ</th>
+                                        <th class="px-4 py-3 text-right">จัดการ</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="adminQueueTableBody" class="text-gray-600 divide-y divide-gray-100">
+                                    <!-- Rendered by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Content: Content (Unlimited Add/Edit/Delete) -->
+            <div id="adminTab-content" class="admin-tab-content hidden space-y-6">
+                 <div class="bg-white p-6 rounded-3xl shadow-sm border border-accent">
+                    <div class="flex justify-between items-center mb-6 border-b border-gray-100 pb-4">
+                        <div>
+                            <h2 class="text-xl font-bold text-sky-800" id="contentFormTitle"><i class="fa-solid fa-plus-circle mr-2"></i>เพิ่มข้อมูลใหม่</h2>
+                            <p class="text-sm text-gray-500 mt-1">สามารถเพิ่ม ลบ และแก้ไขข้อมูลได้ไม่จำกัด (อัปเดตเว็บทันที)</p>
+                        </div>
+                        <button type="button" onclick="adminResetContentForm()" id="btnCancelEdit" class="hidden bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-xl text-sm font-medium transition-colors">
+                            <i class="fa-solid fa-xmark mr-1"></i> ยกเลิกการแก้ไข
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                        <!-- Content Form -->
+                        <form onsubmit="adminSaveMockItem(event)" id="adminContentForm" class="space-y-4">
+                            <input type="hidden" id="mockItemId" value="">
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">หมวดหมู่</label>
+                                <select id="mockItemType" onchange="toggleMockFormFields()" class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-sky-500 focus:border-sky-500">
+                                    <option value="commission">Commission</option>
+                                    <option value="product">สินค้า (Shop)</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">ชื่อรายการ</label>
+                                <input type="text" id="mockItemName" required placeholder="เช่น Pencil Style หรือ พวงกุญแจ" class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-sky-500 focus:border-sky-500">
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">ราคา (THB)</label>
+                                    <input type="number" id="mockItemPrice" required placeholder="0" class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-sky-500 focus:border-sky-500">
+                                </div>
+                                <div id="fieldDuration">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">ระยะเวลาทำงาน</label>
+                                    <input type="text" id="mockItemDuration" placeholder="เช่น 3-5 วัน" class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-sky-500 focus:border-sky-500">
+                                </div>
+                                <div id="fieldStock" class="hidden">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">จำนวน Stock</label>
+                                    <input type="number" id="mockItemStock" placeholder="0" class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-sky-500 focus:border-sky-500">
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">รายละเอียด</label>
+                                <textarea id="mockItemDesc" rows="3" required class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-sky-500 focus:border-sky-500 resize-none"></textarea>
+                            </div>
+
+                            <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                                <label class="block text-sm font-bold text-sky-800 mb-2"><i class="fa-solid fa-image mr-1"></i> อัปโหลดรูปภาพใหม่</label>
+                                <input type="file" id="imageInput" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-white file:text-sky-700 hover:file:bg-sky-50 cursor-pointer border border-gray-200 rounded-lg bg-white">
+                            </div>
+                            
+                            <button type="submit" id="btnSubmitContent" class="w-full bg-sky-500 hover:bg-sky-600 text-white px-4 py-3 rounded-xl text-sm font-bold transition-colors shadow-sm">
+                                <i class="fa-solid fa-save mr-2"></i>บันทึกข้อมูล
+                            </button>
+                        </form>
+
+                        <!-- Preview Area -->
+                        <div class="bg-gray-50 rounded-3xl p-6 border border-gray-200 flex flex-col items-center justify-center min-h-[300px]">
+                            <div id="imagePreviewContainer" class="hidden w-full max-w-sm">
+                                <h4 class="text-sm font-bold text-sky-800 mb-3 text-center border-b border-gray-200 pb-2">พรีวิวการ์ดแสดงผล</h4>
+                                <!-- Mock Card Preview -->
+                                <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-accent">
+                                    <div class="h-48 overflow-hidden bg-gray-100">
+                                        <img id="imagePreview" src="" alt="Preview" class="w-full h-full object-cover">
+                                    </div>
+                                    <div class="p-4">
+                                        <h3 id="previewTitle" class="font-bold text-lg text-textMain mb-1 truncate">ชื่อรายการ...</h3>
+                                        <p id="previewPrice" class="text-sky-600 font-semibold text-sm">0 THB</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-4 flex justify-center">
+                                    <button type="button" onclick="clearImagePreview()" class="text-red-500 hover:text-red-600 text-sm font-medium bg-red-50 px-4 py-2 rounded-lg">
+                                        <i class="fa-solid fa-trash-can mr-1"></i> ลบรูปภาพ
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div id="imagePreviewPlaceholder" class="text-center text-gray-400">
+                                <i class="fa-regular fa-image text-5xl mb-3 text-gray-300"></i>
+                                <p class="text-sm font-medium">อัปโหลดรูปภาพเพื่อดูพรีวิว</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Manage Existing Lists -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-8 border-t border-gray-100">
+                        <!-- Commission List -->
+                        <div>
+                            <h3 class="font-bold text-lg text-sky-800 mb-4 flex items-center"><i class="fa-solid fa-palette mr-2"></i> รายการ Commission</h3>
+                            <div class="space-y-3 max-h-96 overflow-y-auto pr-2 custom-scroll" id="adminManageCommissions">
+                                <!-- Rendered by JS -->
+                            </div>
+                        </div>
+                        
+                        <!-- Shop List -->
+                        <div>
+                            <h3 class="font-bold text-lg text-sky-800 mb-4 flex items-center"><i class="fa-solid fa-store mr-2"></i> รายการ สินค้า</h3>
+                            <div class="space-y-3 max-h-96 overflow-y-auto pr-2 custom-scroll" id="adminManageProducts">
+                                <!-- Rendered by JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                 </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Commission Detail Modal -->
+    <div id="modal-commission" class="fixed inset-0 z-[60] hidden overflow-y-auto bg-black bg-opacity-50 backdrop-blur-sm transition-opacity">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
+            <div class="relative bg-white rounded-3xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-4xl w-full" onclick="event.stopPropagation()">
+                <!-- Close btn -->
+                <button onclick="closeModal('modal-commission')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 bg-white rounded-full p-2 z-10 shadow-sm focus:outline-none">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+                
+                <div class="p-0 sm:flex">
+                    <div class="sm:w-1/2 bg-gray-100 relative h-64 sm:h-auto">
+                        <img id="modalComImage" src="" alt="" class="absolute w-full h-full object-cover cursor-pointer" onclick="openLightbox(this.src)">
+                        <div class="absolute bottom-2 right-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">กดเพื่อดูรูปเต็ม</div>
+                    </div>
+                    <div class="sm:w-1/2 p-6 sm:p-8 flex flex-col">
+                        <h3 class="text-2xl font-bold text-textMain mb-2" id="modalComTitle">Title</h3>
+                        <div class="inline-block bg-sky-50 text-sky-700 px-3 py-1 rounded-full text-sm font-semibold mb-4 w-fit">
+                            เริ่มต้น <span id="modalComPrice">0</span> THB
+                        </div>
+                        
+                        <div class="space-y-4 flex-1">
+                            <div>
+                                <h4 class="font-semibold text-gray-700 text-sm mb-1"><i class="fa-regular fa-clock mr-1"></i> ระยะเวลาทำงาน</h4>
+                                <p class="text-sm text-textMuted" id="modalComDuration">-</p>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-700 text-sm mb-1"><i class="fa-solid fa-align-left mr-1"></i> รายละเอียด</h4>
+                                <p class="text-sm text-textMuted leading-relaxed" id="modalComDesc">-</p>
+                            </div>
+                            
+                            <div class="bg-yellow-50 p-3 rounded-xl border border-yellow-100">
+                                <h4 class="font-semibold text-yellow-800 text-sm mb-1">การนำไปใช้งาน</h4>
+                                <ul class="text-xs text-yellow-700 space-y-1">
+                                    <li>• Commercial Use : ราคาเริ่มต้น x 2</li>
+                                    <li>• Music Cover : ราคาเริ่มต้น x 1.5</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 pt-4 border-t border-gray-100">
+                            <button onclick="window.open('https://twitter.com', '_blank')" class="w-full bg-sky-500 hover:bg-sky-600 text-white font-semibold py-3 px-4 rounded-xl shadow-sm transition-colors mb-2">
+                                ติดต่อสั่งงาน (Contact)
+                            </button>
+                            <p class="text-xs text-center text-gray-400 mt-2">สนใจสั่งงานกรุณาติดต่อผ่านช่องทาง Social Media</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Detail Modal -->
+    <div id="modal-product" class="fixed inset-0 z-[60] hidden overflow-y-auto bg-black bg-opacity-50 backdrop-blur-sm transition-opacity">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
+            <div class="relative bg-white rounded-3xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-2xl w-full" onclick="event.stopPropagation()">
+                <button onclick="closeModal('modal-product')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 bg-white/80 rounded-full p-2 z-10 shadow-sm">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+                <div class="p-6 sm:p-8 flex flex-col md:flex-row gap-6">
+                    <div class="md:w-1/2">
+                        <img id="modalProdImage" src="" alt="" class="w-full h-auto rounded-2xl object-cover shadow-sm cursor-pointer" onclick="openLightbox(this.src)">
+                    </div>
+                    <div class="md:w-1/2 flex flex-col">
+                        <h3 class="text-2xl font-bold text-textMain mb-2" id="modalProdTitle">Product Name</h3>
+                        <p class="text-xl font-bold text-sky-600 mb-4" id="modalProdPrice">฿0</p>
+                        
+                        <div id="modalProdStock" class="mb-4"></div>
+                        
+                        <p class="text-sm text-textMuted mb-6 flex-1 whitespace-pre-line" id="modalProdDesc">Description</p>
+                        
+                        <button id="modalProdBuyBtn" class="w-full bg-sky-500 hover:bg-sky-600 text-white font-semibold py-3 px-4 rounded-xl shadow-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                            สั่งซื้อสินค้า
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lightbox for Images/Videos -->
+    <div id="lightbox" class="fixed inset-0 z-[70] hidden bg-black bg-opacity-90 flex items-center justify-center" onclick="closeLightbox()">
+        <button class="absolute top-6 right-6 text-white text-3xl hover:text-gray-300 focus:outline-none"><i class="fa-solid fa-xmark"></i></button>
+        <img id="lightboxImg" src="" class="max-w-[90%] max-h-[90vh] object-contain shadow-2xl hidden" onclick="event.stopPropagation()">
+        <video id="lightboxVid" src="" controls autoplay loop class="max-w-[90%] max-h-[90vh] object-contain shadow-2xl hidden" onclick="event.stopPropagation()"></video>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-accent py-6 mt-auto">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="text-sm text-textMuted">© 2026 RishmaStu. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- Mock Data & Robust ID Generator ---
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+        }
+
+        // Updated Data Structure for new Queue Table based on image
+        let appState = {
+            currentView: 'home',
+            language: 'th',
+            artistStatus: 'open',
+            queues: [
+                { id: generateId(), type: 'main', client: 'Jotatar Jostar', jobType: 'HS Color', pieces: '2', payColor: 'green', payText: '', briefColor: 'green', briefText: '', deadline: '', workColor: 'green', workText: '' },
+                { id: generateId(), type: 'main', client: 'Naowamin Sukanthamalai', jobType: 'BU Color 4 char', pieces: '1', payColor: 'green', payText: '', briefColor: 'green', briefText: '', deadline: '', workColor: 'yellow', workText: 'ตัดเส้น2' },
+                { id: generateId(), type: 'main', client: 'MJ Marilyn', jobType: 'HS Pencil 2 char', pieces: '1', payColor: 'green', payText: '', briefColor: 'green', briefText: '', deadline: '', workColor: 'none', workText: '' },
+                { id: generateId(), type: 'main', client: 'Cher Cherry', jobType: 'Half Color', pieces: '1', payColor: 'green', payText: '', briefColor: 'green', briefText: '', deadline: '', workColor: 'none', workText: '' },
+                
+                { id: generateId(), type: 'pending', client: 'Rinasa', jobType: 'full cg', pieces: '', payColor: 'yellow', payText: '90', briefColor: 'green', briefText: '', deadline: '', workColor: 'green', workText: '' },
+                { id: generateId(), type: 'pending', client: 'เตี้ยมีปีก โป', jobType: '', pieces: '', payColor: 'none', payText: '', briefColor: 'red', briefText: '', deadline: '', workColor: 'none', workText: '' }
+            ],
+            commissions: [
+                { id: 'pencil', name: 'Pencil Style', price: '300', duration: '3-5 วัน', desc: 'งานสเก็ตช์ดินสอ ลงเงาขาวดำแบบหยาบๆ เหมาะสำหรับคนชอบเส้นดิบๆ', img: 'https://placehold.co/600x800/f3f4f6/9ca3af?text=Pencil+Style', isVideo: false },
+                { id: 'fullcolor', name: 'Full Coloring', price: '1,500', duration: '1-2 สัปดาห์', desc: 'ลงสีเต็มรูปแบบ เก็บรายละเอียดแสงเงา เหมาะสำหรับปกนิยาย หรือภาพพิมพ์', img: 'https://placehold.co/600x800/e0f2fe/38bdf8?text=Full+Color', isVideo: false },
+                { id: 'anim', name: 'Animation Loop', price: '3,000', duration: '2-4 สัปดาห์', desc: 'แอนิเมชันวนลูปสั้นๆ 3-5 วินาที เหมาะสำหรับทำหน้าจอรอสตรีม หรือพื้นหลัง', img: 'https://placehold.co/600x400/fef08a/ca8a04?text=Video+Loop+Thumb', isVideo: true, videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4' },
+                { id: 'chibi', name: 'Chibi Full Color', price: '800', duration: '5-7 วัน', desc: 'ตัวละคร SD หัวโต น่ารัก สดใส', img: 'https://placehold.co/600x600/fce7f3/f472b6?text=Chibi', isVideo: false },
+                { id: 'bg', name: 'Background Only', price: '1,000', duration: '1-2 สัปดาห์', desc: 'วาดเฉพาะฉากหลัง ไม่มีตัวละคร', img: 'https://placehold.co/800x600/dcfce7/4ade80?text=Background', isVideo: false },
+                { id: 'ych', name: 'YCH (Your Character Here)', price: '500', duration: '3-5 วัน', desc: 'นำตัวละครของคุณมาใส่ในเบสท่าทางที่เตรียมไว้', img: 'https://placehold.co/600x600/f3e8ff/c084fc?text=YCH+Base', isVideo: false }
+            ],
+            products: [
+                { id: generateId(), name: 'Artbook Vol.1 "Daydream"', price: 450, stock: 5, img: 'https://placehold.co/400x500/f1f5f9/64748b?text=Artbook', desc: 'หนังสือรวมภาพวาดปี 2024-2025 ขนาด A4 ปกแข็ง' },
+                { id: generateId(), name: 'Keychain Acrylic - Chibi', price: 120, stock: 20, img: 'https://placehold.co/400x400/f1f5f9/64748b?text=Keychain', desc: 'พวงกุญแจอะคริลิคสกรีน 2 ด้าน ขนาด 5cm' },
+                { id: generateId(), name: 'Sticker Sheet - Cats', price: 60, stock: 0, img: 'https://placehold.co/400x400/f1f5f9/64748b?text=Sticker', desc: 'สติกเกอร์ไดคัทเนื้อ PP กันน้ำ ลายแมว' },
+            ]
+        };
+
+        // --- Dictionary ---
+        const dict = {
+            th: {
+                navHome: 'หน้าหลัก', navQueue: 'คิวงาน', navTerms: 'ข้อตกลง', navShop: 'สินค้า',
+                homeRole: 'Full-time freelance illustrator',
+                homeTaxNote: 'เราได้ขึ้นทะเบียนศิลปินเรียบร้อยแล้ว ลูกค้าที่จ้างต่อไปสามารถขอใบเสร็จนำค่าซื้องานศิลปะมาหักลดหย่อนภาษีตามจำนวนที่จ่ายจริงได้แล้วน้า 🧾✨',
+                homeLinks: 'ช่องทางการติดตาม', homeSupport: 'สนับสนุนผลงาน', homeSupportDesc: 'หากชื่นชอบผลงาน สามารถสนับสนุนค่ากาแฟเล็กๆ น้อยๆ ได้นะครับ ☕️',
+                homeExp: 'ประสบการณ์ทำงาน',
+                comIntro: 'ยินดีต้อนรับสู่ส่วนรับงานวาดครับ กรุณาอ่านรายละเอียดและข้อตกลงเบื้องต้นก่อนทำการบรีฟงานนะครับ',
+                queueTitle: 'คิวงาน Rish Studio', queueTotal: 'คิวทั้งหมดในระบบ:',
+                termsTitle: 'ข้อตกลงจ้างงาน (T.O.S)', shopTitle: 'สินค้า (Shop)',
+                statusOpen: '🟢 เปิดรับงาน (Open)', statusClosed: '🔴 ปิดรับงาน (Closed)', statusBusy: '🟡 คิวเต็ม (Full)'
+            },
+            en: {
+                navHome: 'Home', navQueue: 'Queue', navTerms: 'Terms', navShop: 'Shop',
+                homeRole: 'Full-time freelance illustrator',
+                homeTaxNote: 'I am a registered artist. Clients can request a receipt for art purchases for tax deduction purposes! 🧾✨',
+                homeLinks: 'Social Links', homeSupport: 'Support Me', homeSupportDesc: 'If you like my art, consider buying me a coffee! ☕️',
+                homeExp: 'Work Experience',
+                comIntro: 'Welcome to my commission page. Please read the terms and details before briefing.',
+                queueTitle: 'Rish Studio Queue', queueTotal: 'Total Queues:',
+                termsTitle: 'Terms of Service (T.O.S)', shopTitle: 'Shop',
+                statusOpen: '🟢 Commissions Open', statusClosed: '🔴 Commissions Closed', statusBusy: '🟡 Waitlist Full'
+            }
+        };
+
+        function initApp() {
+            renderStatus();
+            renderCommissions();
+            renderQueues();
+            renderShop();
+            applyLanguage();
+            // Setup Admin form
+            document.getElementById('adminStatusSelect').value = appState.artistStatus;
+            renderAdminContentLists(); 
+        }
+
+        // --- Navigation ---
+        function navigate(viewId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`view-${viewId}`).classList.remove('hidden');
+            appState.currentView = viewId;
+            window.scrollTo(0, 0);
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // --- Language ---
+        function toggleLanguage() {
+            appState.language = appState.language === 'th' ? 'en' : 'th';
+            document.getElementById('langText').innerText = appState.language.toUpperCase();
+            document.getElementById('langTextMobile').innerText = appState.language.toUpperCase();
+            applyLanguage();
+            renderStatus(); 
+        }
+
+        function applyLanguage() {
+            const d = dict[appState.language];
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (d[key]) {
+                    if (el.placeholder) el.placeholder = d[key];
+                    else el.innerText = d[key];
+                }
+            });
+        }
+
+        // --- Render Functions ---
+        function renderStatus() {
+            const badge = document.getElementById('commissionStatusBadge');
+            let bgClass = '', textKey = '';
+            
+            if (appState.artistStatus === 'open') {
+                bgClass = 'bg-green-100 text-green-800 border border-green-200';
+                textKey = 'statusOpen';
+            } else if (appState.artistStatus === 'closed') {
+                bgClass = 'bg-red-100 text-red-800 border border-red-200';
+                textKey = 'statusClosed';
+            } else {
+                bgClass = 'bg-yellow-100 text-yellow-800 border border-yellow-200';
+                textKey = 'statusBusy';
+            }
+            
+            badge.className = `inline-flex items-center px-4 py-2 rounded-full font-medium text-sm mb-4 ${bgClass}`;
+            badge.innerText = dict[appState.language][textKey];
+        }
+
+        function renderCommissions() {
+            const container = document.getElementById('commissionCategories');
+            container.innerHTML = '';
+            appState.commissions.forEach(com => {
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-accent cursor-pointer group';
+                card.onclick = () => openCommissionModal(com);
+                
+                const mediaIcon = com.isVideo ? '<div class="absolute top-3 right-3 bg-black bg-opacity-60 text-white rounded-full p-2 w-8 h-8 flex items-center justify-center backdrop-blur-sm"><i class="fa-solid fa-video text-xs"></i></div>' : '';
+
+                card.innerHTML = `
+                    <div class="h-48 overflow-hidden relative">
+                        <img src="${com.img}" alt="${com.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        ${mediaIcon}
+                    </div>
+                    <div class="p-5">
+                        <h3 class="font-bold text-lg text-textMain mb-1 group-hover:text-sky-600 transition-colors">${com.name}</h3>
+                        <p class="text-sky-600 font-semibold text-sm">Starts at ${com.price} THB</p>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            
+            if(appState.commissions.length === 0) {
+                container.innerHTML = '<div class="col-span-full py-12 text-center text-gray-400 font-medium">ยังไม่มีข้อมูล Commission</div>';
+            }
+        }
+
+        // Queue Tab Switcher logic
+        function switchQueueTab(tabId) {
+            // Hide all tab contents
+            document.querySelectorAll('.queue-tab-content').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('block');
+            });
+            // Reset all buttons style
+            document.querySelectorAll('.queue-tab-btn').forEach(el => {
+                el.classList.remove('bg-sky-500', 'text-white', 'shadow-sm');
+                el.classList.add('bg-transparent', 'text-gray-500', 'hover:bg-gray-100');
+            });
+            
+            // Show active tab
+            document.getElementById(`qTab-${tabId}`).classList.remove('hidden');
+            document.getElementById(`qTab-${tabId}`).classList.add('block');
+            
+            // Set active button style
+            const activeBtn = document.getElementById(`qTabBtn-${tabId}`);
+            activeBtn.classList.remove('bg-transparent', 'text-gray-500', 'hover:bg-gray-100');
+            activeBtn.classList.add('bg-sky-500', 'text-white', 'shadow-sm');
+        }
+
+        // Helper for colored table cells
+        function getStatusCellClass(colorStr) {
+            switch(colorStr) {
+                case 'green': return 'bg-statusGreen text-green-900 border-green-300 font-bold';
+                case 'yellow': return 'bg-statusYellow text-yellow-900 border-yellow-400 font-bold';
+                case 'red': return 'bg-statusRed text-red-900 border-red-400 font-bold';
+                default: return 'bg-transparent text-gray-800';
+            }
+        }
+
+        function renderQueues() {
+            document.getElementById('totalQueueCount').innerText = appState.queues.length;
+            
+            const tbodyMain = document.getElementById('tableBody-main');
+            const tbodySub = document.getElementById('tableBody-sub');
+            const tbodyPend = document.getElementById('tableBody-pending');
+            
+            tbodyMain.innerHTML = ''; tbodySub.innerHTML = ''; tbodyPend.innerHTML = '';
+
+            let mainIdx = 1, subIdx = 1, pendIdx = 1;
+
+            appState.queues.forEach(q => {
+                const tr = document.createElement('tr');
+                tr.className = "border-b border-gray-100 hover:bg-sky-50/30 transition-colors";
+                
+                if(q.workColor === 'yellow') {
+                    tr.classList.add('bg-yellow-50/50');
+                }
+
+                let numStr = '';
+                if(q.type === 'main') numStr = mainIdx++;
+                else if (q.type === 'sub') numStr = subIdx++;
+                else numStr = pendIdx++;
+
+                const payClass = getStatusCellClass(q.payColor);
+                const briefClass = getStatusCellClass(q.briefColor);
+                const workClass = getStatusCellClass(q.workColor);
+
+                tr.innerHTML = `
+                    <td class="p-3 font-bold text-gray-400">${numStr}</td>
+                    <td class="p-3 text-left font-bold text-textMain">${q.client || '-'}</td>
+                    <td class="p-3 text-gray-600">${q.jobType || '-'}</td>
+                    <td class="p-3">${q.pieces || '-'}</td>
+                    <td class="p-3 ${payClass} shadow-inner">${q.payText || ''}</td>
+                    <td class="p-3 ${briefClass} shadow-inner">${q.briefText || ''}</td>
+                    <td class="p-3 text-gray-500 text-xs md:text-sm">${q.deadline || '-'}</td>
+                    <td class="p-3 ${workClass} shadow-inner ${q.workColor==='yellow' ? 'animate-pulse' : ''}">${q.workText || ''}</td>
+                `;
+
+                if(q.type === 'main') tbodyMain.appendChild(tr);
+                else if(q.type === 'sub') tbodySub.appendChild(tr);
+                else tbodyPend.appendChild(tr);
+            });
+
+            const emptyRow = (colSpan) => `<tr><td colspan="${colSpan}" class="p-8 text-center text-gray-400 font-medium">ไม่มีรายการในหมวดหมู่นี้</td></tr>`;
+            if(tbodyMain.innerHTML === '') tbodyMain.innerHTML = emptyRow(8);
+            if(tbodySub.innerHTML === '') tbodySub.innerHTML = emptyRow(8);
+            if(tbodyPend.innerHTML === '') tbodyPend.innerHTML = emptyRow(8);
+            
+            renderAdminQueueTable();
+        }
+
+        function renderShop() {
+            const container = document.getElementById('productGrid');
+            container.innerHTML = '';
+            appState.products.forEach(prod => {
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-accent cursor-pointer group flex flex-col';
+                card.onclick = () => openProductModal(prod);
+                
+                let stockBadge = '';
+                if(prod.stock === 0) {
+                    stockBadge = '<span class="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-lg">Out of Stock</span>';
+                } else if(prod.stock < 5) {
+                    stockBadge = `<span class="absolute top-2 left-2 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded-lg">เหลือ ${prod.stock} ชิ้น</span>`;
+                }
+
+                card.innerHTML = `
+                    <div class="aspect-square overflow-hidden relative bg-gray-100">
+                        <img src="${prod.img}" alt="${prod.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${prod.stock===0 ? 'grayscale opacity-60':''}">
+                        ${stockBadge}
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between">
+                        <h3 class="font-semibold text-sm text-textMain line-clamp-2 mb-2 group-hover:text-sky-600">${prod.name}</h3>
+                        <p class="text-sky-600 font-bold">฿${prod.price}</p>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            
+            if(appState.products.length === 0) {
+                container.innerHTML = '<div class="col-span-full py-12 text-center text-gray-400 font-medium">ไม่มีสินค้าในขณะนี้</div>';
+            }
+        }
+
+        function toggleAccordion(btn) {
+            const content = btn.nextElementSibling;
+            const icon = btn.querySelector('i');
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+            } else {
+                content.classList.add('hidden');
+                icon.classList.remove('rotate-180');
+            }
+        }
+
+        function openCommissionModal(com) {
+            document.getElementById('modalComTitle').innerText = com.name;
+            document.getElementById('modalComPrice').innerText = com.price;
+            document.getElementById('modalComDuration').innerText = com.duration;
+            document.getElementById('modalComDesc').innerText = com.desc;
+            
+            const imgEl = document.getElementById('modalComImage');
+            imgEl.src = com.img;
+            
+            imgEl.onclick = () => {
+                if(com.isVideo) openLightbox(com.videoUrl, true);
+                else openLightbox(com.img, false);
+            };
+
+            document.getElementById('modal-commission').classList.remove('hidden');
+        }
+
+        function openProductModal(prod) {
+            document.getElementById('modalProdTitle').innerText = prod.name;
+            document.getElementById('modalProdPrice').innerText = `฿${prod.price}`;
+            document.getElementById('modalProdDesc').innerText = prod.desc;
+            document.getElementById('modalProdImage').src = prod.img;
+            
+            const stockEl = document.getElementById('modalProdStock');
+            const btn = document.getElementById('modalProdBuyBtn');
+            
+            if(prod.stock === 0) {
+                stockEl.innerHTML = '<span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800"><i class="fa-solid fa-box-open mr-2"></i> สินค้าหมด (Out of Stock)</span>';
+                btn.disabled = true;
+                btn.innerText = 'สินค้าหมด';
+                btn.classList.replace('bg-sky-500', 'bg-gray-400');
+                btn.onclick = null;
+            } else {
+                stockEl.innerHTML = `<span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800"><i class="fa-solid fa-check mr-2"></i> มีสินค้า (In Stock : ${prod.stock})</span>`;
+                btn.disabled = false;
+                btn.innerText = 'สั่งซื้อสินค้า';
+                btn.classList.replace('bg-gray-400', 'bg-sky-500');
+                btn.onclick = () => window.open('https://docs.google.com/forms', '_blank'); 
+            }
+
+            document.getElementById('modal-product').classList.remove('hidden');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        function openLightbox(url, isVideo = false) {
+            const modal = document.getElementById('lightbox');
+            const img = document.getElementById('lightboxImg');
+            const vid = document.getElementById('lightboxVid');
+            
+            modal.classList.remove('hidden');
+            if(isVideo) {
+                img.classList.add('hidden');
+                vid.src = url;
+                vid.classList.remove('hidden');
+                vid.play();
+            } else {
+                vid.classList.add('hidden');
+                vid.pause();
+                img.src = url;
+                img.classList.remove('hidden');
+            }
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.add('hidden');
+            document.getElementById('lightboxVid').pause();
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('fixed') && event.target.id.startsWith('modal-')) {
+                event.target.classList.add('hidden');
+            }
+        }
+
+        // --- Admin Functions ---
+
+        function switchAdminTab(tabId) {
+            document.querySelectorAll('.admin-tab-content').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('block');
+            });
+            document.querySelectorAll('.admin-tab-btn').forEach(el => {
+                el.classList.remove('text-sky-600', 'border-sky-600');
+                el.classList.add('text-gray-500', 'border-transparent');
+            });
+            
+            document.getElementById(`adminTab-${tabId}`).classList.remove('hidden');
+            document.getElementById(`adminTab-${tabId}`).classList.add('block');
+            
+            const activeBtn = document.getElementById(`tabBtn-${tabId}`);
+            activeBtn.classList.remove('text-gray-500', 'border-transparent');
+            activeBtn.classList.add('text-sky-600', 'border-sky-600');
+        }
+
+        function adminSaveStatus() {
+            const val = document.getElementById('adminStatusSelect').value;
+            appState.artistStatus = val;
+            renderStatus();
+            alert('อัปเดตสถานะการรับงานเรียบร้อย');
+        }
+        
+        function renderAdminQueueTable() {
+            const tbody = document.getElementById('adminQueueTableBody');
+            tbody.innerHTML = '';
+            
+            if (appState.queues.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="px-4 py-8 text-center text-gray-400 font-medium">ยังไม่มีข้อมูลคิว</td></tr>';
+                return;
+            }
+
+            const colorDot = (c, text) => {
+                let dotCls = 'bg-gray-200 border-gray-300 text-gray-500';
+                if(c==='green') dotCls = 'bg-statusGreen border-green-300 text-green-800';
+                if(c==='yellow') dotCls = 'bg-statusYellow border-yellow-300 text-yellow-800';
+                if(c==='red') dotCls = 'bg-statusRed border-red-300 text-red-800';
+                return `<span class="inline-flex items-center justify-center min-w-[20px] h-5 px-1 rounded text-[10px] border ${dotCls} font-bold mr-1" title="${text || 'ว่าง'}">${text || ''}</span>`;
+            };
+
+            appState.queues.forEach((q) => {
+                const tr = document.createElement('tr');
+                tr.className = `hover:bg-gray-50`;
+                
+                let typeLabel = '<span class="px-2 py-1 rounded text-xs font-medium bg-gray-100 text-gray-800">คิวย่อย</span>';
+                if(q.type === 'main') typeLabel = '<span class="px-2 py-1 rounded text-xs font-medium bg-sky-100 text-sky-800">คิวหลัก</span>';
+                if(q.type === 'pending') typeLabel = '<span class="px-2 py-1 rounded text-xs font-medium bg-red-100 text-red-800">ตกค้าง</span>';
+
+                tr.innerHTML = `
+                    <td class="px-4 py-3">${typeLabel}</td>
+                    <td class="px-4 py-3 font-bold text-gray-900 truncate max-w-[120px]">${q.client}</td>
+                    <td class="px-4 py-3 text-gray-500 text-xs">${q.jobType} (x${q.pieces || 0})</td>
+                    <td class="px-4 py-3 text-center whitespace-nowrap">
+                        ${colorDot(q.payColor, q.payText)} 
+                        ${colorDot(q.briefColor, q.briefText)} 
+                        ${colorDot(q.workColor, q.workText)}
+                    </td>
+                    <td class="px-4 py-3 text-right">
+                        <button type="button" onclick="adminEditQueue('${q.id}')" class="text-sky-600 hover:bg-sky-50 p-1.5 rounded transition-colors mr-1" title="แก้ไข"><i class="fa-solid fa-pen"></i></button>
+                        <button type="button" onclick="adminDeleteQueue('${q.id}')" class="text-red-500 hover:bg-red-50 p-1.5 rounded transition-colors" title="ลบ"><i class="fa-solid fa-trash-can"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function adminSaveQueue(e) {
+            e.preventDefault();
+            const id = document.getElementById('aqId').value;
+            
+            const newQ = {
+                id: id || generateId(),
+                type: document.getElementById('aqType').value,
+                client: document.getElementById('aqClient').value,
+                jobType: document.getElementById('aqJobType').value,
+                pieces: document.getElementById('aqPieces').value,
+                payColor: document.getElementById('aqPayColor').value,
+                payText: document.getElementById('aqPayText').value,
+                briefColor: document.getElementById('aqBriefColor').value,
+                briefText: document.getElementById('aqBriefText').value,
+                workColor: document.getElementById('aqWorkColor').value,
+                workText: document.getElementById('aqWorkText').value,
+                deadline: document.getElementById('aqDeadline').value,
+            };
+
+            if (id) {
+                const qIndex = appState.queues.findIndex(q => q.id == id);
+                if (qIndex > -1) {
+                    appState.queues[qIndex] = newQ;
+                    alert('อัปเดตข้อมูลคิวสำเร็จ');
+                }
+            } else {
+                appState.queues.push(newQ);
+                alert('เพิ่มคิวใหม่สำเร็จ');
+            }
+            
+            renderQueues();
+            adminResetQueueForm();
+        }
+
+        function adminEditQueue(id) {
+            const q = appState.queues.find(q => q.id == id);
+            if (!q) return;
+
+            document.getElementById('aqId').value = q.id;
+            document.getElementById('aqType').value = q.type;
+            document.getElementById('aqClient').value = q.client;
+            document.getElementById('aqJobType').value = q.jobType;
+            document.getElementById('aqPieces').value = q.pieces;
+            
+            document.getElementById('aqPayColor').value = q.payColor;
+            document.getElementById('aqPayText').value = q.payText;
+            
+            document.getElementById('aqBriefColor').value = q.briefColor;
+            document.getElementById('aqBriefText').value = q.briefText;
+            
+            document.getElementById('aqWorkColor').value = q.workColor;
+            document.getElementById('aqWorkText').value = q.workText;
+
+            document.getElementById('aqDeadline').value = q.deadline;
+            
+            document.getElementById('aqFormTitle').innerHTML = '<i class="fa-solid fa-pen-to-square mr-2"></i>แก้ไขคิว';
+            const btn = document.getElementById('btnSubmitQueue');
+            btn.innerText = "อัปเดตข้อมูลคิว";
+            btn.classList.replace('bg-sky-500', 'bg-yellow-500');
+            btn.classList.replace('hover:bg-sky-600', 'hover:bg-yellow-600');
+            
+            document.getElementById('aqFormTitle').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function adminDeleteQueue(id) {
+            if (confirm('คุณแน่ใจหรือไม่ว่าต้องการลบคิวนี้?')) {
+                appState.queues = appState.queues.filter(q => q.id != id);
+                if (document.getElementById('aqId').value == id) {
+                    adminResetQueueForm();
+                }
+                renderQueues();
+            }
+        }
+
+        function adminResetQueueForm() {
+            document.getElementById('adminQueueForm').reset();
+            document.getElementById('aqId').value = '';
+            document.getElementById('aqBriefColor').value = 'green';
+            document.getElementById('aqFormTitle').innerHTML = '<i class="fa-solid fa-plus-circle mr-2"></i>เพิ่มคิวใหม่';
+            
+            const btn = document.getElementById('btnSubmitQueue');
+            btn.innerText = "บันทึกคิว";
+            btn.classList.replace('bg-yellow-500', 'bg-sky-500');
+            btn.classList.replace('hover:bg-yellow-600', 'hover:bg-sky-600');
+        }
+
+        function toggleMockFormFields() {
+            const type = document.getElementById('mockItemType').value;
+            if (type === 'commission') {
+                document.getElementById('fieldDuration').classList.remove('hidden');
+                document.getElementById('fieldStock').classList.add('hidden');
+            } else {
+                document.getElementById('fieldDuration').classList.add('hidden');
+                document.getElementById('fieldStock').classList.remove('hidden');
+            }
+        }
+
+        function adminSaveMockItem(e) {
+            e.preventDefault();
+            const id = document.getElementById('mockItemId').value;
+            const type = document.getElementById('mockItemType').value;
+            const name = document.getElementById('mockItemName').value;
+            const price = document.getElementById('mockItemPrice').value;
+            const desc = document.getElementById('mockItemDesc').value;
+            
+            const previewImgSrc = document.getElementById('imagePreview').src;
+            let finalImg = (!previewImgSrc || previewImgSrc.endsWith('index.html')) 
+                ? 'https://placehold.co/600x600/f3f4f6/9ca3af?text=No+Image' 
+                : previewImgSrc;
+
+            if (type === 'commission') {
+                const duration = document.getElementById('mockItemDuration').value || '1-2 สัปดาห์';
+                
+                if (id) {
+                    const idx = appState.commissions.findIndex(c => c.id == id);
+                    if (idx > -1) {
+                        if(finalImg.includes('No+Image') && appState.commissions[idx].img) {
+                             finalImg = appState.commissions[idx].img;
+                        }
+                        appState.commissions[idx] = { ...appState.commissions[idx], name, price, duration, desc, img: finalImg };
+                        alert(`อัปเดต Commission เรียบร้อยแล้ว`);
+                    }
+                } else {
+                    appState.commissions.push({
+                        id: generateId(), name, price, duration, desc, img: finalImg, isVideo: false
+                    });
+                    alert(`เพิ่ม Commission เรียบร้อยแล้ว`);
+                }
+                renderCommissions();
+                
+            } else {
+                const stock = document.getElementById('mockItemStock').value || 0;
+                
+                if (id) {
+                    const idx = appState.products.findIndex(p => p.id == id);
+                    if (idx > -1) {
+                        if(finalImg.includes('No+Image') && appState.products[idx].img) {
+                             finalImg = appState.products[idx].img;
+                        }
+                        appState.products[idx] = { ...appState.products[idx], name, price, stock: parseInt(stock), desc, img: finalImg };
+                        alert(`อัปเดตสินค้าเรียบร้อยแล้ว`);
+                    }
+                } else {
+                    appState.products.push({
+                        id: generateId(), name, price, stock: parseInt(stock), desc, img: finalImg
+                    });
+                    alert(`เพิ่มสินค้าเรียบร้อยแล้ว`);
+                }
+                renderShop();
+            }
+            
+            adminResetContentForm();
+            renderAdminContentLists();
+        }
+
+        function renderAdminContentLists() {
+            const comContainer = document.getElementById('adminManageCommissions');
+            comContainer.innerHTML = '';
+            if (appState.commissions.length === 0) {
+                 comContainer.innerHTML = '<p class="text-sm text-gray-400 p-4 text-center">ไม่มีข้อมูล Commission</p>';
+            } else {
+                appState.commissions.forEach(item => {
+                    comContainer.innerHTML += `
+                        <div class="flex items-center p-3 bg-white rounded-xl border border-gray-200 hover:border-sky-300 hover:shadow-sm transition-all">
+                            <img src="${item.img}" class="w-14 h-14 object-cover rounded-lg mr-4 bg-gray-100">
+                            <div class="flex-1 min-w-0">
+                                <h4 class="font-bold text-sm text-gray-900 truncate">${item.name}</h4>
+                                <p class="text-xs text-sky-600 font-medium">${item.price} THB</p>
+                            </div>
+                            <div class="flex space-x-1 ml-2">
+                                <button type="button" onclick="adminEditContent('commission', '${item.id}')" class="text-sky-500 hover:bg-sky-50 p-2 rounded-lg transition-colors" title="แก้ไข"><i class="fa-solid fa-pen"></i></button>
+                                <button type="button" onclick="adminDeleteContent('commission', '${item.id}')" class="text-red-500 hover:bg-red-50 p-2 rounded-lg transition-colors" title="ลบ"><i class="fa-solid fa-trash-can"></i></button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            const prodContainer = document.getElementById('adminManageProducts');
+            prodContainer.innerHTML = '';
+            if (appState.products.length === 0) {
+                 prodContainer.innerHTML = '<p class="text-sm text-gray-400 p-4 text-center">ไม่มีข้อมูลสินค้า</p>';
+            } else {
+                appState.products.forEach(item => {
+                    prodContainer.innerHTML += `
+                        <div class="flex items-center p-3 bg-white rounded-xl border border-gray-200 hover:border-sky-300 hover:shadow-sm transition-all">
+                            <img src="${item.img}" class="w-14 h-14 object-cover rounded-lg mr-4 bg-gray-100">
+                            <div class="flex-1 min-w-0">
+                                <h4 class="font-bold text-sm text-gray-900 truncate">${item.name}</h4>
+                                <p class="text-xs text-sky-600 font-medium">฿${item.price} <span class="text-gray-400 font-normal ml-1">(Stock: ${item.stock})</span></p>
+                            </div>
+                            <div class="flex space-x-1 ml-2">
+                                <button type="button" onclick="adminEditContent('product', '${item.id}')" class="text-sky-500 hover:bg-sky-50 p-2 rounded-lg transition-colors" title="แก้ไข"><i class="fa-solid fa-pen"></i></button>
+                                <button type="button" onclick="adminDeleteContent('product', '${item.id}')" class="text-red-500 hover:bg-red-50 p-2 rounded-lg transition-colors" title="ลบ"><i class="fa-solid fa-trash-can"></i></button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+        }
+
+        function adminEditContent(type, id) {
+            document.getElementById('mockItemType').value = type;
+            toggleMockFormFields();
+            
+            let item;
+            if (type === 'commission') {
+                item = appState.commissions.find(c => c.id == id);
+                document.getElementById('mockItemDuration').value = item.duration;
+            } else {
+                item = appState.products.find(p => p.id == id);
+                document.getElementById('mockItemStock').value = item.stock;
+            }
+
+            if (!item) return;
+
+            document.getElementById('mockItemId').value = item.id;
+            document.getElementById('mockItemName').value = item.name;
+            document.getElementById('mockItemPrice').value = item.price;
+            document.getElementById('mockItemDesc').value = item.desc;
+            
+            document.getElementById('imagePreview').src = item.img;
+            document.getElementById('imagePreviewContainer').classList.remove('hidden');
+            document.getElementById('imagePreviewPlaceholder').classList.add('hidden');
+            
+            document.getElementById('mockItemName').dispatchEvent(new Event('input'));
+            document.getElementById('mockItemPrice').dispatchEvent(new Event('input'));
+
+            document.getElementById('contentFormTitle').innerHTML = '<i class="fa-solid fa-pen-to-square mr-2"></i>แก้ไขข้อมูล';
+            document.getElementById('btnSubmitContent').innerHTML = '<i class="fa-solid fa-check mr-2"></i>อัปเดตข้อมูล';
+            document.getElementById('btnSubmitContent').classList.replace('bg-sky-500', 'bg-yellow-500');
+            document.getElementById('btnSubmitContent').classList.replace('hover:bg-sky-600', 'hover:bg-yellow-600');
+            document.getElementById('btnCancelEdit').classList.remove('hidden');
+            
+            document.getElementById('adminTab-content').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function adminDeleteContent(type, id) {
+            if (!confirm('คุณแน่ใจหรือไม่ว่าต้องการลบรายการนี้?')) return;
+            
+            if (document.getElementById('mockItemId').value == id) {
+                adminResetContentForm();
+            }
+            
+            if (type === 'commission') {
+                appState.commissions = appState.commissions.filter(c => c.id != id);
+                renderCommissions();
+            } else {
+                appState.products = appState.products.filter(p => p.id != id);
+                renderShop();
+            }
+            renderAdminContentLists();
+        }
+
+        function adminResetContentForm() {
+            document.getElementById('adminContentForm').reset();
+            document.getElementById('mockItemId').value = '';
+            document.getElementById('imageInput').value = '';
+            clearImagePreview();
+            
+            document.getElementById('contentFormTitle').innerHTML = '<i class="fa-solid fa-plus-circle mr-2"></i>เพิ่มข้อมูลใหม่';
+            document.getElementById('btnSubmitContent').innerHTML = '<i class="fa-solid fa-save mr-2"></i>บันทึกข้อมูล';
+            document.getElementById('btnSubmitContent').classList.replace('bg-yellow-500', 'bg-sky-500');
+            document.getElementById('btnSubmitContent').classList.replace('hover:bg-yellow-600', 'hover:bg-sky-600');
+            document.getElementById('btnCancelEdit').classList.add('hidden');
+            
+            document.getElementById('previewTitle').innerText = 'ชื่อรายการ...';
+            document.getElementById('previewPrice').innerText = '0 THB';
+        }
+
+        document.getElementById('imageInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('imagePreview').src = e.target.result;
+                    document.getElementById('imagePreviewContainer').classList.remove('hidden');
+                    document.getElementById('imagePreviewPlaceholder').classList.add('hidden');
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function clearImagePreview() {
+            document.getElementById('imageInput').value = '';
+            document.getElementById('imagePreview').src = '';
+            document.getElementById('imagePreviewContainer').classList.add('hidden');
+            document.getElementById('imagePreviewPlaceholder').classList.remove('hidden');
+        }
+
+        document.getElementById('mockItemName').addEventListener('input', (e) => {
+            document.getElementById('previewTitle').innerText = e.target.value || 'ชื่อรายการ...';
+        });
+        document.getElementById('mockItemPrice').addEventListener('input', (e) => {
+            const type = document.getElementById('mockItemType').value;
+            const prefix = type === 'commission' ? 'Starts at ' : '฿';
+            const suffix = type === 'commission' ? ' THB' : '';
+            document.getElementById('previewPrice').innerText = e.target.value ? `${prefix}${e.target.value}${suffix}` : '0 THB';
+        });
+        document.getElementById('mockItemType').addEventListener('change', (e) => {
+            document.getElementById('mockItemPrice').dispatchEvent(new Event('input'));
+        });
+
+        window.onload = initApp;
+
+    </script>
+</body>
+</html>
