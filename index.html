@@ -121,6 +121,7 @@
             <div class="flex justify-between items-center h-16">
                 <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="navigate('home')">
+                    <img id="navLogoImg" src="" alt="Logo" class="h-8 w-8 object-cover rounded-full mr-2 hidden shadow-sm border border-gray-200">
                     <span class="font-bold text-xl tracking-tight text-sky-600" id="navLogoText">Rishma<span class="text-textMain">Stu</span></span>
                 </div>
                 
@@ -518,6 +519,18 @@
                 <div class="bg-white/95 backdrop-blur p-6 md:p-8 rounded-3xl shadow-sm border border-accent">
                     <h2 class="text-xl font-bold mb-4 flex items-center text-sky-800"><i class="fa-solid fa-pen-to-square mr-2"></i>แก้ไขข้อความหน้าเว็บ</h2>
                     <form onsubmit="adminSaveGeneralTexts(event)" class="space-y-6">
+                        
+                        <div class="bg-purple-50/50 p-4 rounded-2xl border border-purple-100 space-y-4">
+                            <h3 class="font-bold text-purple-900 border-b border-purple-200 pb-2">โลโก้เว็บไซต์ (Website Logo)</h3>
+                            <div class="flex items-center gap-4">
+                                <img id="adminLogoPreview" src="" class="w-16 h-16 object-cover bg-white rounded-lg border border-purple-200 shadow-sm hidden">
+                                <div class="flex-1">
+                                    <input type="file" id="adminLogoInput" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-white file:text-purple-700 hover:file:bg-purple-50 cursor-pointer border border-gray-200 rounded-xl bg-white shadow-sm transition-colors">
+                                    <button type="button" onclick="adminRemoveLogo()" class="text-xs text-red-500 hover:text-red-700 font-bold mt-2 hidden" id="adminRemoveLogoBtn"><i class="fa-solid fa-trash-can mr-1"></i>ลบรูปโลโก้</button>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="bg-blue-50/50 p-4 rounded-2xl border border-blue-100 space-y-4">
                             <h3 class="font-bold text-sky-900 border-b border-blue-200 pb-2">ข้อมูลส่วนตัว</h3>
                             <div>
@@ -974,7 +987,7 @@
             language: 'th',
             artistStatus: 'open',
             isLoggedIn: false,
-            texts: { artistName: '', artistRole: '', artistRoleEn: '', realName: '', realNameEn: '', taxNote: '', taxNoteEn: '' },
+            texts: { artistName: '', artistRole: '', artistRoleEn: '', realName: '', realNameEn: '', taxNote: '', taxNoteEn: '', logoUrl: '' },
             queues: [], commissions: [], products: [], howToBrief: [], canList: [], cantList: []
         };
 
@@ -1056,6 +1069,7 @@
                 if(settings) {
                     appState.artistStatus = settings.status;
                     appState.texts.artistName = settings.artist_name || 'RishmaStu';
+                    appState.texts.logoUrl = settings.logo_url || '';
                     const role = parseBi(settings.artist_role);
                     appState.texts.artistRole = role.th; appState.texts.artistRoleEn = role.en;
                     const realName = parseBi(settings.real_name);
@@ -1140,7 +1154,7 @@
 
         async function initApp() {
             createHearts();
-            await fetchAllData(); 
+            await fetchAllData(); // Load data from DB first
             
             renderStatus();
             renderCommissionRules();
@@ -1158,6 +1172,12 @@
             document.getElementById('adminRealNameEn').value = appState.texts.realNameEn;
             document.getElementById('adminTaxNote').value = appState.texts.taxNote;
             document.getElementById('adminTaxNoteEn').value = appState.texts.taxNoteEn;
+            
+            if (appState.texts.logoUrl) {
+                document.getElementById('adminLogoPreview').src = appState.texts.logoUrl;
+                document.getElementById('adminLogoPreview').classList.remove('hidden');
+                document.getElementById('adminRemoveLogoBtn').classList.remove('hidden');
+            }
             
             renderAdminContentLists(); 
             renderAdminRulesLists();
@@ -1589,28 +1609,78 @@
             const realName = stringifyBi(document.getElementById('adminRealName').value, document.getElementById('adminRealNameEn').value);
             const taxNote = stringifyBi(document.getElementById('adminTaxNote').value, document.getElementById('adminTaxNoteEn').value);
             
-            const { error } = await supabaseClient.from('settings').update({
-                artist_name: artistName, artist_role: role, real_name: realName, tax_note: taxNote
-            }).eq('id', 1);
+            let logoUrl = appState.texts.logoUrl || '';
+            const logoInput = document.getElementById('adminLogoInput').files[0];
+            const isLogoRemoved = document.getElementById('adminLogoPreview').classList.contains('hidden') && !logoInput;
 
-            if(error) alert("Error: " + error.message);
-            else {
+            try {
+                if (isLogoRemoved) {
+                    logoUrl = '';
+                } else if (logoInput) {
+                    const compressedLogo = await compressImage(logoInput);
+                    logoUrl = await uploadImageToStorage(compressedLogo);
+                }
+
+                const { error } = await supabaseClient.from('settings').update({
+                    artist_name: artistName, artist_role: role, real_name: realName, tax_note: taxNote, logo_url: logoUrl
+                }).eq('id', 1);
+
+                if(error) throw error;
+                
                 appState.texts.artistName = artistName;
+                appState.texts.logoUrl = logoUrl;
                 const r = parseBi(role); appState.texts.artistRole = r.th; appState.texts.artistRoleEn = r.en;
                 const rn = parseBi(realName); appState.texts.realName = rn.th; appState.texts.realNameEn = rn.en;
                 const tn = parseBi(taxNote); appState.texts.taxNote = tn.th; appState.texts.taxNoteEn = tn.en;
+                
                 updateHomeTexts();
+                document.getElementById('adminLogoInput').value = '';
                 alert('อัปเดตข้อความหน้าเว็บเรียบร้อย');
+            } catch (err) {
+                alert("Error: " + err.message);
             }
+            
             btn.disabled = false; btn.innerHTML = originalHTML;
+        }
+
+        // Setup logo image input listener
+        document.getElementById('adminLogoInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('adminLogoPreview').src = e.target.result;
+                    document.getElementById('adminLogoPreview').classList.remove('hidden');
+                    document.getElementById('adminRemoveLogoBtn').classList.remove('hidden');
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function adminRemoveLogo() {
+            document.getElementById('adminLogoInput').value = '';
+            document.getElementById('adminLogoPreview').src = '';
+            document.getElementById('adminLogoPreview').classList.add('hidden');
+            document.getElementById('adminRemoveLogoBtn').classList.add('hidden');
         }
 
         function updateHomeTexts() {
             const lang = appState.language;
-            document.getElementById('homeArtistName').textContent = appState.texts.artistName;
-            document.getElementById('homeArtistRole').textContent = (lang === 'en' && appState.texts.artistRoleEn) ? appState.texts.artistRoleEn : appState.texts.artistRole;
-            document.getElementById('homeRealName').textContent = (lang === 'en' && appState.texts.realNameEn) ? appState.texts.realNameEn : appState.texts.realName;
-            document.getElementById('homeTaxNote').textContent = (lang === 'en' && appState.texts.taxNoteEn) ? appState.texts.taxNoteEn : appState.texts.taxNote;
+            document.getElementById('homeArtistName').innerText = appState.texts.artistName;
+            document.getElementById('navLogoText').innerText = appState.texts.artistName; // Update Navbar Text
+            document.getElementById('homeArtistRole').innerText = (lang === 'en' && appState.texts.artistRoleEn) ? appState.texts.artistRoleEn : appState.texts.artistRole;
+            document.getElementById('homeRealName').innerText = (lang === 'en' && appState.texts.realNameEn) ? appState.texts.realNameEn : appState.texts.realName;
+            document.getElementById('homeTaxNote').innerText = (lang === 'en' && appState.texts.taxNoteEn) ? appState.texts.taxNoteEn : appState.texts.taxNote;
+            
+            // Update Logo Image
+            const navLogoImg = document.getElementById('navLogoImg');
+            if (appState.texts.logoUrl) {
+                navLogoImg.src = appState.texts.logoUrl;
+                navLogoImg.classList.remove('hidden');
+            } else {
+                navLogoImg.src = '';
+                navLogoImg.classList.add('hidden');
+            }
         }
 
         function renderAdminQueueTable() {
