@@ -49,7 +49,6 @@
     
     <style>
         body {
-            /* ลบ background-attachment: fixed ออกเพื่อแก้บั๊กเลื่อนหน้าจอใน iOS */
             background: linear-gradient(135deg, #fffbeb 0%, #fef9c3 100%);
             color: #1f2937;
         }
@@ -115,7 +114,7 @@
         </div>
     </div>
 
-    <!-- Floating Background (ย้ายจาก style body มาไว้ใน container นี้) -->
+    <!-- Floating Background -->
     <div id="floating-bg" class="floating-hearts-container fixed inset-0 w-full h-full bg-gradient-to-br from-[#fffbeb] to-[#fef9c3] -z-20"></div>
 
     <nav class="fixed w-full top-0 z-50 glass-nav transition-all duration-300">
@@ -123,7 +122,7 @@
             <div class="flex justify-between items-center h-16">
                 <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="navigate('home')">
-                    <img id="navLogoImg" src="" alt="Logo" class="h-8 w-8 object-cover rounded-full mr-2 hidden shadow-sm border border-gray-200">
+                    <img id="navLogoImg" src="" alt="Logo" class="h-8 w-8 object-cover rounded-full mr-2 hidden shadow-sm border border-gray-200" onerror="this.classList.add('hidden')">
                     <span class="font-bold text-xl tracking-tight text-sky-600" id="navLogoText">Rishma<span class="text-textMain">Stu</span></span>
                 </div>
                 
@@ -177,7 +176,7 @@
             <div class="bg-white/95 backdrop-blur rounded-3xl p-6 md:p-8 shadow-sm border border-accent flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8 relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-32 h-32 bg-yellow-100 rounded-bl-full opacity-50"></div>
                 <div class="w-32 h-32 md:w-40 md:h-40 flex-shrink-0 relative z-10">
-                    <img src="https://placehold.co/400x400/e0f2fe/0369a1?text=RishmaStu" alt="Profile" class="w-full h-full object-cover rounded-full shadow-md border-4 border-white">
+                    <img id="homeProfileImage" src="https://placehold.co/400x400/e0f2fe/0369a1?text=RishmaStu" alt="Profile" class="w-full h-full object-cover rounded-full shadow-md border-4 border-white">
                 </div>
                 <div class="flex-1 text-center md:text-left relative z-10">
                     <h1 class="text-2xl md:text-3xl font-bold text-textMain mb-2" id="homeArtistName">RishmaStu</h1>
@@ -539,10 +538,27 @@
                         <div class="bg-purple-50/50 p-4 rounded-2xl border border-purple-100 space-y-4">
                             <h3 class="font-bold text-purple-900 border-b border-purple-200 pb-2">โลโก้เว็บไซต์ (Website Logo)</h3>
                             <div class="flex items-center gap-4">
-                                <img id="adminLogoPreview" src="" class="w-16 h-16 object-cover bg-white rounded-lg border border-purple-200 shadow-sm hidden">
+                                <img id="adminLogoPreview" src="" class="w-16 h-16 object-cover bg-white rounded-lg border border-purple-200 shadow-sm hidden" onerror="this.classList.add('hidden')">
                                 <div class="flex-1">
                                     <input type="file" id="adminLogoInput" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-white file:text-purple-700 hover:file:bg-purple-50 cursor-pointer border border-gray-200 rounded-xl bg-white shadow-sm transition-colors">
-                                    <button type="button" onclick="adminRemoveLogo()" class="text-xs text-red-500 hover:text-red-700 font-bold mt-2 hidden" id="adminRemoveLogoBtn"><i class="fa-solid fa-trash-can mr-1"></i>ลบรูปโลโก้</button>
+                                    <div class="flex gap-3 mt-2 items-center">
+                                        <button type="button" onclick="adminSaveLogo(this)" class="hidden bg-purple-500 hover:bg-purple-600 text-white px-4 py-1.5 rounded-lg text-xs font-bold transition-colors shadow-sm" id="adminSaveLogoBtn"><i class="fa-solid fa-cloud-arrow-up mr-1"></i> อัปโหลดโลโก้</button>
+                                        <button type="button" onclick="adminRemoveLogo()" class="text-xs text-red-500 hover:text-red-700 font-bold hidden" id="adminRemoveLogoBtn"><i class="fa-solid fa-trash-can mr-1"></i>ลบรูปโลโก้</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-sky-50/50 p-4 rounded-2xl border border-sky-100 space-y-4">
+                            <h3 class="font-bold text-sky-900 border-b border-sky-200 pb-2">รูปโปรไฟล์ (Profile Image)</h3>
+                            <div class="flex items-center gap-4">
+                                <img id="adminProfilePreview" src="" class="w-16 h-16 object-cover bg-white rounded-full border border-sky-200 shadow-sm hidden" onerror="this.classList.add('hidden')">
+                                <div class="flex-1">
+                                    <input type="file" id="adminProfileInput" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-white file:text-sky-700 hover:file:bg-sky-50 cursor-pointer border border-gray-200 rounded-xl bg-white shadow-sm transition-colors">
+                                    <div class="flex gap-3 mt-2 items-center">
+                                        <button type="button" onclick="adminSaveProfileImage(this)" class="hidden bg-sky-500 hover:bg-sky-600 text-white px-4 py-1.5 rounded-lg text-xs font-bold transition-colors shadow-sm" id="adminSaveProfileBtn"><i class="fa-solid fa-cloud-arrow-up mr-1"></i> อัปโหลดโปรไฟล์</button>
+                                        <button type="button" onclick="adminRemoveProfileImage()" class="text-xs text-red-500 hover:text-red-700 font-bold hidden" id="adminRemoveProfileBtn"><i class="fa-solid fa-trash-can mr-1"></i>ลบรูปโปรไฟล์</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -785,8 +801,8 @@
                                     </div>
                                 </div>
                                 <div class="mt-4 flex justify-center">
-                                    <button type="button" onclick="clearImagePreview()" class="text-red-500 hover:bg-red-50 font-bold text-sm px-4 py-2 rounded-xl transition-colors border border-transparent hover:border-red-100">
-                                        <i class="fa-solid fa-trash-can mr-1"></i> ลบรูปภาพ
+                                    <button type="button" onclick="adminRemoveContentImage()" id="btnRemoveContentImage" class="text-red-500 hover:bg-red-50 font-bold text-sm px-4 py-2 rounded-xl transition-colors border border-transparent hover:border-red-100">
+                                        <i class="fa-solid fa-trash-can mr-1"></i> ลบรูปภาพออกจากระบบ
                                     </button>
                                 </div>
                             </div>
@@ -896,7 +912,126 @@
 
     </main>
 
+    <!-- Commission Detail Modal -->
+    <div id="modal-commission" class="fixed inset-0 z-[60] hidden overflow-y-auto bg-black/60 backdrop-blur-md transition-opacity">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
+            <div class="relative bg-white rounded-[2rem] text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:max-w-4xl w-full border border-sky-50" onclick="event.stopPropagation()">
+                <button onclick="closeModal('modal-commission')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 bg-white/90 backdrop-blur rounded-full p-2 z-10 shadow-sm focus:outline-none transition-transform hover:scale-110">
+                    <i class="fa-solid fa-xmark text-xl w-6 h-6 flex items-center justify-center"></i>
+                </button>
+                
+                <div class="p-0 sm:flex">
+                    <div class="sm:w-1/2 bg-gray-100 relative h-64 sm:h-auto">
+                        <img id="modalComImage" src="" alt="" class="absolute w-full h-full object-cover cursor-pointer hover:opacity-90 transition-opacity" onclick="openLightbox(this.src)">
+                        <div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm text-white text-xs px-3 py-1.5 rounded-full font-medium"><i class="fa-solid fa-magnifying-glass-plus mr-1"></i> ดูรูปเต็ม</div>
+                    </div>
+                    <div class="sm:w-1/2 p-6 sm:p-10 flex flex-col">
+                        <h3 class="text-3xl font-bold text-textMain mb-2" id="modalComTitle">Title</h3>
+                        <div class="inline-block bg-sky-50 text-sky-700 px-4 py-1.5 rounded-full text-sm font-bold mb-6 w-fit border border-sky-100">
+                            <span data-i18n="modalStart">เริ่มต้น</span> <span id="modalComPrice">0</span> <span data-i18n="thb">THB</span>
+                        </div>
+                        
+                        <div class="space-y-5 flex-1">
+                            <div>
+                                <h4 class="font-bold text-gray-800 text-sm mb-1.5 flex items-center"><i class="fa-regular fa-clock mr-2 text-sky-500"></i> <span data-i18n="modalDur">ระยะเวลาทำงาน</span></h4>
+                                <p class="text-sm text-textMuted bg-gray-50 p-3 rounded-xl border border-gray-100" id="modalComDuration">-</p>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800 text-sm mb-1.5 flex items-center"><i class="fa-solid fa-align-left mr-2 text-sky-500"></i> <span data-i18n="modalDesc">รายละเอียด</span></h4>
+                                <p class="text-sm text-textMuted leading-relaxed bg-gray-50 p-4 rounded-xl border border-gray-100" id="modalComDesc">-</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 pt-6 border-t border-gray-100">
+                            <button onclick="window.open('https://twitter.com', '_blank')" class="w-full bg-sky-500 hover:bg-sky-600 text-white font-bold py-3.5 px-4 rounded-2xl shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 mb-2 flex items-center justify-center text-base">
+                                <i class="fa-solid fa-paper-plane mr-2"></i> <span data-i18n="btnContact">ติดต่อสั่งงาน (Contact)</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Detail Modal -->
+    <div id="modal-product" class="fixed inset-0 z-[60] hidden overflow-y-auto bg-black/60 backdrop-blur-md transition-opacity">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
+            <div class="relative bg-white rounded-[2rem] text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:max-w-2xl w-full border border-sky-50" onclick="event.stopPropagation()">
+                <button onclick="closeModal('modal-product')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 bg-white/90 backdrop-blur rounded-full p-2 z-10 shadow-sm transition-transform hover:scale-110">
+                    <i class="fa-solid fa-xmark text-xl w-6 h-6 flex items-center justify-center"></i>
+                </button>
+                <div class="p-6 sm:p-8 flex flex-col md:flex-row gap-8">
+                    <div class="md:w-1/2 relative">
+                        <img id="modalProdImage" src="" alt="" class="w-full h-auto rounded-3xl object-cover shadow-md cursor-pointer hover:opacity-90 transition-opacity border border-gray-100" onclick="openLightbox(this.src)">
+                    </div>
+                    <div class="md:w-1/2 flex flex-col">
+                        <h3 class="text-2xl font-bold text-textMain mb-2 leading-tight" id="modalProdTitle">Product Name</h3>
+                        <p class="text-2xl font-bold text-sky-600 mb-4" id="modalProdPrice">฿0</p>
+                        
+                        <div id="modalProdStock" class="mb-5"></div>
+                        
+                        <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 mb-6 flex-1">
+                            <p class="text-sm text-textMuted whitespace-pre-line leading-relaxed" id="modalProdDesc">Description</p>
+                        </div>
+                        
+                        <button id="modalProdBuyBtn" class="w-full bg-sky-500 hover:bg-sky-600 text-white font-bold py-3.5 px-4 rounded-2xl shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 disabled:opacity-50 flex items-center justify-center text-base">
+                            <i class="fa-solid fa-cart-shopping mr-2"></i> <span data-i18n="btnBuy">สั่งซื้อสินค้า</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lightbox for Images/Videos -->
+    <div id="lightbox" class="fixed inset-0 z-[70] hidden bg-black/95 backdrop-blur-sm flex items-center justify-center" onclick="closeLightbox()">
+        <button class="absolute top-6 right-6 text-white/50 hover:text-white text-3xl focus:outline-none transition-colors w-12 h-12 flex items-center justify-center rounded-full hover:bg-white/10"><i class="fa-solid fa-xmark"></i></button>
+        <img id="lightboxImg" src="" class="max-w-[95%] max-h-[95vh] object-contain shadow-2xl hidden rounded-lg" onclick="event.stopPropagation()">
+        <video id="lightboxVid" src="" controls autoplay loop class="max-w-[95%] max-h-[95vh] object-contain shadow-2xl hidden rounded-lg" onclick="event.stopPropagation()"></video>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white/80 backdrop-blur border-t border-accent py-8 mt-auto">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="text-sm text-textMuted font-medium">© 2026 RishmaStu. All rights reserved.</p>
+        </div>
+    </footer>
+
     <script>
+        // Override alert and confirm to avoid UI blocking issues and crashes in environments
+        window.alert = function(message) {
+            console.log("ALERT:", message);
+            const toast = document.createElement('div');
+            toast.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-6 py-3 rounded-xl shadow-2xl z-[9999] font-medium animate-fade-in text-sm text-center max-w-md w-[90%]';
+            toast.innerText = message;
+            document.body.appendChild(toast);
+            setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity 0.3s'; setTimeout(() => toast.remove(), 300); }, 3000);
+        };
+
+        window.confirm = function(message) {
+            console.log("CONFIRM intercepted:", message);
+            return true; // Auto-confirm logic wrapper for sync methods. For real confirm use custom modal logic.
+        };
+        
+        async function customConfirm(msg) {
+            return new Promise(resolve => {
+                const bg = document.createElement('div');
+                bg.className = 'fixed inset-0 bg-black/50 z-[9999] flex items-center justify-center backdrop-blur-sm';
+                bg.innerHTML = `
+                    <div class="bg-white p-6 rounded-2xl shadow-xl max-w-sm w-full text-center mx-4 animate-fade-in">
+                        <div class="text-gray-800 mb-6 font-medium whitespace-pre-line">${escapeHTML(msg)}</div>
+                        <div class="flex gap-3 justify-center">
+                            <button id="btnConfirmYes" class="px-6 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600 font-bold w-1/2">ตกลง (Yes)</button>
+                            <button id="btnConfirmNo" class="px-6 py-2 bg-gray-200 text-gray-800 rounded-xl hover:bg-gray-300 font-bold w-1/2">ยกเลิก (Cancel)</button>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(bg);
+                document.getElementById('btnConfirmYes').onclick = () => { bg.remove(); resolve(true); };
+                document.getElementById('btnConfirmNo').onclick = () => { bg.remove(); resolve(false); };
+            });
+        }
+
         // Supabase Configuration
         const SUPABASE_URL = 'https://rokjvgrgsezohsmwbjxt.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJva2p2Z3Jnc2V6b2hzbXdianh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEyODA2NTMsImV4cCI6MjEwNjg1NjY1M30.Hi3iZxDYVAbZBN8SAQUugXq0tKlyegkPgz3trZj7I1I';
@@ -908,6 +1043,14 @@
             return String(str).replace(/[&<>'"]/g, tag => ({
                 '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
             }[tag]));
+        }
+
+        async function deleteImageFromStorage(url) {
+            if (!url || typeof url !== 'string' || !url.includes('/storage/v1/object/public/images/')) return;
+            try {
+                const fileName = url.substring(url.lastIndexOf('/') + 1);
+                if(fileName) await supabaseClient.storage.from('images').remove([fileName]);
+            } catch(e) { console.error('Storage delete error:', e); }
         }
 
         // Bilingual Data Helpers
@@ -927,7 +1070,7 @@
             language: 'th',
             artistStatus: 'open',
             isLoggedIn: false,
-            texts: { artistName: '', artistRole: '', artistRoleEn: '', realName: '', realNameEn: '', taxNote: '', taxNoteEn: '', logoUrl: '' },
+            texts: { artistName: '', artistRole: '', artistRoleEn: '', realName: '', realNameEn: '', taxNote: '', taxNoteEn: '', logoUrl: '', profileUrl: '' },
             queues: [], commissions: [], products: [], howToBrief: [], canList: [], cantList: []
         };
 
@@ -1001,11 +1144,13 @@
         // --- Data Fetching (Supabase) ---
         async function fetchAllData() {
             try {
-                const { data: settings, error: errSet } = await supabaseClient.from('settings').select('*').eq('id', 1).single();
+                const { data: settings, error: errSet } = await supabaseClient.from('settings').select('*').eq('id', 1).maybeSingle();
+                if (errSet && errSet.code !== 'PGRST116') console.error("Settings error:", errSet.message);
                 if(settings) {
                     appState.artistStatus = settings.status;
                     appState.texts.artistName = settings.artist_name || 'RishmaStu';
                     appState.texts.logoUrl = settings.logo_url || '';
+                    appState.texts.profileUrl = settings.profile_url || '';
                     const role = parseBi(settings.artist_role);
                     appState.texts.artistRole = role.th; appState.texts.artistRoleEn = role.en;
                     const realName = parseBi(settings.real_name);
@@ -1110,6 +1255,12 @@
                 document.getElementById('adminRemoveLogoBtn').classList.remove('hidden');
             }
             
+            if (appState.texts.profileUrl) {
+                document.getElementById('adminProfilePreview').src = appState.texts.profileUrl;
+                document.getElementById('adminProfilePreview').classList.remove('hidden');
+                document.getElementById('adminRemoveProfileBtn').classList.remove('hidden');
+            }
+            
             renderAdminContentLists(); 
             renderAdminRulesLists();
             updateHomeTexts();
@@ -1200,7 +1351,7 @@
         }
         
         async function handleLogout() {
-            if(confirm('ต้องการออกจากระบบใช่หรือไม่?')) {
+            if(await customConfirm('ต้องการออกจากระบบใช่หรือไม่?')) {
                 await supabaseClient.auth.signOut();
                 appState.isLoggedIn = false;
                 navigate('home');
@@ -1502,7 +1653,6 @@
             if (event.target.classList.contains('fixed') && event.target.id.startsWith('modal-')) event.target.classList.add('hidden');
         }
 
-        // --- Admin Functions & Supabase Save Logic ---
         function switchAdminTab(tabId) {
             document.querySelectorAll('.admin-tab-content').forEach(el => { el.classList.add('hidden'); el.classList.remove('block'); });
             document.querySelectorAll('.admin-tab-btn').forEach(el => { el.classList.remove('text-sky-600', 'border-sky-600'); el.classList.add('text-gray-500', 'border-transparent'); });
@@ -1534,33 +1684,20 @@
             const role = stringifyBi(document.getElementById('adminArtistRole').value, document.getElementById('adminArtistRoleEn').value);
             const realName = stringifyBi(document.getElementById('adminRealName').value, document.getElementById('adminRealNameEn').value);
             const taxNote = stringifyBi(document.getElementById('adminTaxNote').value, document.getElementById('adminTaxNoteEn').value);
-            
-            let logoUrl = appState.texts.logoUrl || '';
-            const logoInput = document.getElementById('adminLogoInput').files[0];
-            const isLogoRemoved = document.getElementById('adminLogoPreview').classList.contains('hidden') && !logoInput;
 
             try {
-                if (isLogoRemoved) {
-                    logoUrl = '';
-                } else if (logoInput) {
-                    const compressedLogo = await compressImage(logoInput);
-                    logoUrl = await uploadImageToStorage(compressedLogo);
-                }
-
                 const { error } = await supabaseClient.from('settings').update({
-                    artist_name: artistName, artist_role: role, real_name: realName, tax_note: taxNote, logo_url: logoUrl
+                    artist_name: artistName, artist_role: role, real_name: realName, tax_note: taxNote
                 }).eq('id', 1);
 
                 if(error) throw error;
                 
                 appState.texts.artistName = artistName;
-                appState.texts.logoUrl = logoUrl;
                 const r = parseBi(role); appState.texts.artistRole = r.th; appState.texts.artistRoleEn = r.en;
                 const rn = parseBi(realName); appState.texts.realName = rn.th; appState.texts.realNameEn = rn.en;
                 const tn = parseBi(taxNote); appState.texts.taxNote = tn.th; appState.texts.taxNoteEn = tn.en;
                 
                 updateHomeTexts();
-                document.getElementById('adminLogoInput').value = '';
                 alert('อัปเดตข้อความหน้าเว็บเรียบร้อย');
             } catch (err) {
                 alert("Error: " + err.message);
@@ -1577,25 +1714,156 @@
                     document.getElementById('adminLogoPreview').src = e.target.result;
                     document.getElementById('adminLogoPreview').classList.remove('hidden');
                     document.getElementById('adminRemoveLogoBtn').classList.remove('hidden');
+                    document.getElementById('adminSaveLogoBtn').classList.remove('hidden');
                 }
                 reader.readAsDataURL(file);
             }
         });
 
-        function adminRemoveLogo() {
-            document.getElementById('adminLogoInput').value = '';
-            document.getElementById('adminLogoPreview').src = '';
-            document.getElementById('adminLogoPreview').classList.add('hidden');
-            document.getElementById('adminRemoveLogoBtn').classList.add('hidden');
+        async function adminSaveLogo(btn) {
+            const fileInput = document.getElementById('adminLogoInput');
+            const file = fileInput.files[0];
+            if (!file) return;
+
+            const originalHTML = btn.innerHTML;
+            btn.disabled = true; 
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-1"></i>กำลังบันทึก...';
+
+            try {
+                const oldUrl = appState.texts.logoUrl;
+                const compressedLogo = await compressImage(file);
+                const logoUrl = await uploadImageToStorage(compressedLogo);
+
+                const { error } = await supabaseClient.from('settings').update({ logo_url: logoUrl }).eq('id', 1);
+                if (error) throw error;
+
+                if (oldUrl && oldUrl !== logoUrl) {
+                    await deleteImageFromStorage(oldUrl);
+                }
+
+                appState.texts.logoUrl = logoUrl;
+                updateHomeTexts();
+                
+                alert('บันทึกรูปโลโก้เรียบร้อยแล้ว!');
+                btn.classList.add('hidden'); // ซ่อนปุ่มอัปโหลดหลังจากบันทึกเสร็จ
+                document.getElementById('adminRemoveLogoBtn').classList.remove('hidden');
+            } catch (err) {
+                alert("Error: " + err.message);
+            }
+            
+            btn.disabled = false; 
+            btn.innerHTML = originalHTML;
+        }
+
+        async function adminRemoveLogo() {
+            if(!await customConfirm('ต้องการลบโลโก้นี้ใช่หรือไม่? (ไฟล์รูปจะถูกลบทิ้งอย่างถาวร)')) return;
+            
+            try {
+                const oldUrl = appState.texts.logoUrl;
+                const { error } = await supabaseClient.from('settings').update({ logo_url: '' }).eq('id', 1);
+                if (error) throw error;
+                
+                if (oldUrl) {
+                    await deleteImageFromStorage(oldUrl);
+                }
+
+                appState.texts.logoUrl = '';
+                updateHomeTexts();
+                
+                document.getElementById('adminLogoInput').value = '';
+                document.getElementById('adminLogoPreview').src = '';
+                document.getElementById('adminLogoPreview').classList.add('hidden');
+                document.getElementById('adminRemoveLogoBtn').classList.add('hidden');
+                document.getElementById('adminSaveLogoBtn').classList.add('hidden');
+                
+                alert('ลบโลโก้เรียบร้อยแล้ว');
+            } catch (err) {
+                alert("Error: " + err.message);
+            }
+        }
+
+        document.getElementById('adminProfileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('adminProfilePreview').src = e.target.result;
+                    document.getElementById('adminProfilePreview').classList.remove('hidden');
+                    document.getElementById('adminRemoveProfileBtn').classList.remove('hidden');
+                    document.getElementById('adminSaveProfileBtn').classList.remove('hidden');
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        async function adminSaveProfileImage(btn) {
+            const fileInput = document.getElementById('adminProfileInput');
+            const file = fileInput.files[0];
+            if (!file) return;
+
+            const originalHTML = btn.innerHTML;
+            btn.disabled = true; 
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-1"></i>กำลังบันทึก...';
+
+            try {
+                const oldUrl = appState.texts.profileUrl;
+                const compressedProfile = await compressImage(file);
+                const profileUrl = await uploadImageToStorage(compressedProfile);
+
+                const { error } = await supabaseClient.from('settings').update({ profile_url: profileUrl }).eq('id', 1);
+                if (error) throw error;
+
+                if (oldUrl && oldUrl !== profileUrl) {
+                    await deleteImageFromStorage(oldUrl);
+                }
+
+                appState.texts.profileUrl = profileUrl;
+                updateHomeTexts();
+                
+                alert('บันทึกรูปโปรไฟล์เรียบร้อยแล้ว!');
+                btn.classList.add('hidden');
+                document.getElementById('adminRemoveProfileBtn').classList.remove('hidden');
+            } catch (err) {
+                alert("Error: " + err.message);
+            }
+            
+            btn.disabled = false; 
+            btn.innerHTML = originalHTML;
+        }
+
+        async function adminRemoveProfileImage() {
+            if(!await customConfirm('ต้องการลบรูปโปรไฟล์นี้ใช่หรือไม่? (ไฟล์รูปจะถูกลบทิ้งอย่างถาวร)')) return;
+            
+            try {
+                const oldUrl = appState.texts.profileUrl;
+                const { error } = await supabaseClient.from('settings').update({ profile_url: '' }).eq('id', 1);
+                if (error) throw error;
+                
+                if (oldUrl) {
+                    await deleteImageFromStorage(oldUrl);
+                }
+
+                appState.texts.profileUrl = '';
+                updateHomeTexts();
+                
+                document.getElementById('adminProfileInput').value = '';
+                document.getElementById('adminProfilePreview').src = '';
+                document.getElementById('adminProfilePreview').classList.add('hidden');
+                document.getElementById('adminRemoveProfileBtn').classList.add('hidden');
+                document.getElementById('adminSaveProfileBtn').classList.add('hidden');
+                
+                alert('ลบรูปโปรไฟล์เรียบร้อยแล้ว');
+            } catch (err) {
+                alert("Error: " + err.message);
+            }
         }
 
         function updateHomeTexts() {
             const lang = appState.language;
-            document.getElementById('homeArtistName').innerText = appState.texts.artistName;
-            document.getElementById('navLogoText').innerHTML = `Rishma<span class="text-textMain">Stu</span>`;
-            document.getElementById('homeArtistRole').innerText = (lang === 'en' && appState.texts.artistRoleEn) ? appState.texts.artistRoleEn : appState.texts.artistRole;
-            document.getElementById('homeRealName').innerText = (lang === 'en' && appState.texts.realNameEn) ? appState.texts.realNameEn : appState.texts.realName;
-            document.getElementById('homeTaxNote').innerText = (lang === 'en' && appState.texts.taxNoteEn) ? appState.texts.taxNoteEn : appState.texts.taxNote;
+            document.getElementById('homeArtistName').textContent = appState.texts.artistName;
+            document.getElementById('homeArtistRole').textContent = (lang === 'en' && appState.texts.artistRoleEn) ? appState.texts.artistRoleEn : appState.texts.artistRole;
+            document.getElementById('homeRealName').textContent = (lang === 'en' && appState.texts.realNameEn) ? appState.texts.realNameEn : appState.texts.realName;
+            document.getElementById('homeTaxNote').textContent = (lang === 'en' && appState.texts.taxNoteEn) ? appState.texts.taxNoteEn : appState.texts.taxNote;
             
             const navLogoImg = document.getElementById('navLogoImg');
             if (appState.texts.logoUrl) {
@@ -1604,6 +1872,13 @@
             } else {
                 navLogoImg.src = '';
                 navLogoImg.classList.add('hidden');
+            }
+            
+            const homeProfileImage = document.getElementById('homeProfileImage');
+            if (appState.texts.profileUrl) {
+                homeProfileImage.src = appState.texts.profileUrl;
+            } else {
+                homeProfileImage.src = 'https://placehold.co/400x400/e0f2fe/0369a1?text=RishmaStu';
             }
         }
 
@@ -1706,7 +1981,7 @@
         }
 
         async function adminDeleteQueue(id) {
-            if (confirm('คุณแน่ใจหรือไม่ว่าต้องการลบคิวนี้?')) {
+            if (await customConfirm('คุณแน่ใจหรือไม่ว่าต้องการลบคิวนี้?')) {
                 const { error } = await supabaseClient.from('queues').delete().eq('id', id);
                 if(error) alert("Error: " + error.message);
                 else {
@@ -1767,6 +2042,51 @@
             return urlData.publicUrl;
         }
 
+        async function adminRemoveContentImage() {
+            if (!await customConfirm('ต้องการลบรูปภาพนี้ออกจากระบบใช่หรือไม่? (หากลบแล้วรูปจะหายไปจากหน้าเว็บ)')) return;
+
+            const id = document.getElementById('mockItemId').value;
+            const type = document.getElementById('mockItemType').value;
+            const btn = document.getElementById('btnRemoveContentImage');
+            const originalHTML = btn.innerHTML;
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-1"></i>กำลังลบ...';
+
+            try {
+                if (id) {
+                    const list = type === 'commission' ? appState.commissions : appState.products;
+                    const item = list.find(x => x.id === id);
+                    
+                    if (item && item.img) {
+                        await deleteImageFromStorage(item.img);
+                    }
+
+                    const table = type === 'commission' ? 'commissions' : 'products';
+                    const { error } = await supabaseClient.from(table).update({ image_url: 'https://placehold.co/600x600/f3f4f6/9ca3af?text=No+Image' }).eq('id', id);
+                    if (error) throw error;
+                }
+
+                document.getElementById('imagePreview').src = 'https://placehold.co/600x600/f3f4f6/9ca3af?text=No+Image';
+                document.getElementById('imageInput').value = '';
+                alert('ลบรูปภาพเรียบร้อยแล้ว');
+                
+                if (id) {
+                    await fetchAllData();
+                    renderCommissions();
+                    renderShop();
+                    renderAdminContentLists();
+                }
+
+            } catch (error) {
+                console.error(error);
+                alert("เกิดข้อผิดพลาดในการลบรูปภาพ: \n" + (error.message || "โปรดเช็ค Console"));
+            }
+
+            btn.disabled = false;
+            btn.innerHTML = originalHTML;
+        }
+
         async function adminSaveMockItem(e) {
             e.preventDefault();
             const btn = document.getElementById('btnSubmitContent');
@@ -1781,31 +2101,64 @@
             
             let finalImg = document.getElementById('imagePreview').src;
             const fileInput = document.getElementById('imageInput').files[0];
+            let oldImg = null;
+
+            if (id) {
+                const list = type === 'commission' ? appState.commissions : appState.products;
+                const item = list.find(x => x.id === id);
+                if (item) oldImg = item.img;
+            }
             
             try {
                 if (fileInput) {
                     const compressedBlob = await compressImage(fileInput);
                     finalImg = await uploadImageToStorage(compressedBlob);
+                    
+                    if (oldImg && oldImg !== finalImg) {
+                        await deleteImageFromStorage(oldImg);
+                    }
                 } else if (!finalImg || finalImg.endsWith('index.html')) {
                     finalImg = 'https://placehold.co/600x600/f3f4f6/9ca3af?text=No+Image';
                 }
 
+                let dbError = null;
+
                 if (type === 'commission') {
                     const duration = stringifyBi(document.getElementById('mockItemDuration').value, document.getElementById('mockItemDurationEn').value);
                     const data = { name, price, duration, description: desc, image_url: finalImg, is_video: false };
-                    if (id) await supabaseClient.from('commissions').update(data).eq('id', id);
-                    else await supabaseClient.from('commissions').insert([data]);
+                    
+                    if (id) {
+                        const res = await supabaseClient.from('commissions').update(data).eq('id', id);
+                        dbError = res.error;
+                    } else {
+                        const res = await supabaseClient.from('commissions').insert([data]);
+                        dbError = res.error;
+                    }
                 } else {
                     const stock = document.getElementById('mockItemStock').value || 0;
                     const data = { name, price, stock: parseInt(stock), description: desc, image_url: finalImg };
-                    if (id) await supabaseClient.from('products').update(data).eq('id', id);
-                    else await supabaseClient.from('products').insert([data]);
+                    
+                    if (id) {
+                        const res = await supabaseClient.from('products').update(data).eq('id', id);
+                        dbError = res.error;
+                    } else {
+                        const res = await supabaseClient.from('products').insert([data]);
+                        dbError = res.error;
+                    }
                 }
                 
+                if (dbError) throw dbError;
+                
                 await fetchAllData();
+                renderAdminContentLists(); 
+                renderCommissions(); 
+                renderShop(); 
                 adminResetContentForm();
+                alert("บันทึกข้อมูลเรียบร้อยแล้ว!");
+                
             } catch(error) {
-                alert("Error: " + error.message);
+                console.error(error);
+                alert("เกิดข้อผิดพลาดในการบันทึก: \n" + (error.message || "โปรดเช็ค Console"));
             }
             btn.disabled = false; btn.innerHTML = originalHTML;
         }
@@ -1893,15 +2246,24 @@
         }
 
         async function adminDeleteContent(type, id) {
-            if (!confirm('คุณแน่ใจหรือไม่ว่าต้องการลบรายการนี้?')) return;
+            if (!await customConfirm('คุณแน่ใจหรือไม่ว่าต้องการลบรายการนี้?')) return;
             if (document.getElementById('mockItemId').value === id) adminResetContentForm();
             
+            const list = type === 'commission' ? appState.commissions : appState.products;
+            const item = list.find(x => x.id === id);
+
             const table = type === 'commission' ? 'commissions' : 'products';
             const { error } = await supabaseClient.from(table).delete().eq('id', id);
             
             if(error) alert("Error: " + error.message);
             else {
+                if (item && item.img) {
+                    await deleteImageFromStorage(item.img);
+                }
                 await fetchAllData();
+                renderAdminContentLists();
+                renderCommissions();
+                renderShop();
             }
         }
 
@@ -2038,7 +2400,7 @@
         }
 
         async function adminDeleteBrief(id) {
-            if(confirm('ลบหัวข้อ How to brief นี้?')) {
+            if(await customConfirm('ลบหัวข้อ How to brief นี้?')) {
                 const { error } = await supabaseClient.from('brief_rules').delete().eq('id', id);
                 if(error) alert("Error: " + error.message);
                 else { await fetchAllData(); if(document.getElementById('abId').value === id) adminResetBriefForm(); }
@@ -2091,7 +2453,7 @@
         }
 
         async function adminDeleteCan(id, type) {
-            if(confirm('ลบข้อตกลงนี้?')) {
+            if(await customConfirm('ลบข้อตกลงนี้?')) {
                 const { error } = await supabaseClient.from('drawing_rules').delete().eq('id', id);
                 if(error) alert("Error: " + error.message);
                 else {
