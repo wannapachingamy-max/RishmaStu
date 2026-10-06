@@ -49,8 +49,8 @@
     
     <style>
         body {
+            /* ลบ background-attachment: fixed ออกเพื่อแก้บั๊กเลื่อนหน้าจอใน iOS */
             background: linear-gradient(135deg, #fffbeb 0%, #fef9c3 100%);
-            background-attachment: fixed;
             color: #1f2937;
         }
         
@@ -105,8 +105,9 @@
         }
     </style>
 </head>
-<body class="antialiased min-h-screen flex flex-col">
+<body class="antialiased min-h-screen flex flex-col relative">
 
+    <!-- Global Loader -->
     <div id="global-loader">
         <div class="text-center">
             <i class="fa-solid fa-circle-notch fa-spin text-4xl text-sky-500 mb-4"></i>
@@ -114,7 +115,8 @@
         </div>
     </div>
 
-    <div id="floating-bg" class="floating-hearts-container"></div>
+    <!-- Floating Background (ย้ายจาก style body มาไว้ใน container นี้) -->
+    <div id="floating-bg" class="floating-hearts-container fixed inset-0 w-full h-full bg-gradient-to-br from-[#fffbeb] to-[#fef9c3] -z-20"></div>
 
     <nav class="fixed w-full top-0 z-50 glass-nav transition-all duration-300">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -132,8 +134,10 @@
                     <button onclick="navigate('queue')" class="nav-link text-textMain hover:text-sky-500 font-medium transition-colors" data-i18n="navQueue">คิวงาน</button>
                     <button onclick="navigate('terms')" class="nav-link text-textMain hover:text-sky-500 font-medium transition-colors" data-i18n="navTerms">ข้อตกลง</button>
                     <button onclick="navigate('shop')" class="nav-link text-textMain hover:text-sky-500 font-medium transition-colors" data-i18n="navShop">สินค้า</button>
+                    <!-- Admin Link -->
                     <button onclick="checkAdminAccess()" class="nav-link text-gray-400 hover:text-sky-500 text-sm transition-colors" title="ตั้งค่าระบบ"><i class="fa-solid fa-gear"></i></button>
                     
+                    <!-- Language Toggle -->
                     <button onclick="toggleLanguage()" class="flex items-center space-x-1 bg-secondary rounded-full px-3 py-1 text-sm text-sky-700 hover:bg-sky-100 transition-colors">
                         <i class="fa-solid fa-globe"></i>
                         <span id="langText">TH</span>
@@ -165,10 +169,11 @@
         </div>
     </nav>
 
-    <main class="flex-grow pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full">
+    <main class="flex-grow pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full relative z-10">
         
         <!-- ==================== HOME ==================== -->
         <section id="view-home" class="view-section animate-fade-in space-y-10">
+            <!-- Profile Info -->
             <div class="bg-white/95 backdrop-blur rounded-3xl p-6 md:p-8 shadow-sm border border-accent flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8 relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-32 h-32 bg-yellow-100 rounded-bl-full opacity-50"></div>
                 <div class="w-32 h-32 md:w-40 md:h-40 flex-shrink-0 relative z-10">
@@ -188,6 +193,7 @@
                 </div>
             </div>
 
+            <!-- Social Links (Pill Buttons Style) -->
             <div class="bg-gray-100/90 backdrop-blur rounded-2xl p-5 shadow-inner border border-gray-200 w-full">
                 <h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3 text-center md:text-left" data-i18n="homeLinks">ช่องทางการติดตาม</h2>
                 <div class="flex flex-wrap gap-3 justify-center md:justify-start">
@@ -209,6 +215,7 @@
                 </div>
             </div>
 
+            <!-- Work Experience -->
             <div class="bg-white/95 backdrop-blur rounded-3xl p-6 md:p-8 shadow-sm border border-accent">
                 <h2 class="text-xl md:text-2xl font-bold mb-6 text-textMain" data-i18n="homeExp">ประสบการณ์ทำงาน</h2>
                 <div class="relative border-l-2 border-sky-100 ml-3 md:ml-4 space-y-8">
@@ -278,6 +285,7 @@
                         </table>
                     </div>
 
+                    <!-- Additional Pricing Info -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="bg-secondary rounded-2xl p-4 border border-sky-100">
                             <h3 class="font-bold text-sky-800 mb-2 flex items-center"><i class="fa-solid fa-tag mr-2"></i> <span data-i18n="usageTitle">Usage Multiply</span></h3>
@@ -297,6 +305,7 @@
                 </div>
             </div>
 
+            <!-- Categories Grid -->
             <div>
                 <h2 class="text-2xl font-bold mb-6 text-textMain" data-i18n="catTitle">Categories</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="commissionCategories"></div>
@@ -305,6 +314,7 @@
 
         <!-- ==================== QUEUE ==================== -->
         <section id="view-queue" class="view-section hidden animate-fade-in space-y-8 max-w-6xl mx-auto">
+            
             <div class="bg-white/80 backdrop-blur-sm p-6 md:p-8 rounded-3xl border border-sky-100 shadow-sm text-center mb-6">
                 <h1 class="text-2xl md:text-4xl font-bold text-textMain mb-2 tracking-wide font-['Noto_Sans_Thai']" data-i18n="queueTitle">คิวงาน Rish Studio</h1>
                 <p class="text-sm md:text-lg text-textMuted mb-4" data-i18n="queueSubtitle">ปริ๊นตัวน้อย กับกองนิยายของเขา</p>
@@ -318,6 +328,7 @@
                 </div>
             </div>
 
+            <!-- Color Legend -->
             <div class="bg-white/90 backdrop-blur p-4 md:p-5 rounded-3xl shadow-sm border border-accent text-xs md:text-sm text-gray-700 mx-auto max-w-2xl font-medium space-y-3">
                 <div class="flex items-center gap-3">
                     <div class="w-5 h-5 md:w-6 md:h-6 rounded bg-statusGreen border border-green-300 shadow-sm shrink-0"></div>
@@ -337,6 +348,7 @@
                 <i class="fa-solid fa-star text-xs mr-2 text-yellow-500"></i> <span data-i18n="qNote">งานสีต่องานสี งานย่อยต่องานย่อย</span> <i class="fa-solid fa-star text-xs ml-2 text-yellow-500"></i>
             </p>
 
+            <!-- Queue Tabs Navigation -->
             <div class="flex flex-wrap gap-2 mb-2 p-2 bg-white/80 backdrop-blur rounded-2xl shadow-sm border border-gray-100 w-fit mx-auto justify-center">
                 <button onclick="switchQueueTab('main')" id="qTabBtn-main" class="queue-tab-btn px-4 md:px-6 py-2 md:py-2.5 rounded-xl font-bold text-xs md:text-sm transition-all bg-sky-500 text-white shadow-sm">
                     <i class="fa-solid fa-list-ol mr-1 md:mr-2"></i> <span data-i18n="qTabMain">คิวหลัก</span>
@@ -349,6 +361,7 @@
                 </button>
             </div>
 
+            <!-- TAB CONTENT: Main Queue Table -->
             <div id="qTab-main" class="queue-tab-content block bg-white/95 backdrop-blur rounded-3xl shadow-sm border border-accent overflow-hidden mb-8 animate-fade-in">
                 <div class="overflow-x-auto custom-scroll">
                     <table class="w-full text-sm queue-table min-w-[900px]">
@@ -369,6 +382,7 @@
                 </div>
             </div>
 
+            <!-- TAB CONTENT: Sub Queue Table -->
             <div id="qTab-sub" class="queue-tab-content hidden bg-white/95 backdrop-blur rounded-3xl shadow-sm border border-accent overflow-hidden mb-8 animate-fade-in">
                 <div class="overflow-x-auto custom-scroll">
                     <table class="w-full text-sm queue-table min-w-[900px]">
@@ -389,6 +403,7 @@
                 </div>
             </div>
 
+            <!-- TAB CONTENT: Pending/Late Queue Table -->
             <div id="qTab-pending" class="queue-tab-content hidden bg-white/95 backdrop-blur rounded-3xl shadow-sm border border-red-200 overflow-hidden animate-fade-in">
                 <div class="overflow-x-auto custom-scroll">
                     <table class="w-full text-sm queue-table min-w-[900px]">
@@ -408,6 +423,7 @@
                     </table>
                 </div>
             </div>
+
         </section>
 
         <!-- ==================== TERMS ==================== -->
@@ -880,84 +896,8 @@
 
     </main>
 
-    <!-- Modals -->
-    <div id="modal-commission" class="fixed inset-0 z-[60] hidden overflow-y-auto bg-black/60 backdrop-blur-md transition-opacity">
-        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
-            <div class="relative bg-white rounded-[2rem] text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:max-w-4xl w-full border border-sky-50" onclick="event.stopPropagation()">
-                <button onclick="closeModal('modal-commission')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 bg-white/90 backdrop-blur rounded-full p-2 z-10 shadow-sm focus:outline-none transition-transform hover:scale-110">
-                    <i class="fa-solid fa-xmark text-xl w-6 h-6 flex items-center justify-center"></i>
-                </button>
-                <div class="p-0 sm:flex">
-                    <div class="sm:w-1/2 bg-gray-100 relative h-64 sm:h-auto">
-                        <img id="modalComImage" src="" alt="" class="absolute w-full h-full object-cover cursor-pointer hover:opacity-90 transition-opacity" onclick="openLightbox(this.src)">
-                    </div>
-                    <div class="sm:w-1/2 p-6 sm:p-10 flex flex-col">
-                        <h3 class="text-2xl md:text-3xl font-bold text-textMain mb-2" id="modalComTitle">Title</h3>
-                        <div class="inline-block bg-sky-50 text-sky-700 px-4 py-1.5 rounded-full text-sm font-bold mb-6 w-fit border border-sky-100">
-                            <span data-i18n="modalStart">เริ่มต้น</span> <span id="modalComPrice">0</span> <span data-i18n="modalThb">THB</span>
-                        </div>
-                        <div class="space-y-5 flex-1">
-                            <div>
-                                <h4 class="font-bold text-gray-800 text-sm mb-1.5 flex items-center"><i class="fa-regular fa-clock mr-2 text-sky-500"></i> <span data-i18n="modalDur">ระยะเวลาทำงาน</span></h4>
-                                <p class="text-sm text-textMuted bg-gray-50 p-3 rounded-xl border border-gray-100" id="modalComDuration">-</p>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-gray-800 text-sm mb-1.5 flex items-center"><i class="fa-solid fa-align-left mr-2 text-sky-500"></i> <span data-i18n="modalDesc">รายละเอียด</span></h4>
-                                <p class="text-sm text-textMuted leading-relaxed bg-gray-50 p-4 rounded-xl border border-gray-100" id="modalComDesc">-</p>
-                            </div>
-                        </div>
-                        <div class="mt-8 pt-6 border-t border-gray-100">
-                            <button onclick="window.open('https://twitter.com', '_blank')" class="w-full bg-sky-500 hover:bg-sky-600 text-white font-bold py-3.5 px-4 rounded-2xl shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 mb-2 flex items-center justify-center text-base">
-                                <i class="fa-solid fa-paper-plane mr-2"></i> <span data-i18n="btnContact">ติดต่อสั่งงาน (Contact)</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="modal-product" class="fixed inset-0 z-[60] hidden overflow-y-auto bg-black/60 backdrop-blur-md transition-opacity">
-        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
-            <div class="relative bg-white rounded-[2rem] text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:max-w-2xl w-full border border-sky-50" onclick="event.stopPropagation()">
-                <button onclick="closeModal('modal-product')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 bg-white/90 backdrop-blur rounded-full p-2 z-10 shadow-sm transition-transform hover:scale-110">
-                    <i class="fa-solid fa-xmark text-xl w-6 h-6 flex items-center justify-center"></i>
-                </button>
-                <div class="p-6 sm:p-8 flex flex-col md:flex-row gap-8">
-                    <div class="md:w-1/2 relative">
-                        <img id="modalProdImage" src="" alt="" class="w-full h-auto rounded-3xl object-cover shadow-md cursor-pointer hover:opacity-90 transition-opacity border border-gray-100" onclick="openLightbox(this.src)">
-                    </div>
-                    <div class="md:w-1/2 flex flex-col">
-                        <h3 class="text-2xl font-bold text-textMain mb-2 leading-tight" id="modalProdTitle">Product Name</h3>
-                        <p class="text-2xl font-bold text-sky-600 mb-4" id="modalProdPrice">฿0</p>
-                        <div id="modalProdStock" class="mb-5"></div>
-                        <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 mb-6 flex-1">
-                            <p class="text-sm text-textMuted whitespace-pre-line leading-relaxed" id="modalProdDesc">Description</p>
-                        </div>
-                        <button id="modalProdBuyBtn" class="w-full bg-sky-500 hover:bg-sky-600 text-white font-bold py-3.5 px-4 rounded-2xl shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 disabled:opacity-50 flex items-center justify-center text-base">
-                            <i class="fa-solid fa-cart-shopping mr-2"></i> <span data-i18n="btnBuy">สั่งซื้อสินค้า</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="lightbox" class="fixed inset-0 z-[70] hidden bg-black/95 backdrop-blur-sm flex items-center justify-center" onclick="closeLightbox()">
-        <button class="absolute top-6 right-6 text-white/50 hover:text-white text-3xl focus:outline-none transition-colors w-12 h-12 flex items-center justify-center rounded-full hover:bg-white/10"><i class="fa-solid fa-xmark"></i></button>
-        <img id="lightboxImg" src="" class="max-w-[95%] max-h-[95vh] object-contain shadow-2xl hidden rounded-lg" onclick="event.stopPropagation()">
-        <video id="lightboxVid" src="" controls autoplay loop class="max-w-[95%] max-h-[95vh] object-contain shadow-2xl hidden rounded-lg" onclick="event.stopPropagation()"></video>
-    </div>
-
-    <!-- Footer -->
-    <footer class="bg-white/80 backdrop-blur border-t border-accent py-8 mt-auto">
-        <div class="max-w-6xl mx-auto px-4 text-center">
-            <p class="text-sm text-textMuted font-medium">© 2026 RishmaStu. All rights reserved.</p>
-        </div>
-    </footer>
-
     <script>
-        // Supabase Configuration (Use Publishable Anon Key only)
+        // Supabase Configuration
         const SUPABASE_URL = 'https://rokjvgrgsezohsmwbjxt.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJva2p2Z3Jnc2V6b2hzbXdianh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEyODA2NTMsImV4cCI6MjEwNjg1NjY1M30.Hi3iZxDYVAbZBN8SAQUugXq0tKlyegkPgz3trZj7I1I';
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -974,7 +914,7 @@
         function parseBi(str) {
             try { 
                 const obj = JSON.parse(str); 
-                return (obj && typeof obj === 'object' && obj.th !== undefined) ? obj : {th: str, en: ''};
+                return (obj && typeof obj === 'object' && obj.th !== undefined) ? obj : {th: str || '', en: ''};
             } catch { return {th: str || '', en: ''}; }
         }
         function stringifyBi(th, en) {
@@ -996,7 +936,6 @@
                 navHome: 'หน้าหลัก', navQueue: 'คิวงาน', navTerms: 'ข้อตกลง', navShop: 'สินค้า', navAdmin: 'จัดการข้อมูล (Admin)',
                 homeRole: 'Full-time freelance illustrator',
                 homeLinks: 'ช่องทางการติดตาม', btnVgen: 'VGen', btnCom: 'Commission', btnDonate: 'โดเนทขั้นต่ำ 10฿', btnQueue: 'Queue คิวงาน', btnDiscord: 'Discord',
-                homeSupport: 'สนับสนุนผลงาน', homeSupportDesc: 'หากชื่นชอบผลงาน สามารถสนับสนุนค่ากาแฟเล็กๆ น้อยๆ ได้นะครับ ☕️',
                 homeExp: 'ประสบการณ์ทำงาน', 
                 exp1Title: 'Freelance Illustrator', exp1Date: 'พ.ศ. 2563 – ปัจจุบัน', exp1Desc: 'รับวาดภาพประกอบ ออกแบบคาแรคเตอร์ และงานศิลปะอื่นๆ',
                 exp2Title: 'ขึ้นทะเบียนศิลปินผู้เป็นเจ้าของงานศิลปะด้านทัศนศิลป์', exp2Date: 'ครั้งที่ 14 / 2569', exp2Btn: 'ดูโพสต์ประกาศ',
@@ -1028,9 +967,7 @@
             en: {
                 navHome: 'Home', navQueue: 'Queue', navTerms: 'Terms', navShop: 'Shop', navAdmin: 'Admin Setting',
                 homeRole: 'Full-time freelance illustrator',
-                homeTaxNote: 'I am a registered artist. Clients can request a receipt for art purchases for tax deduction purposes! 🧾✨',
                 homeLinks: 'Social Links', btnVgen: 'VGen', btnCom: 'Commission', btnDonate: 'Donate min 10฿', btnQueue: 'Queue List', btnDiscord: 'Discord',
-                homeSupport: 'Support Me', homeSupportDesc: 'If you like my art, consider buying me a coffee! ☕️',
                 homeExp: 'Work Experience',
                 exp1Title: 'Freelance Illustrator', exp1Date: '2020 – Present', exp1Desc: 'Illustrations, character designs, and other artworks.',
                 exp2Title: 'Registered Visual Artist', exp2Date: 'No. 14 / 2026', exp2Btn: 'View Announcement',
@@ -1064,7 +1001,6 @@
         // --- Data Fetching (Supabase) ---
         async function fetchAllData() {
             try {
-                // Fetch Settings
                 const { data: settings, error: errSet } = await supabaseClient.from('settings').select('*').eq('id', 1).single();
                 if(settings) {
                     appState.artistStatus = settings.status;
@@ -1078,7 +1014,6 @@
                     appState.texts.taxNote = taxNote.th; appState.texts.taxNoteEn = taxNote.en;
                 }
 
-                // Fetch Commissions
                 const { data: commissions } = await supabaseClient.from('commissions').select('*').order('created_at');
                 if(commissions) {
                     appState.commissions = commissions.map(c => {
@@ -1092,7 +1027,6 @@
                     });
                 }
 
-                // Fetch Products
                 const { data: products } = await supabaseClient.from('products').select('*').order('created_at');
                 if(products) {
                     appState.products = products.map(p => {
@@ -1105,7 +1039,6 @@
                     });
                 }
 
-                // Fetch Queues
                 const { data: queues } = await supabaseClient.from('queues').select('*').order('created_at');
                 if(queues) {
                     appState.queues = queues.map(q => {
@@ -1126,7 +1059,6 @@
                     });
                 }
 
-                // Fetch Rules
                 const { data: bRules } = await supabaseClient.from('brief_rules').select('*').order('created_at');
                 if(bRules) {
                     appState.howToBrief = bRules.map(r => {
@@ -1154,7 +1086,7 @@
 
         async function initApp() {
             createHearts();
-            await fetchAllData(); // Load data from DB first
+            await fetchAllData();
             
             renderStatus();
             renderCommissionRules();
@@ -1163,7 +1095,6 @@
             renderShop();
             applyLanguage();
             
-            // Set initial Admin form values
             document.getElementById('adminStatusSelect').value = appState.artistStatus;
             document.getElementById('adminArtistName').value = appState.texts.artistName;
             document.getElementById('adminArtistRole').value = appState.texts.artistRole;
@@ -1183,7 +1114,6 @@
             renderAdminRulesLists();
             updateHomeTexts();
             
-            // Hide global loader
             const loader = document.getElementById('global-loader');
             loader.style.opacity = '0';
             setTimeout(() => loader.style.display = 'none', 500);
@@ -1223,7 +1153,6 @@
                 navigate('login');
                 return;
             }
-            // Check if current logged in user is admin via RPC
             const { data: isAdmin, error } = await supabaseClient.rpc('is_admin');
             if (isAdmin) {
                 appState.isLoggedIn = true;
@@ -1243,7 +1172,7 @@
             
             const user = document.getElementById('loginUser').value;
             const pass = document.getElementById('loginPass').value;
-            const email = user.includes('@') ? user : user + '@admin.com'; // Fallback mapping
+            const email = user.includes('@') ? user : user + '@admin.com';
 
             const { data, error } = await supabaseClient.auth.signInWithPassword({ email: email, password: pass });
             
@@ -1253,7 +1182,6 @@
                 btn.disabled = false;
                 btn.innerText = 'เข้าสู่ระบบ';
             } else {
-                // Verify Admin privilege
                 const { data: isAdmin } = await supabaseClient.rpc('is_admin');
                 if(isAdmin) {
                     appState.isLoggedIn = true;
@@ -1303,7 +1231,6 @@
             });
         }
 
-        // --- Render Functions (Using escapeHTML for safety) ---
         function renderStatus() {
             const badge = document.getElementById('commissionStatusBadge');
             let bgClass = '', textKey = '';
@@ -1396,7 +1323,7 @@
                 `;
                 container.appendChild(card);
             });
-            if(appState.commissions.length === 0) container.innerHTML = '<div class="col-span-full py-12 text-center text-gray-400 font-medium">ยังไม่มีข้อมูล Commission</div>';
+            if(appState.commissions.length === 0) container.innerHTML = '<div class="col-span-full py-12 text-center text-gray-400 font-medium">ไม่มีข้อมูล / No data</div>';
         }
 
         function switchQueueTab(tabId) {
@@ -1466,7 +1393,7 @@
                 else tbodyPend.appendChild(tr);
             });
 
-            const emptyRow = (colSpan) => `<tr><td colspan="${colSpan}" class="p-8 text-center text-gray-400 font-medium">ไม่มีรายการในหมวดหมู่นี้</td></tr>`;
+            const emptyRow = (colSpan) => `<tr><td colspan="${colSpan}" class="p-8 text-center text-gray-400 font-medium">ไม่มีรายการ / No items</td></tr>`;
             if(tbodyMain.innerHTML === '') tbodyMain.innerHTML = emptyRow(8);
             if(tbodySub.innerHTML === '') tbodySub.innerHTML = emptyRow(8);
             if(tbodyPend.innerHTML === '') tbodyPend.innerHTML = emptyRow(8);
@@ -1505,7 +1432,7 @@
                 `;
                 container.appendChild(card);
             });
-            if(appState.products.length === 0) container.innerHTML = '<div class="col-span-full py-12 text-center text-gray-400 font-medium">ไม่มีสินค้าในขณะนี้</div>';
+            if(appState.products.length === 0) container.innerHTML = '<div class="col-span-full py-12 text-center text-gray-400 font-medium">ไม่มีสินค้าในขณะนี้ / Empty</div>';
         }
 
         function toggleAccordion(btn) {
@@ -1521,7 +1448,6 @@
             document.getElementById('modalComPrice').textContent = com.price;
             document.getElementById('modalComDuration').textContent = (lang === 'en' && com.durationEn) ? com.durationEn : com.duration;
             
-            // Format Description (allow <br>)
             const desc = (lang === 'en' && com.descEn) ? com.descEn : com.desc;
             document.getElementById('modalComDesc').innerHTML = escapeHTML(desc).replace(/\n/g, '<br>');
             
@@ -1643,7 +1569,6 @@
             btn.disabled = false; btn.innerHTML = originalHTML;
         }
 
-        // Setup logo image input listener
         document.getElementById('adminLogoInput').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
@@ -1667,12 +1592,11 @@
         function updateHomeTexts() {
             const lang = appState.language;
             document.getElementById('homeArtistName').innerText = appState.texts.artistName;
-            document.getElementById('navLogoText').innerText = appState.texts.artistName; // Update Navbar Text
+            document.getElementById('navLogoText').innerHTML = `Rishma<span class="text-textMain">Stu</span>`;
             document.getElementById('homeArtistRole').innerText = (lang === 'en' && appState.texts.artistRoleEn) ? appState.texts.artistRoleEn : appState.texts.artistRole;
             document.getElementById('homeRealName').innerText = (lang === 'en' && appState.texts.realNameEn) ? appState.texts.realNameEn : appState.texts.realName;
             document.getElementById('homeTaxNote').innerText = (lang === 'en' && appState.texts.taxNoteEn) ? appState.texts.taxNoteEn : appState.texts.taxNote;
             
-            // Update Logo Image
             const navLogoImg = document.getElementById('navLogoImg');
             if (appState.texts.logoUrl) {
                 navLogoImg.src = appState.texts.logoUrl;
@@ -1758,7 +1682,7 @@
         }
 
         function adminEditQueue(id) {
-            const q = appState.queues.find(q => q.id === id); 
+            const q = appState.queues.find(q => q.id === id);
             if (!q) return;
             document.getElementById('aqId').value = q.id;
             document.getElementById('aqType').value = q.type;
