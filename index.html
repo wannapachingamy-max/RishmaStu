@@ -18,13 +18,13 @@
                     },
                     colors: {
                         primary: '#ffffff',
-                        secondary: '#eff6ff', 
-                        accent: '#bfdbfe', 
+                        secondary: '#f0f9ff', 
+                        accent: '#e0f2fe', 
                         highlight: '#fde047', 
                         textMain: '#1e293b', 
                         textMuted: '#64748b', 
                         
-                        statusGreen: '#86efac',
+                        statusGreen: '#86efac', 
                         statusYellow: '#fde047', 
                         statusRed: '#fca5a5', 
                     },
@@ -49,9 +49,32 @@
     
     <style>
         body {
-            background-color: #fafafa;
+            /* พื้นหลังสีเหลืองอ่อน */
+            background: linear-gradient(135deg, #fffbeb 0%, #fef9c3 100%);
+            background-attachment: fixed;
             color: #1f2937;
         }
+        
+        /* Floating Hearts Styles */
+        .floating-hearts-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+        .heart {
+            position: absolute;
+            bottom: -10%;
+            animation: floatUp linear infinite;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0.5) rotate(-15deg); opacity: 0; }
+            10% { opacity: 1; }
+            80% { opacity: 0.8; }
+            100% { transform: translateY(-110vh) scale(1.2) rotate(25deg); opacity: 0; }
+        }
+
         .hide-scroll::-webkit-scrollbar {
             display: none;
         }
@@ -118,6 +141,9 @@
 </head>
 <body class="antialiased min-h-screen flex flex-col">
 
+    <!-- Floating Background -->
+    <div id="floating-bg" class="floating-hearts-container"></div>
+
     <nav class="fixed w-full top-0 z-50 glass-nav transition-all duration-300">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
@@ -133,7 +159,8 @@
                     <button onclick="navigate('queue')" class="nav-link text-textMain hover:text-sky-500 font-medium transition-colors" data-i18n="navQueue">คิวงาน</button>
                     <button onclick="navigate('terms')" class="nav-link text-textMain hover:text-sky-500 font-medium transition-colors" data-i18n="navTerms">ข้อตกลง</button>
                     <button onclick="navigate('shop')" class="nav-link text-textMain hover:text-sky-500 font-medium transition-colors" data-i18n="navShop">สินค้า</button>
-                    <button onclick="navigate('admin')" class="nav-link text-gray-400 hover:text-sky-500 text-sm transition-colors" title="ตั้งค่าระบบ"><i class="fa-solid fa-gear"></i></button>
+                    <!-- Admin Link -->
+                    <button onclick="checkAdminAccess()" class="nav-link text-gray-400 hover:text-sky-500 text-sm transition-colors" title="ตั้งค่าระบบ"><i class="fa-solid fa-gear"></i></button>
                     
                     <!-- Language Toggle -->
                     <button onclick="toggleLanguage()" class="flex items-center space-x-1 bg-secondary rounded-full px-3 py-1 text-sm text-sky-700 hover:bg-sky-100 transition-colors">
@@ -162,7 +189,7 @@
                 <button onclick="navigate('queue'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-textMain hover:bg-secondary hover:text-sky-600" data-i18n="navQueue">คิวงาน</button>
                 <button onclick="navigate('terms'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-textMain hover:bg-secondary hover:text-sky-600" data-i18n="navTerms">ข้อตกลง</button>
                 <button onclick="navigate('shop'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-textMain hover:bg-secondary hover:text-sky-600" data-i18n="navShop">สินค้า</button>
-                <button onclick="navigate('admin'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:bg-secondary hover:text-sky-600">จัดการข้อมูล (Admin)</button>
+                <button onclick="checkAdminAccess(); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:bg-secondary hover:text-sky-600">จัดการข้อมูล (Admin)</button>
             </div>
         </div>
     </nav>
@@ -173,97 +200,80 @@
         <!-- ==================== HOME ==================== -->
         <section id="view-home" class="view-section animate-fade-in space-y-10">
             <!-- Profile Info -->
-            <div class="bg-white rounded-3xl p-8 shadow-sm border border-accent flex flex-col md:flex-row items-center md:items-start gap-8">
-                <div class="w-40 h-40 flex-shrink-0">
+            <div class="bg-white/95 backdrop-blur rounded-3xl p-8 shadow-sm border border-accent flex flex-col md:flex-row items-center md:items-start gap-8 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-yellow-100 rounded-bl-full opacity-50"></div>
+                <div class="w-40 h-40 flex-shrink-0 relative z-10">
                     <img src="https://placehold.co/400x400/e0f2fe/0369a1?text=RishmaStu" alt="Profile" class="w-full h-full object-cover rounded-full shadow-md border-4 border-white">
                 </div>
-                <div class="flex-1 text-center md:text-left">
-                    <h1 class="text-3xl font-bold text-textMain mb-2">RishmaStu</h1>
-                    <p class="text-lg text-textMuted mb-1" data-i18n="homeRole">Full-time freelance illustrator</p>
-                    <p class="text-textMuted mb-4">ปริ๊น นพสรณ์ ธนะกิตติภูมิ</p>
+                <div class="flex-1 text-center md:text-left relative z-10">
+                    <h1 class="text-3xl font-bold text-textMain mb-2" id="homeArtistName">RishmaStu</h1>
+                    <p class="text-lg text-textMuted mb-1" id="homeArtistRole" data-i18n="homeRole">Full-time freelance illustrator</p>
+                    <p class="text-textMuted mb-4" id="homeRealName">ปริ๊น นพสรณ์ ธนะกิตติภูมิ</p>
                     
                     <!-- Commission Status -->
                     <div class="inline-flex items-center px-4 py-2 rounded-full font-medium text-sm mb-4" id="commissionStatusBadge">
                         <!-- Filled by JS -->
                     </div>
 
-                    <div class="bg-secondary p-4 rounded-2xl text-sm text-sky-800 leading-relaxed">
+                    <div class="bg-secondary p-4 rounded-2xl text-sm text-sky-800 leading-relaxed border border-sky-100">
                         <i class="fa-solid fa-certificate text-sky-500 mr-2"></i>
-                        <span data-i18n="homeTaxNote">เราได้ขึ้นทะเบียนศิลปินเรียบร้อยแล้ว ลูกค้าที่จ้างต่อไปสามารถขอใบเสร็จนำค่าซื้องานศิลปะมาหักลดหย่อนภาษีตามจำนวนที่จ่ายจริงได้แล้วน้า 🧾✨</span>
+                        <span id="homeTaxNote" data-i18n="homeTaxNote">เราได้ขึ้นทะเบียนศิลปินเรียบร้อยแล้ว ลูกค้าที่จ้างต่อไปสามารถขอใบเสร็จนำค่าซื้องานศิลปะมาหักลดหย่อนภาษีตามจำนวนที่จ่ายจริงได้แล้วน้า 🧾✨</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Social Links & Donate -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-white rounded-3xl p-6 shadow-sm border border-accent">
-                    <h2 class="text-xl font-semibold mb-4 flex items-center"><i class="fa-solid fa-link text-sky-400 mr-2"></i> <span data-i18n="homeLinks">ช่องทางการติดตาม</span></h2>
-                    <div class="space-y-3">
-                        <a href="https://twitter.com" target="_blank" class="flex items-center justify-between p-3 rounded-xl bg-gray-50 hover:bg-sky-50 border border-transparent hover:border-sky-100 transition-all group">
-                            <div class="flex items-center space-x-3">
-                                <i class="fa-brands fa-twitter text-xl text-[#1DA1F2]"></i>
-                                <span class="font-medium group-hover:text-sky-600 transition-colors">Twitter (X)</span>
-                            </div>
-                            <i class="fa-solid fa-arrow-up-right-from-square text-xs text-gray-300 group-hover:text-sky-400"></i>
-                        </a>
-                        <a href="https://facebook.com" target="_blank" class="flex items-center justify-between p-3 rounded-xl bg-gray-50 hover:bg-sky-50 border border-transparent hover:border-sky-100 transition-all group">
-                            <div class="flex items-center space-x-3">
-                                <i class="fa-brands fa-facebook text-xl text-[#1877F2]"></i>
-                                <span class="font-medium group-hover:text-sky-600 transition-colors">Facebook Page</span>
-                            </div>
-                            <i class="fa-solid fa-arrow-up-right-from-square text-xs text-gray-300 group-hover:text-sky-400"></i>
-                        </a>
-                        <a href="https://linktr.ee" target="_blank" class="flex items-center justify-between p-3 rounded-xl bg-gray-50 hover:bg-sky-50 border border-transparent hover:border-sky-100 transition-all group">
-                            <div class="flex items-center space-x-3">
-                                <i class="fa-solid fa-tree text-xl text-green-500"></i>
-                                <span class="font-medium group-hover:text-sky-600 transition-colors">Linktree (All Links)</span>
-                            </div>
-                            <i class="fa-solid fa-arrow-up-right-from-square text-xs text-gray-300 group-hover:text-sky-400"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-3xl p-6 shadow-sm border border-accent flex flex-col justify-center items-center text-center">
-                    <h2 class="text-xl font-semibold mb-2" data-i18n="homeSupport">สนับสนุนผลงาน</h2>
-                    <p class="text-textMuted text-sm mb-6" data-i18n="homeSupportDesc">หากชื่นชอบผลงาน สามารถสนับสนุนค่ากาแฟเล็กๆ น้อยๆ ได้นะครับ ☕️</p>
-                    <button onclick="window.open('https://ko-fi.com', '_blank')" class="bg-yellow-300 hover:bg-yellow-400 text-yellow-900 font-semibold py-3 px-8 rounded-full shadow-sm hover:shadow transition-all flex items-center space-x-2">
-                        <i class="fa-solid fa-heart text-red-500"></i>
-                        <span>Donate / Tip</span>
-                    </button>
+            <!-- Social Links (Pill Buttons Style) -->
+            <div class="bg-gray-100 rounded-2xl p-5 shadow-inner border border-gray-200 max-w-3xl">
+                <div class="flex flex-wrap gap-3 justify-center md:justify-start">
+                    <!-- VGen -->
+                    <a href="https://vgen.co/RishmaStu" target="_blank" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white rounded-full text-sm font-bold text-gray-800 shadow-sm border border-gray-200 hover:shadow-md hover:-translate-y-0.5 transition-all">
+                        <i class="fa-solid fa-store text-gray-600"></i> VGen
+                    </a>
+                    <!-- Canva Commission -->
+                    <a href="https://www.canva.com/design/DAHFe_QmxpM/ye-h3wcp-2vQgTDQN-XLXA/edit?continue_in_browser=true" target="_blank" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white rounded-full text-sm font-bold text-gray-800 shadow-sm border border-gray-200 hover:shadow-md hover:-translate-y-0.5 transition-all">
+                        <i class="fa-solid fa-palette text-gray-600"></i> Commission
+                    </a>
+                    <!-- Donate -->
+                    <a href="https://easydonate.app/rishmastu" target="_blank" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white rounded-full text-sm font-bold text-gray-800 shadow-sm border border-gray-200 hover:shadow-md hover:-translate-y-0.5 transition-all">
+                        <i class="fa-solid fa-mug-hot text-gray-600"></i> โดเนทขั้นต่ำ 10฿
+                    </a>
+                    <!-- Queue -->
+                    <a href="https://docs.google.com/document/d/15Zu_rBmcoPj-NPQwXvFPr7trT2fk1qbPEVZOQVnwUsI/edit?tab=t.0" target="_blank" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white rounded-full text-sm font-bold text-gray-800 shadow-sm border border-gray-200 hover:shadow-md hover:-translate-y-0.5 transition-all">
+                        <i class="fa-solid fa-fire text-gray-600"></i> Queue คิวงาน
+                    </a>
+                    <!-- Discord -->
+                    <a href="https://discord.com/invite/hRdmrsTBpe" target="_blank" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white rounded-full text-sm font-bold text-gray-800 shadow-sm border border-gray-200 hover:shadow-md hover:-translate-y-0.5 transition-all">
+                        <i class="fa-brands fa-discord text-gray-600"></i> Discord
+                    </a>
                 </div>
             </div>
 
             <!-- Work Experience -->
-            <div class="bg-white rounded-3xl p-8 shadow-sm border border-accent">
+            <div class="bg-white/95 backdrop-blur rounded-3xl p-8 shadow-sm border border-accent">
                 <h2 class="text-2xl font-bold mb-6 text-textMain" data-i18n="homeExp">ประสบการณ์ทำงาน</h2>
                 <div class="relative border-l-2 border-sky-100 ml-3 md:ml-4 space-y-8">
-                    <!-- Exp Item 1 -->
                     <div class="relative pl-6 md:pl-8">
                         <div class="absolute w-4 h-4 bg-sky-400 rounded-full -left-[9px] top-1 border-4 border-white shadow-sm"></div>
                         <h3 class="font-bold text-lg">Freelance Illustrator</h3>
                         <p class="text-sm text-sky-600 mb-2 font-medium">พ.ศ. 2563 – ปัจจุบัน</p>
                         <p class="text-textMuted text-sm">รับวาดภาพประกอบ ออกแบบคาแรคเตอร์ และงานศิลปะอื่นๆ</p>
                     </div>
-                    <!-- Exp Item 2 -->
                     <div class="relative pl-6 md:pl-8">
                         <div class="absolute w-4 h-4 bg-sky-200 rounded-full -left-[9px] top-1 border-4 border-white shadow-sm"></div>
                         <h3 class="font-bold text-lg">ขึ้นทะเบียนศิลปินผู้เป็นเจ้าของงานศิลปะด้านทัศนศิลป์</h3>
                         <p class="text-sm text-sky-600 mb-2 font-medium">ครั้งที่ 14 / 2569</p>
                         <button onclick="window.open('https://facebook.com', '_blank')" class="text-sm text-blue-500 hover:underline"><i class="fa-solid fa-arrow-up-right-from-square mr-1"></i>ดูโพสต์ประกาศ</button>
                     </div>
-                    <!-- Exp Item 3 -->
                     <div class="relative pl-6 md:pl-8">
                         <div class="absolute w-4 h-4 bg-gray-200 rounded-full -left-[9px] top-1 border-4 border-white shadow-sm"></div>
                         <h3 class="font-bold text-lg">Outsource 2D Artist (Unannounced Game)</h3>
                         <p class="text-sm text-gray-500 mb-2 font-medium">Sunny Syrup Studio | ก.ย. 2569</p>
                     </div>
-                    <!-- Exp Item 4 -->
                     <div class="relative pl-6 md:pl-8">
                         <div class="absolute w-4 h-4 bg-gray-200 rounded-full -left-[9px] top-1 border-4 border-white shadow-sm"></div>
                         <h3 class="font-bold text-lg">Trainee</h3>
                         <p class="text-sm text-gray-500 mb-2 font-medium">KP Learning Space | มี.ค. – มิ.ย. 2567</p>
                     </div>
-                     <!-- Exp Item 5 -->
                      <div class="relative pl-6 md:pl-8">
                         <div class="absolute w-4 h-4 bg-gray-200 rounded-full -left-[9px] top-1 border-4 border-white shadow-sm"></div>
                         <h3 class="font-bold text-lg">คณะสถาปัตยกรรมศาสตร์ สาขาการออกแบบกราฟิกและมัลติมีเดีย</h3>
@@ -283,46 +293,17 @@
             <!-- How to Brief & Can/Can't -->
             <div class="space-y-6">
                 <!-- How to Brief -->
-                <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-accent">
+                <div class="bg-white/95 backdrop-blur rounded-3xl p-6 md:p-8 shadow-sm border border-accent">
                     <h2 class="text-2xl font-bold mb-2 flex items-center text-sky-700"><i class="fa-solid fa-list-check mr-3"></i> How to Brief ❓</h2>
                     <p class="text-red-500 font-medium text-sm mb-6">*ไม่รับออกแบบตัวละครที่ให้คิดเองทั้งหมดตั้งแต่คอนเซ็ปต์*</p>
                     
-                    <ol class="list-decimal list-outside ml-5 space-y-4 text-sm text-textMain leading-relaxed">
-                        <li class="pl-2">
-                            <span class="font-medium">รูปตัวละครที่อยากจ้าง</span> / หากไม่มีรูป กรุณาส่งรายละเอียดตัวละคร เช่น ทรงผม สีผม ชุด เป็นต้น
-                        </li>
-                        <li class="pl-2">
-                            <span class="font-medium">ท่าทาง / มุมกล้อง / สีหน้าของตัวละคร</span> หากมีนิสัยคร่าวๆ จะทำให้วาดออกมาได้ตรงมากขึ้น
-                            <ul class="list-disc list-outside ml-5 mt-1 text-textMuted">
-                                <li>ถ้าคิดท่าทางไม่ออก ให้บรรยายแนวคิด / อารมณ์ของภาพที่อยากได้</li>
-                            </ul>
-                        </li>
-                        <li class="pl-2">
-                            <span class="font-medium">ภาพพื้นหลังที่อยากจ้าง</span> <span class="text-red-500">*หากไม่รับพื้นหลัง ไม่ต้องบรีฟ*</span>
-                            <ul class="list-disc list-outside ml-5 mt-1 text-textMuted">
-                                <li>โทนสี / รายละเอียดพื้นหลังที่อยากจ้าง</li>
-                            </ul>
-                        </li>
-                        <li class="pl-2">
-                            <span class="font-medium">ขนาดของงานที่อยากได้</span> หากไม่ระบุ เราจะทำการสุ่ม
-                        </li>
-                        <li class="pl-2">
-                            <span class="font-medium">นำงานไปทำสิ่งพิมพ์หรือไม่</span> หากใช่ เราจะตั้งค่าสี CMYK ซึ่งเป็นสีที่ใช้ในงานพิมพ์
-                            <ul class="list-disc list-outside ml-5 mt-1 text-textMuted">
-                                <li>หากเปลี่ยนค่าสีในภายหลังอาจจะคิดค่าใช้จ่ายเพิ่มตามรายละเอียดสีที่ต้องเปลี่ยน</li>
-                            </ul>
-                        </li>
-                        <li class="pl-2">
-                            <span class="font-medium">งานนี้เป็นงานเชิงพาณิชย์หรือใช้ส่วนตัว</span>
-                            <ul class="list-disc list-outside ml-5 mt-1 text-textMuted">
-                                <li>งานเชิงพาณิชย์จะมีราคาคูณ 2 จากราคาปกติ</li>
-                            </ul>
-                        </li>
+                    <ol id="howToBriefList" class="list-decimal list-outside ml-5 space-y-4 text-sm text-textMain leading-relaxed">
+                        <!-- Rendered by JS -->
                     </ol>
                 </div>
 
                 <!-- Can / Can't -->
-                <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-accent">
+                <div class="bg-white/95 backdrop-blur rounded-3xl p-6 md:p-8 shadow-sm border border-accent">
                     <div class="mb-6">
                         <h2 class="text-2xl font-bold mb-1 text-textMain">Can & Can't</h2>
                         <p class="text-sky-600 font-medium">Human / Humanoid / Furry Commission</p>
@@ -337,23 +318,8 @@
                                     <th class="w-1/2 rounded-tr-xl"><i class="fa-solid fa-circle-xmark text-red-500 mr-2"></i>Can't (ไม่รับวาด)</th>
                                 </tr>
                             </thead>
-                            <tbody class="text-textMain">
-                                <tr>
-                                    <td>OC / Female / Male / LGBTQ+</td>
-                                    <td>Horror (Ghost) <span class="text-textMuted text-xs ml-1">เฉพาะผี</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Fan art <span class="text-textMuted text-xs ml-1">(Personal use)</span></td>
-                                    <td>Fan art <span class="text-textMuted text-xs ml-1">(Commercial use)</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Blood / Gore / Bone / Skeleton <br><span class="text-textMuted text-xs">(เลือด/กระดูก/โครงกระดูก/เครื่องใน)</span></td>
-                                    <td>Entrails <span class="text-textMuted text-xs ml-1">(เครื่องใน)</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Mimi , Kemono , Furry / Uncle , Muscle</td>
-                                    <td>จิ้งจก ตุ๊กแก</td>
-                                </tr>
+                            <tbody id="canCantTableBody" class="text-textMain">
+                                <!-- Rendered by JS -->
                             </tbody>
                         </table>
                     </div>
@@ -390,16 +356,21 @@
         <!-- ==================== QUEUE ==================== -->
         <section id="view-queue" class="view-section hidden animate-fade-in space-y-8 max-w-6xl mx-auto">
             
-            <div class="text-center mb-6">
+            <div class="bg-white/80 backdrop-blur-sm p-8 rounded-3xl border border-sky-100 shadow-sm text-center mb-6">
                 <h1 class="text-3xl md:text-4xl font-bold text-textMain mb-2 tracking-wide font-['Noto_Sans_Thai']">คิวงาน Rish Studio</h1>
                 <p class="text-lg text-textMuted mb-4">ปริ๊นตัวน้อย กับกองนิยายของเขา</p>
-                <div class="inline-flex items-center px-6 py-2 rounded-full font-bold text-sm tracking-widest bg-green-100 text-green-700 border border-green-200 uppercase">
-                    - OPEN -
+                <div class="flex flex-wrap items-center justify-center gap-3">
+                    <div class="inline-flex items-center px-6 py-2 rounded-full font-bold text-sm tracking-widest bg-green-100 text-green-700 border border-green-200 uppercase">
+                        - OPEN -
+                    </div>
+                    <div class="inline-flex items-center px-6 py-2 rounded-full font-bold text-sm bg-white text-sky-700 border border-sky-200 shadow-sm">
+                        คิวทั้งหมดในระบบ: <span id="totalQueueCount" class="ml-2 text-lg text-sky-600">0</span>
+                    </div>
                 </div>
             </div>
 
             <!-- Color Legend -->
-            <div class="bg-white p-5 rounded-3xl shadow-sm border border-accent text-sm text-gray-700 mx-auto max-w-2xl font-medium space-y-3">
+            <div class="bg-white/90 backdrop-blur p-5 rounded-3xl shadow-sm border border-accent text-sm text-gray-700 mx-auto max-w-2xl font-medium space-y-3">
                 <div class="flex items-center gap-3">
                     <div class="w-6 h-6 rounded bg-statusGreen border border-green-300 shadow-sm shrink-0"></div>
                     <span>= จ่ายแล้ว / เสร็จแล้ว [ 100% paid / Finished ]</span>
@@ -414,12 +385,12 @@
                 </div>
             </div>
 
-            <p class="text-sm font-semibold text-yellow-600 flex items-center mb-2 px-2">
-                <i class="fa-solid fa-star text-xs mr-2"></i> งานสีต่องานสี งานย่อยต่องานย่อย <i class="fa-solid fa-star text-xs ml-2"></i>
+            <p class="text-sm font-semibold text-yellow-700 bg-yellow-100/80 w-fit mx-auto px-4 py-2 rounded-full flex items-center mb-2">
+                <i class="fa-solid fa-star text-xs mr-2 text-yellow-500"></i> งานสีต่องานสี งานย่อยต่องานย่อย <i class="fa-solid fa-star text-xs ml-2 text-yellow-500"></i>
             </p>
 
             <!-- Queue Tabs Navigation -->
-            <div class="flex flex-wrap gap-2 mb-2 p-2 bg-white rounded-2xl shadow-sm border border-gray-100 w-fit mx-auto justify-center">
+            <div class="flex flex-wrap gap-2 mb-2 p-2 bg-white/80 backdrop-blur rounded-2xl shadow-sm border border-gray-100 w-fit mx-auto justify-center">
                 <button onclick="switchQueueTab('main')" id="qTabBtn-main" class="queue-tab-btn px-6 py-2.5 rounded-xl font-bold text-sm transition-all bg-sky-500 text-white shadow-sm">
                     <i class="fa-solid fa-list-ol mr-2"></i> คิวหลัก
                 </button>
@@ -432,7 +403,7 @@
             </div>
 
             <!-- TAB CONTENT: Main Queue Table -->
-            <div id="qTab-main" class="queue-tab-content block bg-white rounded-3xl shadow-sm border border-accent overflow-hidden mb-8 animate-fade-in">
+            <div id="qTab-main" class="queue-tab-content block bg-white/95 backdrop-blur rounded-3xl shadow-sm border border-accent overflow-hidden mb-8 animate-fade-in">
                 <div class="overflow-x-auto custom-scroll">
                     <table class="w-full text-sm queue-table min-w-[900px]">
                         <thead class="bg-gray-50 text-gray-700 font-semibold font-['Noto_Sans_Thai'] text-base">
@@ -455,7 +426,7 @@
             </div>
 
             <!-- TAB CONTENT: Sub Queue Table -->
-            <div id="qTab-sub" class="queue-tab-content hidden bg-white rounded-3xl shadow-sm border border-accent overflow-hidden mb-8 animate-fade-in">
+            <div id="qTab-sub" class="queue-tab-content hidden bg-white/95 backdrop-blur rounded-3xl shadow-sm border border-accent overflow-hidden mb-8 animate-fade-in">
                 <div class="overflow-x-auto custom-scroll">
                     <table class="w-full text-sm queue-table min-w-[900px]">
                         <thead class="bg-gray-50 text-gray-700 font-semibold font-['Noto_Sans_Thai'] text-base">
@@ -478,7 +449,7 @@
             </div>
 
             <!-- TAB CONTENT: Pending/Late Queue Table -->
-            <div id="qTab-pending" class="queue-tab-content hidden bg-white rounded-3xl shadow-sm border border-red-200 overflow-hidden animate-fade-in">
+            <div id="qTab-pending" class="queue-tab-content hidden bg-white/95 backdrop-blur rounded-3xl shadow-sm border border-red-200 overflow-hidden animate-fade-in">
                 <div class="overflow-x-auto custom-scroll">
                     <table class="w-full text-sm queue-table min-w-[900px]">
                         <thead class="bg-red-50 text-red-800 font-semibold font-['Noto_Sans_Thai'] text-base">
@@ -505,14 +476,14 @@
         <!-- ==================== TERMS ==================== -->
         <section id="view-terms" class="view-section hidden animate-fade-in">
             <div class="max-w-3xl mx-auto">
-                <div class="text-center mb-8">
+                <div class="bg-white/90 backdrop-blur rounded-3xl p-8 shadow-sm border border-sky-100 text-center mb-8">
                     <h1 class="text-3xl font-bold text-textMain mb-4" data-i18n="termsTitle">ข้อตกลงจ้างงาน (T.O.S)</h1>
                     <p class="text-textMuted">กรุณาอ่านและทำความเข้าใจก่อนทำการจ้างงาน เพื่อความสบายใจของทั้งสองฝ่าย</p>
                 </div>
 
                 <div class="space-y-4" id="termsAccordion">
                     <!-- Accordion Item 1 -->
-                    <div class="bg-white rounded-2xl shadow-sm border border-accent overflow-hidden">
+                    <div class="bg-white/95 backdrop-blur rounded-2xl shadow-sm border border-accent overflow-hidden">
                         <button class="w-full px-6 py-4 text-left font-semibold text-lg flex justify-between items-center focus:outline-none hover:bg-secondary transition-colors" onclick="toggleAccordion(this)">
                             1. ขั้นตอนการทำงานและการชำระเงิน
                             <i class="fa-solid fa-chevron-down text-sky-500 transition-transform duration-300"></i>
@@ -529,7 +500,7 @@
                     </div>
                     
                     <!-- Accordion Item 2 -->
-                    <div class="bg-white rounded-2xl shadow-sm border border-accent overflow-hidden">
+                    <div class="bg-white/95 backdrop-blur rounded-2xl shadow-sm border border-accent overflow-hidden">
                         <button class="w-full px-6 py-4 text-left font-semibold text-lg flex justify-between items-center focus:outline-none hover:bg-secondary transition-colors" onclick="toggleAccordion(this)">
                             2. ลิขสิทธิ์และการนำไปใช้งาน
                             <i class="fa-solid fa-chevron-down text-sky-500 transition-transform duration-300"></i>
@@ -545,7 +516,7 @@
                     </div>
 
                     <!-- Accordion Item 3 -->
-                    <div class="bg-white rounded-2xl shadow-sm border border-accent overflow-hidden">
+                    <div class="bg-white/95 backdrop-blur rounded-2xl shadow-sm border border-accent overflow-hidden">
                         <button class="w-full px-6 py-4 text-left font-semibold text-lg flex justify-between items-center focus:outline-none hover:bg-secondary transition-colors" onclick="toggleAccordion(this)">
                             3. เรทราคา Commercial Use / นำไปใช้ประโยชน์
                             <i class="fa-solid fa-chevron-down text-sky-500 transition-transform duration-300"></i>
@@ -567,7 +538,7 @@
 
         <!-- ==================== SHOP ==================== -->
         <section id="view-shop" class="view-section hidden animate-fade-in space-y-8">
-            <div class="text-center mb-8">
+            <div class="bg-white/90 backdrop-blur rounded-3xl p-8 shadow-sm border border-sky-100 text-center mb-8">
                 <h1 class="text-3xl font-bold text-textMain mb-4" data-i18n="shopTitle">สินค้า (Shop)</h1>
                 <p class="text-textMuted">สินค้าพร้อมส่งและพรีออเดอร์จาก RishmaStu</p>
             </div>
@@ -577,41 +548,115 @@
             </div>
         </section>
 
-        <!-- ==================== ADMIN ==================== -->
+        <!-- ==================== ADMIN LOGIN ==================== -->
+        <section id="view-login" class="view-section hidden animate-fade-in flex items-center justify-center min-h-[60vh]">
+            <div class="bg-white/95 backdrop-blur p-8 rounded-3xl shadow-lg border border-accent w-full max-w-md relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-yellow-100 rounded-bl-full opacity-50"></div>
+                <div class="text-center mb-6 relative z-10">
+                    <div class="w-16 h-16 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 shadow-sm border border-yellow-200">
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-textMain">Admin Login</h2>
+                    <p class="text-sm text-textMuted mt-1">เข้าสู่ระบบเพื่อจัดการข้อมูล</p>
+                </div>
+                <form onsubmit="handleLogin(event)" class="space-y-4 relative z-10">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+                        <input type="text" id="loginUser" required class="w-full bg-gray-50 border border-gray-300 rounded-xl p-3 text-sm focus:ring-sky-500 focus:border-sky-500" placeholder="Username...">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                        <input type="password" id="loginPass" required class="w-full bg-gray-50 border border-gray-300 rounded-xl p-3 text-sm focus:ring-sky-500 focus:border-sky-500" placeholder="••••••••">
+                    </div>
+                    <div id="loginError" class="hidden text-red-500 text-sm font-medium text-center bg-red-50 py-2 rounded-lg border border-red-100">Username หรือ Password ไม่ถูกต้อง</div>
+                    <button type="submit" class="w-full bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-4 rounded-xl shadow-sm transition-colors mt-2">
+                        เข้าสู่ระบบ
+                    </button>
+                </form>
+                <div class="mt-6 p-4 bg-blue-50/80 rounded-xl text-xs text-blue-700 border border-blue-100 text-center relative z-10">
+                    <strong>Demo Credentials:</strong><br>
+                    User: <strong>admin</strong> | Pass: <strong>1234</strong>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== ADMIN DASHBOARD ==================== -->
         <section id="view-admin" class="view-section hidden animate-fade-in space-y-8 max-w-6xl mx-auto">
-            <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6 relative" role="alert">
-                <strong class="font-bold">Admin Mode (Mockup):</strong>
-                <span class="block sm:inline"> ข้อมูลในหน้านี้จะอัปเดตไปยังหน้าเว็บจริงทันที และสามารถเพิ่มลบได้ไม่จำกัด (ข้อมูลจะรีเซ็ตเมื่อโหลดหน้าเว็บใหม่)</span>
+            
+            <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4 bg-white/90 backdrop-blur p-6 rounded-3xl border border-sky-100 shadow-sm">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-800">ระบบจัดการหลังบ้าน (Admin)</h1>
+                    <p class="text-sm text-gray-500 mt-1">ยินดีต้อนรับ, จัดการข้อมูลเว็บไซต์ของคุณได้ที่นี่</p>
+                </div>
+                <button onclick="handleLogout()" class="bg-red-50 hover:bg-red-100 text-red-600 px-5 py-2.5 rounded-xl text-sm font-bold border border-red-200 transition-colors shadow-sm whitespace-nowrap">
+                    <i class="fa-solid fa-right-from-bracket mr-2"></i>ออกจากระบบ
+                </button>
+            </div>
+
+            <div class="bg-yellow-50 border border-yellow-200 text-yellow-800 px-4 py-3 rounded-xl mb-6 shadow-sm" role="alert">
+                <strong class="font-bold"><i class="fa-solid fa-triangle-exclamation mr-2"></i>Admin Mode (Mockup):</strong>
+                <span class="block sm:inline"> ข้อมูลจะอัปเดตไปหน้าเว็บทันที และเพิ่มลบได้ไม่จำกัด (ข้อมูลจะรีเซ็ตเมื่อรีเฟรชหน้าเว็บ เนื่องจากยังไม่ได้ต่อฐานข้อมูลจริง)</span>
             </div>
 
             <!-- Admin Tabs -->
-            <div class="flex space-x-2 border-b border-gray-200 mb-6 overflow-x-auto hide-scroll">
+            <div class="flex space-x-2 border-b border-gray-200 mb-6 overflow-x-auto hide-scroll bg-white/50 p-2 rounded-t-2xl">
                 <button onclick="switchAdminTab('general')" id="tabBtn-general" class="admin-tab-btn whitespace-nowrap py-2 px-4 font-semibold text-sky-600 border-b-2 border-sky-600">ตั้งค่าทั่วไป</button>
                 <button onclick="switchAdminTab('queue')" id="tabBtn-queue" class="admin-tab-btn whitespace-nowrap py-2 px-4 font-semibold text-gray-500 hover:text-sky-600 border-b-2 border-transparent">จัดการคิว (Table Format)</button>
                 <button onclick="switchAdminTab('content')" id="tabBtn-content" class="admin-tab-btn whitespace-nowrap py-2 px-4 font-semibold text-gray-500 hover:text-sky-600 border-b-2 border-transparent">จัดการ Commission / สินค้า</button>
+                <button onclick="switchAdminTab('rules')" id="tabBtn-rules" class="admin-tab-btn whitespace-nowrap py-2 px-4 font-semibold text-gray-500 hover:text-sky-600 border-b-2 border-transparent">จัดการบรีฟ & Can/Can't</button>
             </div>
 
             <!-- Tab Content: General -->
             <div id="adminTab-general" class="admin-tab-content block space-y-6">
-                <div class="bg-white p-6 rounded-3xl shadow-sm border border-accent">
-                    <h2 class="text-xl font-bold mb-4">ตั้งค่าสถานะ (Commission Status)</h2>
+                <!-- Status Settings -->
+                <div class="bg-white/95 backdrop-blur p-6 md:p-8 rounded-3xl shadow-sm border border-accent">
+                    <h2 class="text-xl font-bold mb-4 flex items-center text-sky-800"><i class="fa-solid fa-toggle-on mr-2"></i>ตั้งค่าสถานะ (Commission Status)</h2>
                     <div class="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
-                        <select id="adminStatusSelect" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 p-2.5 min-w-[200px]">
+                        <select id="adminStatusSelect" class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-xl focus:ring-sky-500 focus:border-sky-500 p-3 min-w-[250px] shadow-sm">
                             <option value="open">🟢 เปิดรับงาน (Open)</option>
                             <option value="closed">🔴 ปิดรับงาน (Closed)</option>
                             <option value="busy">🟡 คิวเต็ม (Full)</option>
                         </select>
-                        <button onclick="adminSaveStatus()" class="bg-sky-500 hover:bg-sky-600 text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-colors w-full sm:w-auto"><i class="fa-solid fa-save mr-2"></i>บันทึกสถานะ</button>
+                        <button onclick="adminSaveStatus()" class="bg-sky-500 hover:bg-sky-600 text-white px-8 py-3 rounded-xl text-sm font-bold transition-colors shadow-sm w-full sm:w-auto">
+                            <i class="fa-solid fa-save mr-2"></i>บันทึกสถานะ
+                        </button>
                     </div>
+                </div>
+
+                <!-- Text Settings -->
+                <div class="bg-white/95 backdrop-blur p-6 md:p-8 rounded-3xl shadow-sm border border-accent">
+                    <h2 class="text-xl font-bold mb-4 flex items-center text-sky-800"><i class="fa-solid fa-pen-to-square mr-2"></i>แก้ไขข้อความหน้าเว็บ</h2>
+                    <form onsubmit="adminSaveGeneralTexts(event)" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">ชื่อศิลปิน (Artist Name)</label>
+                                <input type="text" id="adminArtistName" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-3 text-sm focus:ring-sky-500 focus:border-sky-500 shadow-sm">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">บทบาท (Role)</label>
+                                <input type="text" id="adminArtistRole" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-3 text-sm focus:ring-sky-500 focus:border-sky-500 shadow-sm">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">ชื่อ-นามสกุลจริง</label>
+                            <input type="text" id="adminRealName" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-3 text-sm focus:ring-sky-500 focus:border-sky-500 shadow-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">ข้อความประกาศ (เรื่องภาษี ฯลฯ)</label>
+                            <textarea id="adminTaxNote" rows="3" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-3 text-sm focus:ring-sky-500 focus:border-sky-500 resize-none shadow-sm"></textarea>
+                        </div>
+                        <button type="submit" class="bg-sky-500 hover:bg-sky-600 text-white px-8 py-3 rounded-xl text-sm font-bold transition-colors shadow-sm w-full sm:w-auto mt-2">
+                            <i class="fa-solid fa-save mr-2"></i>บันทึกข้อความ
+                        </button>
+                    </form>
                 </div>
             </div>
 
             <!-- Tab Content: Queue -->
             <div id="adminTab-queue" class="admin-tab-content hidden space-y-6">
                 <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
-                    
                     <!-- Add/Edit Queue Form -->
-                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-accent h-fit xl:col-span-1 order-2 xl:order-1">
+                    <div class="bg-white/95 backdrop-blur p-6 rounded-3xl shadow-sm border border-accent h-fit xl:col-span-1 order-2 xl:order-1">
                         <div class="flex justify-between items-center mb-4">
                             <h2 class="text-xl font-bold text-sky-800" id="aqFormTitle"><i class="fa-solid fa-plus-circle mr-2"></i>เพิ่มคิวใหม่</h2>
                         </div>
@@ -621,85 +666,83 @@
                             <div class="grid grid-cols-2 gap-3">
                                 <div class="col-span-2">
                                     <label class="block text-xs font-bold text-gray-700 mb-1">หมวดหมู่คิว</label>
-                                    <select id="aqType" class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm focus:ring-sky-500 focus:border-sky-500">
+                                    <select id="aqType" class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm focus:ring-sky-500 focus:border-sky-500 shadow-sm">
                                         <option value="main">คิวหลัก (Main)</option>
                                         <option value="sub">คิวย่อย (Sub)</option>
                                         <option value="pending">ตกค้าง (Pending)</option>
                                     </select>
                                 </div>
-                                
                                 <div class="col-span-2">
                                     <label class="block text-xs font-bold text-gray-700 mb-1">ชื่อลูกค้า (Client)</label>
-                                    <input type="text" id="aqClient" required class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm focus:ring-sky-500 focus:border-sky-500">
+                                    <input type="text" id="aqClient" required class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm focus:ring-sky-500 focus:border-sky-500 shadow-sm">
                                 </div>
-
                                 <div>
                                     <label class="block text-xs font-bold text-gray-700 mb-1">ประเภทงาน (Type)</label>
-                                    <input type="text" id="aqJobType" class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm focus:ring-sky-500 focus:border-sky-500">
+                                    <input type="text" id="aqJobType" class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm focus:ring-sky-500 focus:border-sky-500 shadow-sm">
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold text-gray-700 mb-1">จำนวน (Piece)</label>
-                                    <input type="text" id="aqPieces" class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm focus:ring-sky-500 focus:border-sky-500">
+                                    <input type="text" id="aqPieces" class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm focus:ring-sky-500 focus:border-sky-500 shadow-sm">
                                 </div>
                             </div>
 
                             <div class="border-t border-gray-200 pt-3 mt-3">
                                 <label class="block text-xs font-bold text-gray-700 mb-1">สถานะการจ่ายเงิน (Payment)</label>
                                 <div class="flex gap-2">
-                                    <select id="aqPayColor" class="bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm w-24">
+                                    <select id="aqPayColor" class="bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm w-24 shadow-sm">
                                         <option value="none">สีขาว</option>
                                         <option value="green">เขียว</option>
                                         <option value="yellow">เหลือง</option>
                                         <option value="red">แดง</option>
                                     </select>
-                                    <input type="text" id="aqPayText" placeholder="ข้อความ..." class="flex-1 bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm">
+                                    <input type="text" id="aqPayText" placeholder="ข้อความ..." class="flex-1 bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm shadow-sm">
                                 </div>
                             </div>
 
                             <div class="border-t border-gray-200 pt-3 mt-3">
                                 <label class="block text-xs font-bold text-gray-700 mb-1">บรีฟลูกค้า (Brief)</label>
                                 <div class="flex gap-2">
-                                    <select id="aqBriefColor" class="bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm w-24">
+                                    <select id="aqBriefColor" class="bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm w-24 shadow-sm">
                                         <option value="none">สีขาว</option>
                                         <option value="green" selected>เขียว</option>
                                         <option value="yellow">เหลือง</option>
                                         <option value="red">แดง</option>
                                     </select>
-                                    <input type="text" id="aqBriefText" placeholder="ข้อความ..." class="flex-1 bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm">
+                                    <input type="text" id="aqBriefText" placeholder="ข้อความ..." class="flex-1 bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm shadow-sm">
                                 </div>
                             </div>
 
                             <div class="border-t border-gray-200 pt-3 mt-3">
                                 <label class="block text-xs font-bold text-gray-700 mb-1">สถานะงาน (Working Status)</label>
                                 <div class="flex gap-2">
-                                    <select id="aqWorkColor" class="bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm w-24">
+                                    <select id="aqWorkColor" class="bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm w-24 shadow-sm">
                                         <option value="none">สีขาว</option>
                                         <option value="green">เขียว</option>
                                         <option value="yellow">เหลือง</option>
                                         <option value="red">แดง</option>
                                     </select>
-                                    <input type="text" id="aqWorkText" placeholder="ข้อความ (เช่น ตัดเส้น2)" class="flex-1 bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm">
+                                    <input type="text" id="aqWorkText" placeholder="ข้อความ (เช่น ตัดเส้น2)" class="flex-1 bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm shadow-sm">
                                 </div>
                             </div>
 
                             <div class="border-t border-gray-200 pt-3 mt-3">
                                 <label class="block text-xs font-bold text-gray-700 mb-1">Deadline / หมายเหตุ</label>
-                                <input type="text" id="aqDeadline" class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm focus:ring-sky-500 focus:border-sky-500">
+                                <input type="text" id="aqDeadline" class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-sky-500 focus:border-sky-500 shadow-sm">
                             </div>
                             
                             <div class="flex space-x-2 pt-4">
-                                <button type="submit" id="btnSubmitQueue" class="flex-1 bg-sky-500 hover:bg-sky-600 text-white px-4 py-2.5 rounded-lg text-sm font-bold transition-colors shadow-sm">บันทึกคิว</button>
-                                <button type="button" onclick="adminResetQueueForm()" class="px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm font-bold transition-colors">ยกเลิก</button>
+                                <button type="submit" id="btnSubmitQueue" class="flex-1 bg-sky-500 hover:bg-sky-600 text-white px-4 py-3 rounded-xl text-sm font-bold transition-colors shadow-md">บันทึกคิว</button>
+                                <button type="button" onclick="adminResetQueueForm()" class="px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-sm font-bold transition-colors">ยกเลิก</button>
                             </div>
                         </form>
                     </div>
 
                     <!-- Queue List Preview (Admin side) -->
-                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-accent xl:col-span-2 order-1 xl:order-2">
-                        <h2 class="text-xl font-bold mb-4">รายการคิวทั้งหมดในระบบ</h2>
-                        <div class="overflow-x-auto custom-scroll max-h-[700px]">
+                    <div class="bg-white/95 backdrop-blur p-6 rounded-3xl shadow-sm border border-accent xl:col-span-2 order-1 xl:order-2">
+                        <h2 class="text-xl font-bold mb-4 text-sky-800"><i class="fa-solid fa-list mr-2"></i>รายการคิวทั้งหมดในระบบ</h2>
+                        <div class="overflow-x-auto custom-scroll max-h-[700px] border border-gray-100 rounded-xl">
                             <table class="w-full text-sm text-left border-collapse">
-                                <thead class="text-xs text-gray-700 bg-gray-50 uppercase sticky top-0 z-10 border-b border-gray-200">
+                                <thead class="text-xs text-gray-700 bg-gray-50 uppercase sticky top-0 z-10 border-b border-gray-200 shadow-sm">
                                     <tr>
                                         <th class="px-4 py-3">หมวด</th>
                                         <th class="px-4 py-3">ลูกค้า</th>
@@ -717,165 +760,225 @@
                 </div>
             </div>
 
-            <!-- Tab Content: Content (Unlimited Add/Edit/Delete) -->
+            <!-- Tab Content: Content (Commission/Shop) -->
             <div id="adminTab-content" class="admin-tab-content hidden space-y-6">
-                 <div class="bg-white p-6 rounded-3xl shadow-sm border border-accent">
-                    <div class="flex justify-between items-center mb-6 border-b border-gray-100 pb-4">
+                 <div class="bg-white/95 backdrop-blur p-6 rounded-3xl shadow-sm border border-accent">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 border-b border-gray-100 pb-4 gap-4">
                         <div>
                             <h2 class="text-xl font-bold text-sky-800" id="contentFormTitle"><i class="fa-solid fa-plus-circle mr-2"></i>เพิ่มข้อมูลใหม่</h2>
-                            <p class="text-sm text-gray-500 mt-1">สามารถเพิ่ม ลบ และแก้ไขข้อมูลได้ไม่จำกัด (อัปเดตเว็บทันที)</p>
+                            <p class="text-sm text-gray-500 mt-1">สามารถเพิ่ม ลบ และแก้ไขข้อมูล Commission และสินค้า ได้ไม่จำกัด</p>
                         </div>
-                        <button type="button" onclick="adminResetContentForm()" id="btnCancelEdit" class="hidden bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-xl text-sm font-medium transition-colors">
+                        <button type="button" onclick="adminResetContentForm()" id="btnCancelEdit" class="hidden bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-xl text-sm font-bold transition-colors shadow-sm">
                             <i class="fa-solid fa-xmark mr-1"></i> ยกเลิกการแก้ไข
                         </button>
                     </div>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                        <!-- Content Form -->
                         <form onsubmit="adminSaveMockItem(event)" id="adminContentForm" class="space-y-4">
                             <input type="hidden" id="mockItemId" value="">
                             
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">หมวดหมู่</label>
-                                <select id="mockItemType" onchange="toggleMockFormFields()" class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-sky-500 focus:border-sky-500">
-                                    <option value="commission">Commission</option>
-                                    <option value="product">สินค้า (Shop)</option>
+                            <div class="bg-blue-50/50 p-4 rounded-2xl border border-blue-100 mb-2">
+                                <label class="block text-sm font-bold text-sky-900 mb-2">เลือกหมวดหมู่ที่ต้องการเพิ่ม/แก้ไข</label>
+                                <select id="mockItemType" onchange="toggleMockFormFields()" class="w-full bg-white border border-gray-300 rounded-xl p-3 text-sm focus:ring-sky-500 focus:border-sky-500 shadow-sm font-medium">
+                                    <option value="commission">🎨 Commission (งานวาด)</option>
+                                    <option value="product">🛍️ สินค้า (Shop)</option>
                                 </select>
                             </div>
-
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">ชื่อรายการ</label>
-                                <input type="text" id="mockItemName" required placeholder="เช่น Pencil Style หรือ พวงกุญแจ" class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-sky-500 focus:border-sky-500">
+                                <input type="text" id="mockItemName" required placeholder="เช่น Pencil Style หรือ พวงกุญแจ" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-3 text-sm focus:ring-sky-500 focus:border-sky-500 shadow-sm">
                             </div>
-                            
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">ราคา (THB)</label>
-                                    <input type="number" id="mockItemPrice" required placeholder="0" class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-sky-500 focus:border-sky-500">
+                                    <input type="number" id="mockItemPrice" required placeholder="0" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-3 text-sm focus:ring-sky-500 focus:border-sky-500 shadow-sm">
                                 </div>
                                 <div id="fieldDuration">
                                     <label class="block text-sm font-medium text-gray-700 mb-1">ระยะเวลาทำงาน</label>
-                                    <input type="text" id="mockItemDuration" placeholder="เช่น 3-5 วัน" class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-sky-500 focus:border-sky-500">
+                                    <input type="text" id="mockItemDuration" placeholder="เช่น 3-5 วัน" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-3 text-sm focus:ring-sky-500 focus:border-sky-500 shadow-sm">
                                 </div>
                                 <div id="fieldStock" class="hidden">
                                     <label class="block text-sm font-medium text-gray-700 mb-1">จำนวน Stock</label>
-                                    <input type="number" id="mockItemStock" placeholder="0" class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-sky-500 focus:border-sky-500">
+                                    <input type="number" id="mockItemStock" placeholder="0" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-3 text-sm focus:ring-sky-500 focus:border-sky-500 shadow-sm">
                                 </div>
                             </div>
-                            
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">รายละเอียด</label>
-                                <textarea id="mockItemDesc" rows="3" required class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-sky-500 focus:border-sky-500 resize-none"></textarea>
+                                <textarea id="mockItemDesc" rows="3" required class="w-full bg-gray-50 border border-gray-300 rounded-xl p-3 text-sm focus:ring-sky-500 focus:border-sky-500 resize-none shadow-sm"></textarea>
                             </div>
-
-                            <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
-                                <label class="block text-sm font-bold text-sky-800 mb-2"><i class="fa-solid fa-image mr-1"></i> อัปโหลดรูปภาพใหม่</label>
-                                <input type="file" id="imageInput" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-white file:text-sky-700 hover:file:bg-sky-50 cursor-pointer border border-gray-200 rounded-lg bg-white">
+                            <div class="bg-yellow-50 p-4 rounded-2xl border border-yellow-100">
+                                <label class="block text-sm font-bold text-yellow-800 mb-2"><i class="fa-solid fa-image mr-1"></i> อัปโหลดรูปภาพใหม่</label>
+                                <input type="file" id="imageInput" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-white file:text-yellow-700 hover:file:bg-yellow-100 cursor-pointer border border-gray-200 rounded-xl bg-white shadow-sm transition-colors">
                             </div>
-                            
-                            <button type="submit" id="btnSubmitContent" class="w-full bg-sky-500 hover:bg-sky-600 text-white px-4 py-3 rounded-xl text-sm font-bold transition-colors shadow-sm">
+                            <button type="submit" id="btnSubmitContent" class="w-full bg-sky-500 hover:bg-sky-600 text-white px-4 py-3.5 rounded-xl text-base font-bold transition-colors shadow-md mt-2">
                                 <i class="fa-solid fa-save mr-2"></i>บันทึกข้อมูล
                             </button>
                         </form>
 
-                        <!-- Preview Area -->
-                        <div class="bg-gray-50 rounded-3xl p-6 border border-gray-200 flex flex-col items-center justify-center min-h-[300px]">
-                            <div id="imagePreviewContainer" class="hidden w-full max-w-sm">
+                        <div class="bg-gray-50 rounded-3xl p-6 border border-gray-200 flex flex-col items-center justify-center min-h-[300px] relative overflow-hidden">
+                            <div class="absolute top-0 right-0 w-32 h-32 bg-sky-100 rounded-bl-full opacity-30"></div>
+                            <div id="imagePreviewContainer" class="hidden w-full max-w-sm relative z-10">
                                 <h4 class="text-sm font-bold text-sky-800 mb-3 text-center border-b border-gray-200 pb-2">พรีวิวการ์ดแสดงผล</h4>
-                                <!-- Mock Card Preview -->
-                                <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-accent">
-                                    <div class="h-48 overflow-hidden bg-gray-100">
+                                <div class="bg-white rounded-3xl overflow-hidden shadow-md border border-accent">
+                                    <div class="h-48 overflow-hidden bg-gray-100 relative">
                                         <img id="imagePreview" src="" alt="Preview" class="w-full h-full object-cover">
                                     </div>
-                                    <div class="p-4">
+                                    <div class="p-5">
                                         <h3 id="previewTitle" class="font-bold text-lg text-textMain mb-1 truncate">ชื่อรายการ...</h3>
-                                        <p id="previewPrice" class="text-sky-600 font-semibold text-sm">0 THB</p>
+                                        <p id="previewPrice" class="text-sky-600 font-bold text-sm">0 THB</p>
                                     </div>
                                 </div>
-                                
                                 <div class="mt-4 flex justify-center">
-                                    <button type="button" onclick="clearImagePreview()" class="text-red-500 hover:text-red-600 text-sm font-medium bg-red-50 px-4 py-2 rounded-lg">
+                                    <button type="button" onclick="clearImagePreview()" class="text-red-500 hover:bg-red-50 font-bold text-sm px-4 py-2 rounded-xl transition-colors border border-transparent hover:border-red-100">
                                         <i class="fa-solid fa-trash-can mr-1"></i> ลบรูปภาพ
                                     </button>
                                 </div>
                             </div>
-                            
-                            <div id="imagePreviewPlaceholder" class="text-center text-gray-400">
-                                <i class="fa-regular fa-image text-5xl mb-3 text-gray-300"></i>
+                            <div id="imagePreviewPlaceholder" class="text-center text-gray-400 relative z-10">
+                                <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3 shadow-inner">
+                                    <i class="fa-regular fa-image text-3xl text-gray-300"></i>
+                                </div>
                                 <p class="text-sm font-medium">อัปโหลดรูปภาพเพื่อดูพรีวิว</p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Manage Existing Lists -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-8 border-t border-gray-100">
-                        <!-- Commission List -->
-                        <div>
+                        <div class="bg-blue-50/30 p-4 rounded-3xl border border-blue-100">
                             <h3 class="font-bold text-lg text-sky-800 mb-4 flex items-center"><i class="fa-solid fa-palette mr-2"></i> รายการ Commission</h3>
-                            <div class="space-y-3 max-h-96 overflow-y-auto pr-2 custom-scroll" id="adminManageCommissions">
+                            <div class="space-y-3 max-h-[400px] overflow-y-auto pr-2 custom-scroll" id="adminManageCommissions">
                                 <!-- Rendered by JS -->
                             </div>
                         </div>
-                        
-                        <!-- Shop List -->
-                        <div>
-                            <h3 class="font-bold text-lg text-sky-800 mb-4 flex items-center"><i class="fa-solid fa-store mr-2"></i> รายการ สินค้า</h3>
-                            <div class="space-y-3 max-h-96 overflow-y-auto pr-2 custom-scroll" id="adminManageProducts">
+                        <div class="bg-yellow-50/30 p-4 rounded-3xl border border-yellow-100">
+                            <h3 class="font-bold text-lg text-yellow-700 mb-4 flex items-center"><i class="fa-solid fa-store mr-2"></i> รายการ สินค้า</h3>
+                            <div class="space-y-3 max-h-[400px] overflow-y-auto pr-2 custom-scroll" id="adminManageProducts">
                                 <!-- Rendered by JS -->
                             </div>
                         </div>
                     </div>
-
                  </div>
             </div>
+
+            <!-- Tab Content: Brief & Rules -->
+            <div id="adminTab-rules" class="admin-tab-content hidden space-y-6">
+                
+                <!-- How to Brief Setting -->
+                <div class="bg-white/95 backdrop-blur p-6 rounded-3xl shadow-sm border border-accent">
+                    <h2 class="text-xl font-bold mb-4 flex items-center text-sky-800"><i class="fa-solid fa-list-check mr-2"></i>ข้อความหัวข้อ How to Brief</h2>
+                    
+                    <form onsubmit="adminSaveBrief(event)" id="adminBriefForm" class="bg-secondary p-5 rounded-2xl border border-sky-100 mb-6">
+                        <input type="hidden" id="abId" value="">
+                        <div class="grid grid-cols-1 gap-4">
+                            <div>
+                                <label class="block text-sm font-bold text-sky-900 mb-1">หัวข้อหลัก (ตัวหนา)</label>
+                                <input type="text" id="abMainText" required placeholder="เช่น รูปตัวละครที่อยากจ้าง" class="w-full bg-white border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-sky-500 shadow-sm">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-sky-900 mb-1">รายละเอียด / ข้อย่อย</label>
+                                <p class="text-xs text-sky-600 mb-2 font-medium">ใส่เครื่องหมาย <code>*</code> หน้าและหลังข้อความเพื่อทำ <b>สีแดง</b> <br>ใส่เครื่องหมาย <code>-</code> (ขีดและเว้นวรรค) ขึ้นต้นบรรทัดเพื่อทำเป็น <b>List ย่อย</b></p>
+                                <textarea id="abDescText" rows="3" placeholder="- ทรงผม สีผม ชุด เป็นต้น" class="w-full bg-white border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-sky-500 resize-y shadow-sm"></textarea>
+                            </div>
+                            <div class="flex gap-2">
+                                <button type="submit" id="btnSubmitBrief" class="bg-sky-500 hover:bg-sky-600 text-white px-5 py-2 rounded-xl text-sm font-bold transition-colors shadow-sm">
+                                    <i class="fa-solid fa-plus mr-1"></i> บันทึกข้อความ
+                                </button>
+                                <button type="button" onclick="adminResetBriefForm()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-2 rounded-xl text-sm font-bold transition-colors">ยกเลิก</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="space-y-2" id="adminManageBriefList">
+                        <!-- Rendered by JS -->
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Can -->
+                    <div class="bg-white/95 backdrop-blur p-6 rounded-3xl shadow-sm border border-green-200">
+                        <h2 class="text-xl font-bold mb-4 flex items-center text-green-700"><i class="fa-solid fa-circle-check mr-2"></i>สิ่งที่รับวาด (Can)</h2>
+                        <form onsubmit="adminSaveCan(event, 'can')" id="adminCanForm" class="bg-green-50 p-4 rounded-2xl border border-green-100 mb-4">
+                            <input type="hidden" id="acanId" value="">
+                            <div class="space-y-3">
+                                <div>
+                                    <label class="block text-xs font-bold text-green-800 mb-1">ข้อความหลัก</label>
+                                    <input type="text" id="acanMain" required class="w-full bg-white border border-green-200 rounded-lg p-2 text-sm focus:ring-green-500 shadow-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-green-800 mb-1">คำอธิบายเพิ่มเติม (ถ้ามี)</label>
+                                    <input type="text" id="acanSub" placeholder="เช่น (Personal use)" class="w-full bg-white border border-green-200 rounded-lg p-2 text-sm focus:ring-green-500 shadow-sm">
+                                </div>
+                                <button type="submit" id="btnSubmitCan" class="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-sm transition-colors">บันทึก</button>
+                            </div>
+                        </form>
+                        <div class="space-y-2 max-h-64 overflow-y-auto custom-scroll pr-2" id="adminManageCanList"></div>
+                    </div>
+
+                    <!-- Can't -->
+                    <div class="bg-white/95 backdrop-blur p-6 rounded-3xl shadow-sm border border-red-200">
+                        <h2 class="text-xl font-bold mb-4 flex items-center text-red-700"><i class="fa-solid fa-circle-xmark mr-2"></i>สิ่งที่ไม่รับวาด (Can't)</h2>
+                        <form onsubmit="adminSaveCan(event, 'cant')" id="adminCantForm" class="bg-red-50 p-4 rounded-2xl border border-red-100 mb-4">
+                            <input type="hidden" id="acantId" value="">
+                            <div class="space-y-3">
+                                <div>
+                                    <label class="block text-xs font-bold text-red-800 mb-1">ข้อความหลัก</label>
+                                    <input type="text" id="acantMain" required class="w-full bg-white border border-red-200 rounded-lg p-2 text-sm focus:ring-red-500 shadow-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-red-800 mb-1">คำอธิบายเพิ่มเติม (ถ้ามี)</label>
+                                    <input type="text" id="acantSub" placeholder="เช่น (เครื่องใน)" class="w-full bg-white border border-red-200 rounded-lg p-2 text-sm focus:ring-red-500 shadow-sm">
+                                </div>
+                                <button type="submit" id="btnSubmitCant" class="w-full bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-sm transition-colors">บันทึก</button>
+                            </div>
+                        </form>
+                        <div class="space-y-2 max-h-64 overflow-y-auto custom-scroll pr-2" id="adminManageCantList"></div>
+                    </div>
+                </div>
+            </div>
+
         </section>
 
     </main>
 
-    <!-- Commission Detail Modal -->
-    <div id="modal-commission" class="fixed inset-0 z-[60] hidden overflow-y-auto bg-black bg-opacity-50 backdrop-blur-sm transition-opacity">
+    <!-- Modal Elements remain same -->
+    <div id="modal-commission" class="fixed inset-0 z-[60] hidden overflow-y-auto bg-black/60 backdrop-blur-md transition-opacity">
         <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
-            <div class="relative bg-white rounded-3xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-4xl w-full" onclick="event.stopPropagation()">
-                <!-- Close btn -->
-                <button onclick="closeModal('modal-commission')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 bg-white rounded-full p-2 z-10 shadow-sm focus:outline-none">
-                    <i class="fa-solid fa-xmark text-xl"></i>
+            <div class="relative bg-white rounded-[2rem] text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:max-w-4xl w-full border border-sky-50" onclick="event.stopPropagation()">
+                <button onclick="closeModal('modal-commission')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 bg-white/90 backdrop-blur rounded-full p-2 z-10 shadow-sm focus:outline-none transition-transform hover:scale-110">
+                    <i class="fa-solid fa-xmark text-xl w-6 h-6 flex items-center justify-center"></i>
                 </button>
-                
                 <div class="p-0 sm:flex">
                     <div class="sm:w-1/2 bg-gray-100 relative h-64 sm:h-auto">
-                        <img id="modalComImage" src="" alt="" class="absolute w-full h-full object-cover cursor-pointer" onclick="openLightbox(this.src)">
-                        <div class="absolute bottom-2 right-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">กดเพื่อดูรูปเต็ม</div>
+                        <img id="modalComImage" src="" alt="" class="absolute w-full h-full object-cover cursor-pointer hover:opacity-90 transition-opacity" onclick="openLightbox(this.src)">
+                        <div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm text-white text-xs px-3 py-1.5 rounded-full font-medium"><i class="fa-solid fa-magnifying-glass-plus mr-1"></i> ดูรูปเต็ม</div>
                     </div>
-                    <div class="sm:w-1/2 p-6 sm:p-8 flex flex-col">
-                        <h3 class="text-2xl font-bold text-textMain mb-2" id="modalComTitle">Title</h3>
-                        <div class="inline-block bg-sky-50 text-sky-700 px-3 py-1 rounded-full text-sm font-semibold mb-4 w-fit">
+                    <div class="sm:w-1/2 p-6 sm:p-10 flex flex-col">
+                        <h3 class="text-3xl font-bold text-textMain mb-2" id="modalComTitle">Title</h3>
+                        <div class="inline-block bg-sky-50 text-sky-700 px-4 py-1.5 rounded-full text-sm font-bold mb-6 w-fit border border-sky-100">
                             เริ่มต้น <span id="modalComPrice">0</span> THB
                         </div>
-                        
-                        <div class="space-y-4 flex-1">
+                        <div class="space-y-5 flex-1">
                             <div>
-                                <h4 class="font-semibold text-gray-700 text-sm mb-1"><i class="fa-regular fa-clock mr-1"></i> ระยะเวลาทำงาน</h4>
-                                <p class="text-sm text-textMuted" id="modalComDuration">-</p>
+                                <h4 class="font-bold text-gray-800 text-sm mb-1.5 flex items-center"><i class="fa-regular fa-clock mr-2 text-sky-500"></i> ระยะเวลาทำงาน</h4>
+                                <p class="text-sm text-textMuted bg-gray-50 p-3 rounded-xl border border-gray-100" id="modalComDuration">-</p>
                             </div>
                             <div>
-                                <h4 class="font-semibold text-gray-700 text-sm mb-1"><i class="fa-solid fa-align-left mr-1"></i> รายละเอียด</h4>
-                                <p class="text-sm text-textMuted leading-relaxed" id="modalComDesc">-</p>
+                                <h4 class="font-bold text-gray-800 text-sm mb-1.5 flex items-center"><i class="fa-solid fa-align-left mr-2 text-sky-500"></i> รายละเอียด</h4>
+                                <p class="text-sm text-textMuted leading-relaxed bg-gray-50 p-4 rounded-xl border border-gray-100" id="modalComDesc">-</p>
                             </div>
-                            
-                            <div class="bg-yellow-50 p-3 rounded-xl border border-yellow-100">
-                                <h4 class="font-semibold text-yellow-800 text-sm mb-1">การนำไปใช้งาน</h4>
-                                <ul class="text-xs text-yellow-700 space-y-1">
-                                    <li>• Commercial Use : ราคาเริ่มต้น x 2</li>
-                                    <li>• Music Cover : ราคาเริ่มต้น x 1.5</li>
+                            <div class="bg-gradient-to-br from-yellow-50 to-amber-50 p-4 rounded-xl border border-yellow-200 shadow-sm">
+                                <h4 class="font-bold text-yellow-800 text-sm mb-2 flex items-center"><i class="fa-solid fa-triangle-exclamation mr-2 text-yellow-500"></i>การนำไปใช้งาน</h4>
+                                <ul class="text-xs text-yellow-700 space-y-1.5 font-medium">
+                                    <li class="flex items-start"><span class="text-yellow-500 mr-1">•</span> Commercial Use : ราคาเริ่มต้น x 2</li>
+                                    <li class="flex items-start"><span class="text-yellow-500 mr-1">•</span> Music Cover : ราคาเริ่มต้น x 1.5</li>
                                 </ul>
                             </div>
                         </div>
-                        
-                        <div class="mt-6 pt-4 border-t border-gray-100">
-                            <button onclick="window.open('https://twitter.com', '_blank')" class="w-full bg-sky-500 hover:bg-sky-600 text-white font-semibold py-3 px-4 rounded-xl shadow-sm transition-colors mb-2">
-                                ติดต่อสั่งงาน (Contact)
+                        <div class="mt-8 pt-6 border-t border-gray-100">
+                            <button onclick="window.open('https://twitter.com', '_blank')" class="w-full bg-sky-500 hover:bg-sky-600 text-white font-bold py-3.5 px-4 rounded-2xl shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 mb-2 flex items-center justify-center text-base">
+                                <i class="fa-solid fa-paper-plane mr-2"></i> ติดต่อสั่งงาน (Contact)
                             </button>
-                            <p class="text-xs text-center text-gray-400 mt-2">สนใจสั่งงานกรุณาติดต่อผ่านช่องทาง Social Media</p>
+                            <p class="text-xs text-center text-gray-400 mt-3 font-medium">สนใจสั่งงานกรุณาติดต่อผ่านช่องทาง Social Media</p>
                         </div>
                     </div>
                 </div>
@@ -884,26 +987,29 @@
     </div>
 
     <!-- Product Detail Modal -->
-    <div id="modal-product" class="fixed inset-0 z-[60] hidden overflow-y-auto bg-black bg-opacity-50 backdrop-blur-sm transition-opacity">
+    <div id="modal-product" class="fixed inset-0 z-[60] hidden overflow-y-auto bg-black/60 backdrop-blur-md transition-opacity">
         <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
-            <div class="relative bg-white rounded-3xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-2xl w-full" onclick="event.stopPropagation()">
-                <button onclick="closeModal('modal-product')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 bg-white/80 rounded-full p-2 z-10 shadow-sm">
-                    <i class="fa-solid fa-xmark text-xl"></i>
+            <div class="relative bg-white rounded-[2rem] text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:max-w-2xl w-full border border-sky-50" onclick="event.stopPropagation()">
+                <button onclick="closeModal('modal-product')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 bg-white/90 backdrop-blur rounded-full p-2 z-10 shadow-sm transition-transform hover:scale-110">
+                    <i class="fa-solid fa-xmark text-xl w-6 h-6 flex items-center justify-center"></i>
                 </button>
-                <div class="p-6 sm:p-8 flex flex-col md:flex-row gap-6">
-                    <div class="md:w-1/2">
-                        <img id="modalProdImage" src="" alt="" class="w-full h-auto rounded-2xl object-cover shadow-sm cursor-pointer" onclick="openLightbox(this.src)">
+                <div class="p-6 sm:p-8 flex flex-col md:flex-row gap-8">
+                    <div class="md:w-1/2 relative">
+                        <img id="modalProdImage" src="" alt="" class="w-full h-auto rounded-3xl object-cover shadow-md cursor-pointer hover:opacity-90 transition-opacity border border-gray-100" onclick="openLightbox(this.src)">
                     </div>
                     <div class="md:w-1/2 flex flex-col">
-                        <h3 class="text-2xl font-bold text-textMain mb-2" id="modalProdTitle">Product Name</h3>
-                        <p class="text-xl font-bold text-sky-600 mb-4" id="modalProdPrice">฿0</p>
+                        <h3 class="text-2xl font-bold text-textMain mb-2 leading-tight" id="modalProdTitle">Product Name</h3>
+                        <p class="text-2xl font-bold text-sky-600 mb-4" id="modalProdPrice">฿0</p>
                         
-                        <div id="modalProdStock" class="mb-4"></div>
+                        <div id="modalProdStock" class="mb-5"></div>
                         
-                        <p class="text-sm text-textMuted mb-6 flex-1 whitespace-pre-line" id="modalProdDesc">Description</p>
+                        <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 mb-6 flex-1">
+                            <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Description</h4>
+                            <p class="text-sm text-textMuted whitespace-pre-line leading-relaxed" id="modalProdDesc">Description</p>
+                        </div>
                         
-                        <button id="modalProdBuyBtn" class="w-full bg-sky-500 hover:bg-sky-600 text-white font-semibold py-3 px-4 rounded-xl shadow-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                            สั่งซื้อสินค้า
+                        <button id="modalProdBuyBtn" class="w-full bg-sky-500 hover:bg-sky-600 text-white font-bold py-3.5 px-4 rounded-2xl shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none flex items-center justify-center text-base">
+                            <i class="fa-solid fa-cart-shopping mr-2"></i> สั่งซื้อสินค้า
                         </button>
                     </div>
                 </div>
@@ -911,31 +1017,52 @@
         </div>
     </div>
 
-    <!-- Lightbox for Images/Videos -->
-    <div id="lightbox" class="fixed inset-0 z-[70] hidden bg-black bg-opacity-90 flex items-center justify-center" onclick="closeLightbox()">
-        <button class="absolute top-6 right-6 text-white text-3xl hover:text-gray-300 focus:outline-none"><i class="fa-solid fa-xmark"></i></button>
-        <img id="lightboxImg" src="" class="max-w-[90%] max-h-[90vh] object-contain shadow-2xl hidden" onclick="event.stopPropagation()">
-        <video id="lightboxVid" src="" controls autoplay loop class="max-w-[90%] max-h-[90vh] object-contain shadow-2xl hidden" onclick="event.stopPropagation()"></video>
+    <div id="lightbox" class="fixed inset-0 z-[70] hidden bg-black/95 backdrop-blur-sm flex items-center justify-center" onclick="closeLightbox()">
+        <button class="absolute top-6 right-6 text-white/50 hover:text-white text-3xl focus:outline-none transition-colors w-12 h-12 flex items-center justify-center rounded-full hover:bg-white/10"><i class="fa-solid fa-xmark"></i></button>
+        <img id="lightboxImg" src="" class="max-w-[95%] max-h-[95vh] object-contain shadow-2xl hidden rounded-lg" onclick="event.stopPropagation()">
+        <video id="lightboxVid" src="" controls autoplay loop class="max-w-[95%] max-h-[95vh] object-contain shadow-2xl hidden rounded-lg" onclick="event.stopPropagation()"></video>
     </div>
 
     <!-- Footer -->
-    <footer class="bg-white border-t border-accent py-6 mt-auto">
+    <footer class="bg-white/80 backdrop-blur border-t border-accent py-8 mt-auto">
         <div class="max-w-6xl mx-auto px-4 text-center">
-            <p class="text-sm text-textMuted">© 2026 RishmaStu. All rights reserved.</p>
+            <p class="text-sm text-textMuted font-medium">© 2026 RishmaStu. All rights reserved.</p>
         </div>
     </footer>
 
     <script>
+        function createHearts() {
+            const container = document.getElementById('floating-bg');
+            if(!container) return;
+            const colors = ['rgba(255,255,255,0.7)', 'rgba(253, 224, 71, 0.4)', 'rgba(253, 186, 116, 0.3)'];
+            for (let i = 0; i < 15; i++) {
+                const heart = document.createElement('i');
+                heart.className = 'fa-solid fa-heart heart';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 15 + 10) + 's';
+                heart.style.animationDelay = (Math.random() * 10) + 's';
+                heart.style.fontSize = (Math.random() * 1.5 + 0.8) + 'rem';
+                heart.style.color = colors[Math.floor(Math.random() * colors.length)];
+                container.appendChild(heart);
+            }
+        }
+
         // --- Mock Data & Robust ID Generator ---
         function generateId() {
             return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
         }
 
-        // Updated Data Structure for new Queue Table based on image
         let appState = {
             currentView: 'home',
             language: 'th',
             artistStatus: 'open',
+            isLoggedIn: false,
+            texts: {
+                artistName: 'RishmaStu',
+                artistRole: 'Full-time freelance illustrator',
+                realName: 'ปริ๊น นพสรณ์ ธนะกิตติภูมิ',
+                taxNote: 'เราได้ขึ้นทะเบียนศิลปินเรียบร้อยแล้ว ลูกค้าที่จ้างต่อไปสามารถขอใบเสร็จนำค่าซื้องานศิลปะมาหักลดหย่อนภาษีตามจำนวนที่จ่ายจริงได้แล้วน้า 🧾✨'
+            },
             queues: [
                 { id: generateId(), type: 'main', client: 'Jotatar Jostar', jobType: 'HS Color', pieces: '2', payColor: 'green', payText: '', briefColor: 'green', briefText: '', deadline: '', workColor: 'green', workText: '' },
                 { id: generateId(), type: 'main', client: 'Naowamin Sukanthamalai', jobType: 'BU Color 4 char', pieces: '1', payColor: 'green', payText: '', briefColor: 'green', briefText: '', deadline: '', workColor: 'yellow', workText: 'ตัดเส้น2' },
@@ -957,10 +1084,30 @@
                 { id: generateId(), name: 'Artbook Vol.1 "Daydream"', price: 450, stock: 5, img: 'https://placehold.co/400x500/f1f5f9/64748b?text=Artbook', desc: 'หนังสือรวมภาพวาดปี 2024-2025 ขนาด A4 ปกแข็ง' },
                 { id: generateId(), name: 'Keychain Acrylic - Chibi', price: 120, stock: 20, img: 'https://placehold.co/400x400/f1f5f9/64748b?text=Keychain', desc: 'พวงกุญแจอะคริลิคสกรีน 2 ด้าน ขนาด 5cm' },
                 { id: generateId(), name: 'Sticker Sheet - Cats', price: 60, stock: 0, img: 'https://placehold.co/400x400/f1f5f9/64748b?text=Sticker', desc: 'สติกเกอร์ไดคัทเนื้อ PP กันน้ำ ลายแมว' },
+            ],
+            /* --- Editable Texts Data --- */
+            howToBrief: [
+                { id: generateId(), mainText: 'รูปตัวละครที่อยากจ้าง', descText: '/ หากไม่มีรูป กรุณาส่งรายละเอียดตัวละคร เช่น ทรงผม สีผม ชุด เป็นต้น' },
+                { id: generateId(), mainText: 'ท่าทาง / มุมกล้อง / สีหน้าของตัวละคร', descText: 'หากมีนิสัยคร่าวๆ จะทำให้วาดออกมาได้ตรงมากขึ้น\n- ถ้าคิดท่าทางไม่ออก ให้บรรยายแนวคิด / อารมณ์ของภาพที่อยากได้' },
+                { id: generateId(), mainText: 'ภาพพื้นหลังที่อยากจ้าง', descText: '*หากไม่รับพื้นหลัง ไม่ต้องบรีฟ*\n- โทนสี / รายละเอียดพื้นหลังที่อยากจ้าง' },
+                { id: generateId(), mainText: 'ขนาดของงานที่อยากได้', descText: 'หากไม่ระบุ เราจะทำการสุ่ม' },
+                { id: generateId(), mainText: 'นำงานไปทำสิ่งพิมพ์หรือไม่', descText: 'หากใช่ เราจะตั้งค่าสี CMYK ซึ่งเป็นสีที่ใช้ในงานพิมพ์\n- หากเปลี่ยนค่าสีในภายหลังอาจจะคิดค่าใช้จ่ายเพิ่มตามรายละเอียดสีที่ต้องเปลี่ยน' },
+                { id: generateId(), mainText: 'งานนี้เป็นงานเชิงพาณิชย์หรือใช้ส่วนตัว', descText: '- งานเชิงพาณิชย์จะมีราคาคูณ 2 จากราคาปกติ' }
+            ],
+            canList: [
+                { id: generateId(), mainText: 'OC / Female / Male / LGBTQ+', subText: '' },
+                { id: generateId(), mainText: 'Fan art', subText: '(Personal use)' },
+                { id: generateId(), mainText: 'Blood / Gore / Bone / Skeleton', subText: '<br>(เลือด/กระดูก/โครงกระดูก/เครื่องใน)' },
+                { id: generateId(), mainText: 'Mimi , Kemono , Furry / Uncle , Muscle', subText: '' }
+            ],
+            cantList: [
+                { id: generateId(), mainText: 'Horror (Ghost)', subText: 'เฉพาะผี' },
+                { id: generateId(), mainText: 'Fan art', subText: '(Commercial use)' },
+                { id: generateId(), mainText: 'Entrails', subText: '(เครื่องใน)' },
+                { id: generateId(), mainText: 'จิ้งจก ตุ๊กแก', subText: '' }
             ]
         };
 
-        // --- Dictionary ---
         const dict = {
             th: {
                 navHome: 'หน้าหลัก', navQueue: 'คิวงาน', navTerms: 'ข้อตกลง', navShop: 'สินค้า',
@@ -987,17 +1134,27 @@
         };
 
         function initApp() {
+            createHearts(); 
             renderStatus();
+            renderCommissionRules(); // Render How to Brief / Can Can't
             renderCommissions();
             renderQueues();
             renderShop();
             applyLanguage();
-            // Setup Admin form
+            
+            // Setup Admin form initial values
             document.getElementById('adminStatusSelect').value = appState.artistStatus;
+            document.getElementById('adminArtistName').value = appState.texts.artistName;
+            document.getElementById('adminArtistRole').value = appState.texts.artistRole;
+            document.getElementById('adminRealName').value = appState.texts.realName;
+            document.getElementById('adminTaxNote').value = appState.texts.taxNote;
+            
             renderAdminContentLists(); 
+            renderAdminRulesLists();
+            updateHomeTexts();
         }
 
-        // --- Navigation ---
+        // --- Navigation & Auth ---
         function navigate(viewId) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
             document.getElementById(`view-${viewId}`).classList.remove('hidden');
@@ -1008,6 +1165,37 @@
         function toggleMobileMenu() {
             const menu = document.getElementById('mobileMenu');
             menu.classList.toggle('hidden');
+        }
+        
+        function checkAdminAccess() {
+            if (appState.isLoggedIn) {
+                navigate('admin');
+            } else {
+                navigate('login');
+            }
+        }
+        
+        function handleLogin(e) {
+            e.preventDefault();
+            const user = document.getElementById('loginUser').value;
+            const pass = document.getElementById('loginPass').value;
+            
+            if(user === 'admin' && pass === '1234') {
+                appState.isLoggedIn = true;
+                document.getElementById('loginError').classList.add('hidden');
+                document.getElementById('loginUser').value = '';
+                document.getElementById('loginPass').value = '';
+                navigate('admin');
+            } else {
+                document.getElementById('loginError').classList.remove('hidden');
+            }
+        }
+        
+        function handleLogout() {
+            if(confirm('ต้องการออกจากระบบใช่หรือไม่?')) {
+                appState.isLoggedIn = false;
+                navigate('home');
+            }
         }
 
         // --- Language ---
@@ -1030,7 +1218,7 @@
             });
         }
 
-        // --- Render Functions ---
+        // --- View Rendering ---
         function renderStatus() {
             const badge = document.getElementById('commissionStatusBadge');
             let bgClass = '', textKey = '';
@@ -1046,8 +1234,52 @@
                 textKey = 'statusBusy';
             }
             
-            badge.className = `inline-flex items-center px-4 py-2 rounded-full font-medium text-sm mb-4 ${bgClass}`;
+            badge.className = `inline-flex items-center px-4 py-2 rounded-full font-bold text-sm mb-4 shadow-sm ${bgClass}`;
             badge.innerText = dict[appState.language][textKey];
+        }
+
+        // Render Editable Commission Rules (How to brief, Can/Can't)
+        function renderCommissionRules() {
+            const briefList = document.getElementById('howToBriefList');
+            briefList.innerHTML = '';
+            
+            appState.howToBrief.forEach(item => {
+                let html = `<span class="font-medium">${item.mainText}</span>`;
+                let bullets = [];
+                
+                if(item.descText) {
+                    const lines = item.descText.split('\n');
+                    lines.forEach(line => {
+                        let l = line.trim();
+                        if(l.startsWith('-')) {
+                            bullets.push(`<li>${l.substring(1).trim()}</li>`);
+                        } else if (l.startsWith('*') && l.endsWith('*') && l.length > 2) {
+                            html += ` <span class="text-red-500 font-medium">${l.substring(1, l.length-1)}</span>`;
+                        } else if (l !== '') {
+                            html += ` ${l}`;
+                        }
+                    });
+                }
+                
+                if(bullets.length > 0) {
+                    html += `<ul class="list-disc list-outside ml-5 mt-1 text-textMuted">${bullets.join('')}</ul>`;
+                }
+                briefList.innerHTML += `<li class="pl-2">${html}</li>`;
+            });
+
+            const canCantBody = document.getElementById('canCantTableBody');
+            canCantBody.innerHTML = '';
+            const maxLen = Math.max(appState.canList.length, appState.cantList.length);
+            
+            for(let i = 0; i < maxLen; i++) {
+                const can = appState.canList[i];
+                const cant = appState.cantList[i];
+                
+                const canHtml = can ? `${can.mainText} ${can.subText ? `<span class="text-textMuted text-xs ml-1">${can.subText}</span>` : ''}` : '';
+                const cantHtml = cant ? `${cant.mainText} ${cant.subText ? `<span class="text-textMuted text-xs ml-1">${cant.subText}</span>` : ''}` : '';
+                
+                canCantBody.innerHTML += `<tr><td>${canHtml}</td><td>${cantHtml}</td></tr>`;
+            }
         }
 
         function renderCommissions() {
@@ -1055,53 +1287,43 @@
             container.innerHTML = '';
             appState.commissions.forEach(com => {
                 const card = document.createElement('div');
-                card.className = 'bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-accent cursor-pointer group';
+                card.className = 'bg-white/90 backdrop-blur rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all transform hover:-translate-y-1 border border-accent cursor-pointer group';
                 card.onclick = () => openCommissionModal(com);
                 
-                const mediaIcon = com.isVideo ? '<div class="absolute top-3 right-3 bg-black bg-opacity-60 text-white rounded-full p-2 w-8 h-8 flex items-center justify-center backdrop-blur-sm"><i class="fa-solid fa-video text-xs"></i></div>' : '';
+                const mediaIcon = com.isVideo ? '<div class="absolute top-3 right-3 bg-black/60 backdrop-blur-sm text-white rounded-full p-2 w-8 h-8 flex items-center justify-center"><i class="fa-solid fa-video text-xs"></i></div>' : '';
 
                 card.innerHTML = `
-                    <div class="h-48 overflow-hidden relative">
+                    <div class="h-48 overflow-hidden relative border-b border-gray-50">
                         <img src="${com.img}" alt="${com.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         ${mediaIcon}
                     </div>
                     <div class="p-5">
                         <h3 class="font-bold text-lg text-textMain mb-1 group-hover:text-sky-600 transition-colors">${com.name}</h3>
-                        <p class="text-sky-600 font-semibold text-sm">Starts at ${com.price} THB</p>
+                        <p class="text-sky-600 font-bold text-sm">Starts at ${com.price} THB</p>
                     </div>
                 `;
                 container.appendChild(card);
             });
-            
-            if(appState.commissions.length === 0) {
-                container.innerHTML = '<div class="col-span-full py-12 text-center text-gray-400 font-medium">ยังไม่มีข้อมูล Commission</div>';
-            }
         }
 
-        // Queue Tab Switcher logic
         function switchQueueTab(tabId) {
-            // Hide all tab contents
             document.querySelectorAll('.queue-tab-content').forEach(el => {
                 el.classList.add('hidden');
                 el.classList.remove('block');
             });
-            // Reset all buttons style
             document.querySelectorAll('.queue-tab-btn').forEach(el => {
                 el.classList.remove('bg-sky-500', 'text-white', 'shadow-sm');
                 el.classList.add('bg-transparent', 'text-gray-500', 'hover:bg-gray-100');
             });
             
-            // Show active tab
             document.getElementById(`qTab-${tabId}`).classList.remove('hidden');
             document.getElementById(`qTab-${tabId}`).classList.add('block');
             
-            // Set active button style
             const activeBtn = document.getElementById(`qTabBtn-${tabId}`);
             activeBtn.classList.remove('bg-transparent', 'text-gray-500', 'hover:bg-gray-100');
             activeBtn.classList.add('bg-sky-500', 'text-white', 'shadow-sm');
         }
 
-        // Helper for colored table cells
         function getStatusCellClass(colorStr) {
             switch(colorStr) {
                 case 'green': return 'bg-statusGreen text-green-900 border-green-300 font-bold';
@@ -1112,7 +1334,8 @@
         }
 
         function renderQueues() {
-            document.getElementById('totalQueueCount').innerText = appState.queues.length;
+            const totalQueueEl = document.getElementById('totalQueueCount');
+            if (totalQueueEl) totalQueueEl.innerText = appState.queues.length;
             
             const tbodyMain = document.getElementById('tableBody-main');
             const tbodySub = document.getElementById('tableBody-sub');
@@ -1124,10 +1347,10 @@
 
             appState.queues.forEach(q => {
                 const tr = document.createElement('tr');
-                tr.className = "border-b border-gray-100 hover:bg-sky-50/30 transition-colors";
+                tr.className = "border-b border-gray-100 hover:bg-sky-50/50 transition-colors";
                 
                 if(q.workColor === 'yellow') {
-                    tr.classList.add('bg-yellow-50/50');
+                    tr.classList.add('bg-yellow-50/70');
                 }
 
                 let numStr = '';
@@ -1168,38 +1391,33 @@
             container.innerHTML = '';
             appState.products.forEach(prod => {
                 const card = document.createElement('div');
-                card.className = 'bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-accent cursor-pointer group flex flex-col';
+                card.className = 'bg-white/90 backdrop-blur rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all transform hover:-translate-y-1 border border-accent cursor-pointer group flex flex-col';
                 card.onclick = () => openProductModal(prod);
                 
                 let stockBadge = '';
                 if(prod.stock === 0) {
-                    stockBadge = '<span class="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-lg">Out of Stock</span>';
+                    stockBadge = '<span class="absolute top-3 left-3 bg-red-500/90 backdrop-blur-sm text-white text-xs font-bold px-2.5 py-1.5 rounded-xl shadow-sm">Out of Stock</span>';
                 } else if(prod.stock < 5) {
-                    stockBadge = `<span class="absolute top-2 left-2 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded-lg">เหลือ ${prod.stock} ชิ้น</span>`;
+                    stockBadge = `<span class="absolute top-3 left-3 bg-yellow-400/90 backdrop-blur-sm text-yellow-900 text-xs font-bold px-2.5 py-1.5 rounded-xl shadow-sm">เหลือ ${prod.stock} ชิ้น</span>`;
                 }
 
                 card.innerHTML = `
-                    <div class="aspect-square overflow-hidden relative bg-gray-100">
+                    <div class="aspect-square overflow-hidden relative bg-gray-100 border-b border-gray-50">
                         <img src="${prod.img}" alt="${prod.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${prod.stock===0 ? 'grayscale opacity-60':''}">
                         ${stockBadge}
                     </div>
-                    <div class="p-4 flex-1 flex flex-col justify-between">
-                        <h3 class="font-semibold text-sm text-textMain line-clamp-2 mb-2 group-hover:text-sky-600">${prod.name}</h3>
-                        <p class="text-sky-600 font-bold">฿${prod.price}</p>
+                    <div class="p-5 flex-1 flex flex-col justify-between">
+                        <h3 class="font-semibold text-sm text-textMain line-clamp-2 mb-2 group-hover:text-sky-600 transition-colors">${prod.name}</h3>
+                        <p class="text-sky-600 font-bold text-lg">฿${prod.price}</p>
                     </div>
                 `;
                 container.appendChild(card);
             });
-            
-            if(appState.products.length === 0) {
-                container.innerHTML = '<div class="col-span-full py-12 text-center text-gray-400 font-medium">ไม่มีสินค้าในขณะนี้</div>';
-            }
         }
 
         function toggleAccordion(btn) {
             const content = btn.nextElementSibling;
             const icon = btn.querySelector('i');
-            
             if (content.classList.contains('hidden')) {
                 content.classList.remove('hidden');
                 icon.classList.add('rotate-180');
@@ -1214,15 +1432,12 @@
             document.getElementById('modalComPrice').innerText = com.price;
             document.getElementById('modalComDuration').innerText = com.duration;
             document.getElementById('modalComDesc').innerText = com.desc;
-            
             const imgEl = document.getElementById('modalComImage');
             imgEl.src = com.img;
-            
             imgEl.onclick = () => {
                 if(com.isVideo) openLightbox(com.videoUrl, true);
                 else openLightbox(com.img, false);
             };
-
             document.getElementById('modal-commission').classList.remove('hidden');
         }
 
@@ -1231,24 +1446,21 @@
             document.getElementById('modalProdPrice').innerText = `฿${prod.price}`;
             document.getElementById('modalProdDesc').innerText = prod.desc;
             document.getElementById('modalProdImage').src = prod.img;
-            
             const stockEl = document.getElementById('modalProdStock');
             const btn = document.getElementById('modalProdBuyBtn');
-            
             if(prod.stock === 0) {
-                stockEl.innerHTML = '<span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800"><i class="fa-solid fa-box-open mr-2"></i> สินค้าหมด (Out of Stock)</span>';
+                stockEl.innerHTML = '<span class="inline-flex items-center px-3.5 py-1.5 rounded-xl text-sm font-bold bg-red-50 text-red-600 border border-red-100"><i class="fa-solid fa-box-open mr-2"></i> สินค้าหมด (Out of Stock)</span>';
                 btn.disabled = true;
-                btn.innerText = 'สินค้าหมด';
+                btn.innerHTML = '<i class="fa-solid fa-ban mr-2"></i>สินค้าหมด';
                 btn.classList.replace('bg-sky-500', 'bg-gray-400');
                 btn.onclick = null;
             } else {
-                stockEl.innerHTML = `<span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800"><i class="fa-solid fa-check mr-2"></i> มีสินค้า (In Stock : ${prod.stock})</span>`;
+                stockEl.innerHTML = `<span class="inline-flex items-center px-3.5 py-1.5 rounded-xl text-sm font-bold bg-green-50 text-green-600 border border-green-100"><i class="fa-solid fa-check mr-2"></i> มีสินค้า (In Stock : ${prod.stock})</span>`;
                 btn.disabled = false;
-                btn.innerText = 'สั่งซื้อสินค้า';
+                btn.innerHTML = '<i class="fa-solid fa-cart-shopping mr-2"></i> สั่งซื้อสินค้า';
                 btn.classList.replace('bg-gray-400', 'bg-sky-500');
                 btn.onclick = () => window.open('https://docs.google.com/forms', '_blank'); 
             }
-
             document.getElementById('modal-product').classList.remove('hidden');
         }
 
@@ -1260,7 +1472,6 @@
             const modal = document.getElementById('lightbox');
             const img = document.getElementById('lightboxImg');
             const vid = document.getElementById('lightboxVid');
-            
             modal.classList.remove('hidden');
             if(isVideo) {
                 img.classList.add('hidden');
@@ -1287,7 +1498,6 @@
         }
 
         // --- Admin Functions ---
-
         function switchAdminTab(tabId) {
             document.querySelectorAll('.admin-tab-content').forEach(el => {
                 el.classList.add('hidden');
@@ -1297,10 +1507,8 @@
                 el.classList.remove('text-sky-600', 'border-sky-600');
                 el.classList.add('text-gray-500', 'border-transparent');
             });
-            
             document.getElementById(`adminTab-${tabId}`).classList.remove('hidden');
             document.getElementById(`adminTab-${tabId}`).classList.add('block');
-            
             const activeBtn = document.getElementById(`tabBtn-${tabId}`);
             activeBtn.classList.remove('text-gray-500', 'border-transparent');
             activeBtn.classList.add('text-sky-600', 'border-sky-600');
@@ -1313,6 +1521,24 @@
             alert('อัปเดตสถานะการรับงานเรียบร้อย');
         }
         
+        function adminSaveGeneralTexts(e) {
+            e.preventDefault();
+            appState.texts.artistName = document.getElementById('adminArtistName').value;
+            appState.texts.artistRole = document.getElementById('adminArtistRole').value;
+            appState.texts.realName = document.getElementById('adminRealName').value;
+            appState.texts.taxNote = document.getElementById('adminTaxNote').value;
+            
+            updateHomeTexts();
+            alert('อัปเดตข้อความหน้าเว็บเรียบร้อย');
+        }
+
+        function updateHomeTexts() {
+            document.getElementById('homeArtistName').innerText = appState.texts.artistName;
+            document.getElementById('homeArtistRole').innerText = appState.texts.artistRole;
+            document.getElementById('homeRealName').innerText = appState.texts.realName;
+            document.getElementById('homeTaxNote').innerText = appState.texts.taxNote;
+        }
+
         function renderAdminQueueTable() {
             const tbody = document.getElementById('adminQueueTableBody');
             tbody.innerHTML = '';
@@ -1323,33 +1549,33 @@
             }
 
             const colorDot = (c, text) => {
-                let dotCls = 'bg-gray-200 border-gray-300 text-gray-500';
+                let dotCls = 'bg-gray-100 border-gray-200 text-gray-400';
                 if(c==='green') dotCls = 'bg-statusGreen border-green-300 text-green-800';
                 if(c==='yellow') dotCls = 'bg-statusYellow border-yellow-300 text-yellow-800';
                 if(c==='red') dotCls = 'bg-statusRed border-red-300 text-red-800';
-                return `<span class="inline-flex items-center justify-center min-w-[20px] h-5 px-1 rounded text-[10px] border ${dotCls} font-bold mr-1" title="${text || 'ว่าง'}">${text || ''}</span>`;
+                return `<span class="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-md text-[10px] border ${dotCls} font-bold mr-1" title="${text || 'ว่าง'}">${text || ''}</span>`;
             };
 
             appState.queues.forEach((q) => {
                 const tr = document.createElement('tr');
-                tr.className = `hover:bg-gray-50`;
+                tr.className = `hover:bg-sky-50/50 transition-colors`;
                 
-                let typeLabel = '<span class="px-2 py-1 rounded text-xs font-medium bg-gray-100 text-gray-800">คิวย่อย</span>';
-                if(q.type === 'main') typeLabel = '<span class="px-2 py-1 rounded text-xs font-medium bg-sky-100 text-sky-800">คิวหลัก</span>';
-                if(q.type === 'pending') typeLabel = '<span class="px-2 py-1 rounded text-xs font-medium bg-red-100 text-red-800">ตกค้าง</span>';
+                let typeLabel = '<span class="px-2 py-1 rounded-lg text-xs font-bold bg-gray-100 text-gray-600">คิวย่อย</span>';
+                if(q.type === 'main') typeLabel = '<span class="px-2 py-1 rounded-lg text-xs font-bold bg-sky-100 text-sky-700">คิวหลัก</span>';
+                if(q.type === 'pending') typeLabel = '<span class="px-2 py-1 rounded-lg text-xs font-bold bg-red-100 text-red-700">ตกค้าง</span>';
 
                 tr.innerHTML = `
                     <td class="px-4 py-3">${typeLabel}</td>
                     <td class="px-4 py-3 font-bold text-gray-900 truncate max-w-[120px]">${q.client}</td>
-                    <td class="px-4 py-3 text-gray-500 text-xs">${q.jobType} (x${q.pieces || 0})</td>
+                    <td class="px-4 py-3 text-gray-500 text-xs">${q.jobType || '-'} ${q.pieces ? `(x${q.pieces})` : ''}</td>
                     <td class="px-4 py-3 text-center whitespace-nowrap">
                         ${colorDot(q.payColor, q.payText)} 
                         ${colorDot(q.briefColor, q.briefText)} 
                         ${colorDot(q.workColor, q.workText)}
                     </td>
-                    <td class="px-4 py-3 text-right">
-                        <button type="button" onclick="adminEditQueue('${q.id}')" class="text-sky-600 hover:bg-sky-50 p-1.5 rounded transition-colors mr-1" title="แก้ไข"><i class="fa-solid fa-pen"></i></button>
-                        <button type="button" onclick="adminDeleteQueue('${q.id}')" class="text-red-500 hover:bg-red-50 p-1.5 rounded transition-colors" title="ลบ"><i class="fa-solid fa-trash-can"></i></button>
+                    <td class="px-4 py-3 text-right whitespace-nowrap">
+                        <button type="button" onclick="adminEditQueue('${q.id}')" class="text-sky-600 hover:bg-sky-100 p-2 rounded-lg transition-colors mr-1" title="แก้ไข"><i class="fa-solid fa-pen"></i></button>
+                        <button type="button" onclick="adminDeleteQueue('${q.id}')" class="text-red-500 hover:bg-red-100 p-2 rounded-lg transition-colors" title="ลบ"><i class="fa-solid fa-trash-can"></i></button>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -1359,7 +1585,6 @@
         function adminSaveQueue(e) {
             e.preventDefault();
             const id = document.getElementById('aqId').value;
-            
             const newQ = {
                 id: id || generateId(),
                 type: document.getElementById('aqType').value,
@@ -1374,18 +1599,12 @@
                 workText: document.getElementById('aqWorkText').value,
                 deadline: document.getElementById('aqDeadline').value,
             };
-
             if (id) {
                 const qIndex = appState.queues.findIndex(q => q.id == id);
-                if (qIndex > -1) {
-                    appState.queues[qIndex] = newQ;
-                    alert('อัปเดตข้อมูลคิวสำเร็จ');
-                }
+                if (qIndex > -1) { appState.queues[qIndex] = newQ; }
             } else {
                 appState.queues.push(newQ);
-                alert('เพิ่มคิวใหม่สำเร็จ');
             }
-            
             renderQueues();
             adminResetQueueForm();
         }
@@ -1393,30 +1612,24 @@
         function adminEditQueue(id) {
             const q = appState.queues.find(q => q.id == id);
             if (!q) return;
-
             document.getElementById('aqId').value = q.id;
             document.getElementById('aqType').value = q.type;
             document.getElementById('aqClient').value = q.client;
             document.getElementById('aqJobType').value = q.jobType;
             document.getElementById('aqPieces').value = q.pieces;
-            
             document.getElementById('aqPayColor').value = q.payColor;
             document.getElementById('aqPayText').value = q.payText;
-            
             document.getElementById('aqBriefColor').value = q.briefColor;
             document.getElementById('aqBriefText').value = q.briefText;
-            
             document.getElementById('aqWorkColor').value = q.workColor;
             document.getElementById('aqWorkText').value = q.workText;
-
             document.getElementById('aqDeadline').value = q.deadline;
             
             document.getElementById('aqFormTitle').innerHTML = '<i class="fa-solid fa-pen-to-square mr-2"></i>แก้ไขคิว';
             const btn = document.getElementById('btnSubmitQueue');
-            btn.innerText = "อัปเดตข้อมูลคิว";
+            btn.innerHTML = '<i class="fa-solid fa-check mr-2"></i>อัปเดตข้อมูลคิว';
             btn.classList.replace('bg-sky-500', 'bg-yellow-500');
             btn.classList.replace('hover:bg-sky-600', 'hover:bg-yellow-600');
-            
             document.getElementById('aqFormTitle').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
@@ -1435,9 +1648,8 @@
             document.getElementById('aqId').value = '';
             document.getElementById('aqBriefColor').value = 'green';
             document.getElementById('aqFormTitle').innerHTML = '<i class="fa-solid fa-plus-circle mr-2"></i>เพิ่มคิวใหม่';
-            
             const btn = document.getElementById('btnSubmitQueue');
-            btn.innerText = "บันทึกคิว";
+            btn.innerHTML = 'บันทึกคิว';
             btn.classList.replace('bg-yellow-500', 'bg-sky-500');
             btn.classList.replace('hover:bg-yellow-600', 'hover:bg-sky-600');
         }
@@ -1460,7 +1672,6 @@
             const name = document.getElementById('mockItemName').value;
             const price = document.getElementById('mockItemPrice').value;
             const desc = document.getElementById('mockItemDesc').value;
-            
             const previewImgSrc = document.getElementById('imagePreview').src;
             let finalImg = (!previewImgSrc || previewImgSrc.endsWith('index.html')) 
                 ? 'https://placehold.co/600x600/f3f4f6/9ca3af?text=No+Image' 
@@ -1468,45 +1679,29 @@
 
             if (type === 'commission') {
                 const duration = document.getElementById('mockItemDuration').value || '1-2 สัปดาห์';
-                
                 if (id) {
                     const idx = appState.commissions.findIndex(c => c.id == id);
                     if (idx > -1) {
-                        if(finalImg.includes('No+Image') && appState.commissions[idx].img) {
-                             finalImg = appState.commissions[idx].img;
-                        }
+                        if(finalImg.includes('No+Image') && appState.commissions[idx].img) finalImg = appState.commissions[idx].img;
                         appState.commissions[idx] = { ...appState.commissions[idx], name, price, duration, desc, img: finalImg };
-                        alert(`อัปเดต Commission เรียบร้อยแล้ว`);
                     }
                 } else {
-                    appState.commissions.push({
-                        id: generateId(), name, price, duration, desc, img: finalImg, isVideo: false
-                    });
-                    alert(`เพิ่ม Commission เรียบร้อยแล้ว`);
+                    appState.commissions.push({ id: generateId(), name, price, duration, desc, img: finalImg, isVideo: false });
                 }
                 renderCommissions();
-                
             } else {
                 const stock = document.getElementById('mockItemStock').value || 0;
-                
                 if (id) {
                     const idx = appState.products.findIndex(p => p.id == id);
                     if (idx > -1) {
-                        if(finalImg.includes('No+Image') && appState.products[idx].img) {
-                             finalImg = appState.products[idx].img;
-                        }
+                        if(finalImg.includes('No+Image') && appState.products[idx].img) finalImg = appState.products[idx].img;
                         appState.products[idx] = { ...appState.products[idx], name, price, stock: parseInt(stock), desc, img: finalImg };
-                        alert(`อัปเดตสินค้าเรียบร้อยแล้ว`);
                     }
                 } else {
-                    appState.products.push({
-                        id: generateId(), name, price, stock: parseInt(stock), desc, img: finalImg
-                    });
-                    alert(`เพิ่มสินค้าเรียบร้อยแล้ว`);
+                    appState.products.push({ id: generateId(), name, price, stock: parseInt(stock), desc, img: finalImg });
                 }
                 renderShop();
             }
-            
             adminResetContentForm();
             renderAdminContentLists();
         }
@@ -1515,19 +1710,19 @@
             const comContainer = document.getElementById('adminManageCommissions');
             comContainer.innerHTML = '';
             if (appState.commissions.length === 0) {
-                 comContainer.innerHTML = '<p class="text-sm text-gray-400 p-4 text-center">ไม่มีข้อมูล Commission</p>';
+                 comContainer.innerHTML = '<p class="text-sm text-gray-400 p-4 text-center bg-white/50 rounded-2xl border border-dashed border-gray-200">ไม่มีข้อมูล Commission</p>';
             } else {
                 appState.commissions.forEach(item => {
                     comContainer.innerHTML += `
-                        <div class="flex items-center p-3 bg-white rounded-xl border border-gray-200 hover:border-sky-300 hover:shadow-sm transition-all">
-                            <img src="${item.img}" class="w-14 h-14 object-cover rounded-lg mr-4 bg-gray-100">
+                        <div class="flex items-center p-3 bg-white rounded-2xl border border-gray-100 hover:border-sky-300 hover:shadow-sm transition-all">
+                            <img src="${item.img}" class="w-14 h-14 object-cover rounded-xl mr-4 bg-gray-100 border border-gray-100">
                             <div class="flex-1 min-w-0">
                                 <h4 class="font-bold text-sm text-gray-900 truncate">${item.name}</h4>
-                                <p class="text-xs text-sky-600 font-medium">${item.price} THB</p>
+                                <p class="text-xs text-sky-600 font-bold">${item.price} THB</p>
                             </div>
                             <div class="flex space-x-1 ml-2">
-                                <button type="button" onclick="adminEditContent('commission', '${item.id}')" class="text-sky-500 hover:bg-sky-50 p-2 rounded-lg transition-colors" title="แก้ไข"><i class="fa-solid fa-pen"></i></button>
-                                <button type="button" onclick="adminDeleteContent('commission', '${item.id}')" class="text-red-500 hover:bg-red-50 p-2 rounded-lg transition-colors" title="ลบ"><i class="fa-solid fa-trash-can"></i></button>
+                                <button type="button" onclick="adminEditContent('commission', '${item.id}')" class="text-sky-500 hover:bg-sky-100 p-2 rounded-lg transition-colors" title="แก้ไข"><i class="fa-solid fa-pen"></i></button>
+                                <button type="button" onclick="adminDeleteContent('commission', '${item.id}')" class="text-red-500 hover:bg-red-100 p-2 rounded-lg transition-colors" title="ลบ"><i class="fa-solid fa-trash-can"></i></button>
                             </div>
                         </div>
                     `;
@@ -1537,19 +1732,19 @@
             const prodContainer = document.getElementById('adminManageProducts');
             prodContainer.innerHTML = '';
             if (appState.products.length === 0) {
-                 prodContainer.innerHTML = '<p class="text-sm text-gray-400 p-4 text-center">ไม่มีข้อมูลสินค้า</p>';
+                 prodContainer.innerHTML = '<p class="text-sm text-gray-400 p-4 text-center bg-white/50 rounded-2xl border border-dashed border-gray-200">ไม่มีข้อมูลสินค้า</p>';
             } else {
                 appState.products.forEach(item => {
                     prodContainer.innerHTML += `
-                        <div class="flex items-center p-3 bg-white rounded-xl border border-gray-200 hover:border-sky-300 hover:shadow-sm transition-all">
-                            <img src="${item.img}" class="w-14 h-14 object-cover rounded-lg mr-4 bg-gray-100">
+                        <div class="flex items-center p-3 bg-white rounded-2xl border border-gray-100 hover:border-yellow-300 hover:shadow-sm transition-all">
+                            <img src="${item.img}" class="w-14 h-14 object-cover rounded-xl mr-4 bg-gray-100 border border-gray-100">
                             <div class="flex-1 min-w-0">
                                 <h4 class="font-bold text-sm text-gray-900 truncate">${item.name}</h4>
-                                <p class="text-xs text-sky-600 font-medium">฿${item.price} <span class="text-gray-400 font-normal ml-1">(Stock: ${item.stock})</span></p>
+                                <p class="text-xs text-sky-600 font-bold">฿${item.price} <span class="text-gray-400 font-normal ml-1 bg-gray-100 px-2 py-0.5 rounded-md">Stock: ${item.stock}</span></p>
                             </div>
                             <div class="flex space-x-1 ml-2">
-                                <button type="button" onclick="adminEditContent('product', '${item.id}')" class="text-sky-500 hover:bg-sky-50 p-2 rounded-lg transition-colors" title="แก้ไข"><i class="fa-solid fa-pen"></i></button>
-                                <button type="button" onclick="adminDeleteContent('product', '${item.id}')" class="text-red-500 hover:bg-red-50 p-2 rounded-lg transition-colors" title="ลบ"><i class="fa-solid fa-trash-can"></i></button>
+                                <button type="button" onclick="adminEditContent('product', '${item.id}')" class="text-sky-500 hover:bg-sky-100 p-2 rounded-lg transition-colors" title="แก้ไข"><i class="fa-solid fa-pen"></i></button>
+                                <button type="button" onclick="adminDeleteContent('product', '${item.id}')" class="text-red-500 hover:bg-red-100 p-2 rounded-lg transition-colors" title="ลบ"><i class="fa-solid fa-trash-can"></i></button>
                             </div>
                         </div>
                     `;
@@ -1569,7 +1764,6 @@
                 item = appState.products.find(p => p.id == id);
                 document.getElementById('mockItemStock').value = item.stock;
             }
-
             if (!item) return;
 
             document.getElementById('mockItemId').value = item.id;
@@ -1589,17 +1783,12 @@
             document.getElementById('btnSubmitContent').classList.replace('bg-sky-500', 'bg-yellow-500');
             document.getElementById('btnSubmitContent').classList.replace('hover:bg-sky-600', 'hover:bg-yellow-600');
             document.getElementById('btnCancelEdit').classList.remove('hidden');
-            
             document.getElementById('adminTab-content').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         function adminDeleteContent(type, id) {
             if (!confirm('คุณแน่ใจหรือไม่ว่าต้องการลบรายการนี้?')) return;
-            
-            if (document.getElementById('mockItemId').value == id) {
-                adminResetContentForm();
-            }
-            
+            if (document.getElementById('mockItemId').value == id) adminResetContentForm();
             if (type === 'commission') {
                 appState.commissions = appState.commissions.filter(c => c.id != id);
                 renderCommissions();
@@ -1658,6 +1847,151 @@
         document.getElementById('mockItemType').addEventListener('change', (e) => {
             document.getElementById('mockItemPrice').dispatchEvent(new Event('input'));
         });
+
+        // --- NEW: Admin functions for Brief & Rules ---
+        function renderAdminRulesLists() {
+            const briefListContainer = document.getElementById('adminManageBriefList');
+            briefListContainer.innerHTML = '';
+            appState.howToBrief.forEach(item => {
+                briefListContainer.innerHTML += `
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl border border-gray-200">
+                        <div class="flex-1 truncate pr-4">
+                            <p class="font-bold text-sm text-gray-800 truncate">${item.mainText}</p>
+                        </div>
+                        <div class="flex space-x-1 shrink-0">
+                            <button type="button" onclick="adminEditBrief('${item.id}')" class="text-sky-500 hover:bg-sky-100 p-1.5 rounded transition-colors"><i class="fa-solid fa-pen"></i></button>
+                            <button type="button" onclick="adminDeleteBrief('${item.id}')" class="text-red-500 hover:bg-red-100 p-1.5 rounded transition-colors"><i class="fa-solid fa-trash-can"></i></button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            const canListContainer = document.getElementById('adminManageCanList');
+            canListContainer.innerHTML = '';
+            appState.canList.forEach(item => {
+                canListContainer.innerHTML += `
+                    <div class="flex items-center justify-between p-2.5 bg-white rounded-lg border border-green-100">
+                        <div class="flex-1 truncate pr-4">
+                            <p class="font-bold text-xs text-green-900 truncate">${item.mainText} <span class="font-normal text-gray-500">${item.subText}</span></p>
+                        </div>
+                        <div class="flex space-x-1 shrink-0">
+                            <button type="button" onclick="adminEditCan('${item.id}', 'can')" class="text-green-600 hover:bg-green-50 p-1 rounded transition-colors"><i class="fa-solid fa-pen text-[10px]"></i></button>
+                            <button type="button" onclick="adminDeleteCan('${item.id}', 'can')" class="text-red-500 hover:bg-red-50 p-1 rounded transition-colors"><i class="fa-solid fa-trash-can text-[10px]"></i></button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            const cantListContainer = document.getElementById('adminManageCantList');
+            cantListContainer.innerHTML = '';
+            appState.cantList.forEach(item => {
+                cantListContainer.innerHTML += `
+                    <div class="flex items-center justify-between p-2.5 bg-white rounded-lg border border-red-100">
+                        <div class="flex-1 truncate pr-4">
+                            <p class="font-bold text-xs text-red-900 truncate">${item.mainText} <span class="font-normal text-gray-500">${item.subText}</span></p>
+                        </div>
+                        <div class="flex space-x-1 shrink-0">
+                            <button type="button" onclick="adminEditCan('${item.id}', 'cant')" class="text-red-600 hover:bg-red-50 p-1 rounded transition-colors"><i class="fa-solid fa-pen text-[10px]"></i></button>
+                            <button type="button" onclick="adminDeleteCan('${item.id}', 'cant')" class="text-red-500 hover:bg-red-50 p-1 rounded transition-colors"><i class="fa-solid fa-trash-can text-[10px]"></i></button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // Brief CRUD
+        function adminSaveBrief(e) {
+            e.preventDefault();
+            const id = document.getElementById('abId').value;
+            const mainText = document.getElementById('abMainText').value;
+            const descText = document.getElementById('abDescText').value;
+
+            if (id) {
+                const idx = appState.howToBrief.findIndex(x => x.id == id);
+                if (idx > -1) appState.howToBrief[idx] = { id, mainText, descText };
+            } else {
+                appState.howToBrief.push({ id: generateId(), mainText, descText });
+            }
+            renderCommissionRules();
+            renderAdminRulesLists();
+            adminResetBriefForm();
+        }
+
+        function adminEditBrief(id) {
+            const item = appState.howToBrief.find(x => x.id == id);
+            if(!item) return;
+            document.getElementById('abId').value = item.id;
+            document.getElementById('abMainText').value = item.mainText;
+            document.getElementById('abDescText').value = item.descText || '';
+            const btn = document.getElementById('btnSubmitBrief');
+            btn.innerHTML = '<i class="fa-solid fa-check mr-1"></i> อัปเดตข้อความ';
+            btn.classList.replace('bg-sky-500', 'bg-yellow-500');
+            btn.classList.replace('hover:bg-sky-600', 'hover:bg-yellow-600');
+        }
+
+        function adminDeleteBrief(id) {
+            if(confirm('ลบหัวข้อ How to brief นี้?')) {
+                appState.howToBrief = appState.howToBrief.filter(x => x.id != id);
+                if(document.getElementById('abId').value == id) adminResetBriefForm();
+                renderCommissionRules();
+                renderAdminRulesLists();
+            }
+        }
+
+        function adminResetBriefForm() {
+            document.getElementById('adminBriefForm').reset();
+            document.getElementById('abId').value = '';
+            const btn = document.getElementById('btnSubmitBrief');
+            btn.innerHTML = '<i class="fa-solid fa-plus mr-1"></i> บันทึกข้อความ';
+            btn.classList.replace('bg-yellow-500', 'bg-sky-500');
+            btn.classList.replace('hover:bg-yellow-600', 'hover:bg-sky-600');
+        }
+
+        // Can/Cant CRUD
+        function adminSaveCan(e, type) {
+            e.preventDefault();
+            const prefix = type === 'can' ? 'acan' : 'acant';
+            const id = document.getElementById(`${prefix}Id`).value;
+            const mainText = document.getElementById(`${prefix}Main`).value;
+            const subText = document.getElementById(`${prefix}Sub`).value;
+            const list = type === 'can' ? appState.canList : appState.cantList;
+
+            if (id) {
+                const idx = list.findIndex(x => x.id == id);
+                if (idx > -1) list[idx] = { id, mainText, subText };
+            } else {
+                list.push({ id: generateId(), mainText, subText });
+            }
+            renderCommissionRules();
+            renderAdminRulesLists();
+            
+            document.getElementById(`admin${type === 'can' ? 'Can' : 'Cant'}Form`).reset();
+            document.getElementById(`${prefix}Id`).value = '';
+        }
+
+        function adminEditCan(id, type) {
+            const prefix = type === 'can' ? 'acan' : 'acant';
+            const list = type === 'can' ? appState.canList : appState.cantList;
+            const item = list.find(x => x.id == id);
+            if(!item) return;
+            document.getElementById(`${prefix}Id`).value = item.id;
+            document.getElementById(`${prefix}Main`).value = item.mainText;
+            document.getElementById(`${prefix}Sub`).value = item.subText || '';
+        }
+
+        function adminDeleteCan(id, type) {
+            if(confirm('ลบข้อตกลงนี้?')) {
+                if(type === 'can') {
+                    appState.canList = appState.canList.filter(x => x.id != id);
+                    if(document.getElementById('acanId').value == id) document.getElementById('adminCanForm').reset();
+                } else {
+                    appState.cantList = appState.cantList.filter(x => x.id != id);
+                    if(document.getElementById('acantId').value == id) document.getElementById('adminCantForm').reset();
+                }
+                renderCommissionRules();
+                renderAdminRulesLists();
+            }
+        }
 
         window.onload = initApp;
 
