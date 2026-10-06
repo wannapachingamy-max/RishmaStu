@@ -133,10 +133,7 @@
                     <button onclick="navigate('queue')" class="nav-link text-textMain hover:text-sky-500 font-medium transition-colors" data-i18n="navQueue">คิวงาน</button>
                     <button onclick="navigate('terms')" class="nav-link text-textMain hover:text-sky-500 font-medium transition-colors" data-i18n="navTerms">ข้อตกลง</button>
                     <button onclick="navigate('shop')" class="nav-link text-textMain hover:text-sky-500 font-medium transition-colors" data-i18n="navShop">สินค้า</button>
-                    <!-- Admin Link -->
                     <button onclick="checkAdminAccess()" class="nav-link text-gray-400 hover:text-sky-500 text-sm transition-colors" title="ตั้งค่าระบบ"><i class="fa-solid fa-gear"></i></button>
-                    
-                    <!-- Language Toggle -->
                     <button onclick="toggleLanguage()" class="flex items-center space-x-1 bg-secondary rounded-full px-3 py-1 text-sm text-sky-700 hover:bg-sky-100 transition-colors">
                         <i class="fa-solid fa-globe"></i>
                         <span id="langText">TH</span>
@@ -192,7 +189,7 @@
                 </div>
             </div>
 
-            <!-- Social Links (Pill Buttons Style) -->
+            <!-- Social Links -->
             <div class="bg-gray-100/90 backdrop-blur rounded-2xl p-5 shadow-inner border border-gray-200 w-full">
                 <h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3 text-center md:text-left" data-i18n="homeLinks">ช่องทางการติดตาม</h2>
                 <div class="flex flex-wrap gap-3 justify-center md:justify-start">
@@ -228,7 +225,6 @@
                         <div class="absolute w-4 h-4 bg-sky-200 rounded-full -left-[9px] top-1 border-4 border-white shadow-sm"></div>
                         <h3 class="font-bold text-lg" data-i18n="exp2Title">ขึ้นทะเบียนศิลปินผู้เป็นเจ้าของงานศิลปะด้านทัศนศิลป์</h3>
                         <p class="text-sm text-sky-600 mb-2 font-medium" data-i18n="exp2Date">ครั้งที่ 14 / 2569</p>
-                        <button onclick="window.open('https://facebook.com', '_blank')" class="text-sm text-blue-500 hover:underline"><i class="fa-solid fa-arrow-up-right-from-square mr-1"></i><span data-i18n="exp2Btn">ดูโพสต์ประกาศ</span></button>
                     </div>
                     <div class="relative pl-6 md:pl-8">
                         <div class="absolute w-4 h-4 bg-gray-200 rounded-full -left-[9px] top-1 border-4 border-white shadow-sm"></div>
@@ -282,24 +278,6 @@
                             </thead>
                             <tbody id="canCantTableBody" class="text-textMain"></tbody>
                         </table>
-                    </div>
-
-                    <!-- Additional Pricing Info -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="bg-secondary rounded-2xl p-4 border border-sky-100">
-                            <h3 class="font-bold text-sky-800 mb-2 flex items-center"><i class="fa-solid fa-tag mr-2"></i> <span data-i18n="usageTitle">Usage Multiply</span></h3>
-                            <ul class="text-sm text-sky-700 space-y-1">
-                                <li data-i18n="usage1">• Commercial use x2</li>
-                                <li data-i18n="usage2">• งาน cover เพลง ไม่แสวงผลกำไร x1.5</li>
-                            </ul>
-                        </div>
-                        <div class="bg-yellow-50 rounded-2xl p-4 border border-yellow-100">
-                            <h3 class="font-bold text-yellow-800 mb-2 flex items-center"><i class="fa-solid fa-image mr-2"></i> <span data-i18n="bgTitle">Background Add-on</span></h3>
-                            <ul class="text-sm text-yellow-700 space-y-1">
-                                <li data-i18n="bg1">• พื้นหลังสีพื้น, คลุมโทน +50฿</li>
-                                <li data-i18n="bg2">• พื้นหลังปกติราคาที่ 300฿ - 2000฿</li>
-                            </ul>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -778,8 +756,18 @@
                             </div>
 
                             <div class="bg-yellow-50 p-4 rounded-2xl border border-yellow-100">
-                                <label class="block text-sm font-bold text-yellow-800 mb-2"><i class="fa-solid fa-image mr-1"></i> รูปภาพใหม่</label>
+                                <label class="block text-sm font-bold text-yellow-800 mb-2"><i class="fa-solid fa-image mr-1"></i> รูปหน้าปก (Cover Image)</label>
                                 <input type="file" id="imageInput" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-white file:text-yellow-700 hover:file:bg-yellow-100 cursor-pointer border border-gray-200 rounded-xl bg-white shadow-sm transition-colors">
+                            </div>
+
+                            <!-- GALLERY FIELD (NEW) -->
+                            <div class="bg-yellow-50 p-4 rounded-2xl border border-yellow-100 mt-2" id="fieldGallery">
+                                <label class="block text-sm font-bold text-yellow-800 mb-2 flex items-center justify-between">
+                                    <span><i class="fa-solid fa-images mr-1"></i> รูปตัวอย่างแกลเลอรี่ (เลือกได้หลายรูป)</span>
+                                    <button type="button" onclick="adminClearGalleryInput()" class="text-xs bg-red-100 hover:bg-red-200 text-red-600 px-2 py-1 rounded-md font-bold">เคลียร์แกลเลอรี่</button>
+                                </label>
+                                <input type="file" id="galleryInput" accept="image/*" multiple class="block w-full text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-white file:text-yellow-700 hover:file:bg-yellow-100 cursor-pointer border border-gray-200 rounded-xl bg-white shadow-sm transition-colors">
+                                <div id="adminGalleryPreview" class="flex gap-2 mt-3 overflow-x-auto py-1"></div>
                             </div>
                             
                             <button type="submit" id="btnSubmitContent" class="w-full bg-sky-500 hover:bg-sky-600 text-white px-4 py-3.5 rounded-xl text-base font-bold transition-colors shadow-md mt-2">
@@ -802,7 +790,7 @@
                                 </div>
                                 <div class="mt-4 flex justify-center">
                                     <button type="button" onclick="adminRemoveContentImage()" id="btnRemoveContentImage" class="text-red-500 hover:bg-red-50 font-bold text-sm px-4 py-2 rounded-xl transition-colors border border-transparent hover:border-red-100">
-                                        <i class="fa-solid fa-trash-can mr-1"></i> ลบรูปภาพออกจากระบบ
+                                        <i class="fa-solid fa-trash-can mr-1"></i> ลบรูปหน้าปกออกจากระบบ
                                     </button>
                                 </div>
                             </div>
@@ -912,41 +900,56 @@
 
     </main>
 
-    <!-- Commission Detail Modal -->
+    <!-- NEW Commission Detail Modal (Vertical Layout + Gallery Grid) -->
     <div id="modal-commission" class="fixed inset-0 z-[60] hidden overflow-y-auto bg-black/60 backdrop-blur-md transition-opacity">
         <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
-            <div class="relative bg-white rounded-[2rem] text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:max-w-4xl w-full border border-sky-50" onclick="event.stopPropagation()">
-                <button onclick="closeModal('modal-commission')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 bg-white/90 backdrop-blur rounded-full p-2 z-10 shadow-sm focus:outline-none transition-transform hover:scale-110">
-                    <i class="fa-solid fa-xmark text-xl w-6 h-6 flex items-center justify-center"></i>
+            <div class="relative bg-white rounded-[2rem] text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:max-w-2xl w-full border border-sky-50" onclick="event.stopPropagation()">
+                <button onclick="closeModal('modal-commission')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 bg-white/90 backdrop-blur rounded-full w-8 h-8 z-10 shadow-sm focus:outline-none transition-transform hover:scale-110 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark text-xl"></i>
                 </button>
                 
-                <div class="p-0 sm:flex">
-                    <div class="sm:w-1/2 bg-gray-100 relative h-64 sm:h-auto">
-                        <img id="modalComImage" src="" alt="" class="absolute w-full h-full object-cover cursor-pointer hover:opacity-90 transition-opacity" onclick="openLightbox(this.src)">
-                        <div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm text-white text-xs px-3 py-1.5 rounded-full font-medium"><i class="fa-solid fa-magnifying-glass-plus mr-1"></i> ดูรูปเต็ม</div>
-                    </div>
-                    <div class="sm:w-1/2 p-6 sm:p-10 flex flex-col">
-                        <h3 class="text-3xl font-bold text-textMain mb-2" id="modalComTitle">Title</h3>
-                        <div class="inline-block bg-sky-50 text-sky-700 px-4 py-1.5 rounded-full text-sm font-bold mb-6 w-fit border border-sky-100">
+                <div class="p-6 sm:p-8 flex flex-col">
+                    <h3 class="text-2xl md:text-3xl font-bold text-textMain mb-2 text-center" id="modalComTitle">Title</h3>
+                    
+                    <div class="flex justify-center mb-6">
+                        <div class="inline-block bg-sky-50 text-sky-700 px-5 py-2 rounded-full text-base font-bold border border-sky-100 shadow-sm">
                             <span data-i18n="modalStart">เริ่มต้น</span> <span id="modalComPrice">0</span> <span data-i18n="thb">THB</span>
                         </div>
+                    </div>
+                    
+                    <div class="space-y-4 mb-6">
+                        <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                            <h4 class="font-bold text-gray-800 text-sm mb-2 flex items-center"><i class="fa-solid fa-align-left mr-2 text-sky-500"></i> <span data-i18n="modalDesc">รายละเอียด</span></h4>
+                            <p class="text-sm text-textMuted leading-relaxed" id="modalComDesc">-</p>
+                        </div>
                         
-                        <div class="space-y-5 flex-1">
-                            <div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100">
                                 <h4 class="font-bold text-gray-800 text-sm mb-1.5 flex items-center"><i class="fa-regular fa-clock mr-2 text-sky-500"></i> <span data-i18n="modalDur">ระยะเวลาทำงาน</span></h4>
-                                <p class="text-sm text-textMuted bg-gray-50 p-3 rounded-xl border border-gray-100" id="modalComDuration">-</p>
+                                <p class="text-sm text-textMuted font-medium" id="modalComDuration">-</p>
                             </div>
-                            <div>
-                                <h4 class="font-bold text-gray-800 text-sm mb-1.5 flex items-center"><i class="fa-solid fa-align-left mr-2 text-sky-500"></i> <span data-i18n="modalDesc">รายละเอียด</span></h4>
-                                <p class="text-sm text-textMuted leading-relaxed bg-gray-50 p-4 rounded-xl border border-gray-100" id="modalComDesc">-</p>
+                            
+                            <!-- Usage Conditions inside Modal -->
+                            <div class="bg-secondary p-4 rounded-2xl border border-sky-100">
+                                <h4 class="font-bold text-sky-800 text-sm mb-1.5 flex items-center"><i class="fa-solid fa-tag mr-2"></i> <span>เงื่อนไขการใช้งาน</span></h4>
+                                <p class="text-xs text-sky-700 font-medium mb-1">• Commercial use x2</p>
+                                <p class="text-xs text-sky-700 font-medium">• งาน cover เพลง x1.5</p>
                             </div>
                         </div>
-                        
-                        <div class="mt-8 pt-6 border-t border-gray-100">
-                            <button onclick="window.open('https://twitter.com', '_blank')" class="w-full bg-sky-500 hover:bg-sky-600 text-white font-bold py-3.5 px-4 rounded-2xl shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 mb-2 flex items-center justify-center text-base">
-                                <i class="fa-solid fa-paper-plane mr-2"></i> <span data-i18n="btnContact">ติดต่อสั่งงาน (Contact)</span>
-                            </button>
+                    </div>
+
+                    <!-- Image Gallery Grid -->
+                    <div>
+                        <h4 class="font-bold text-gray-800 text-sm mb-3 flex items-center"><i class="fa-solid fa-images mr-2 text-sky-500"></i> ตัวอย่างผลงาน (Gallery)</h4>
+                        <div id="modalComGallery" class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                            <!-- JS Will Inject Gallery Images Here -->
                         </div>
+                    </div>
+                    
+                    <div class="mt-8 pt-6 border-t border-gray-100">
+                        <button onclick="window.open('https://twitter.com', '_blank')" class="w-full bg-sky-500 hover:bg-sky-600 text-white font-bold py-3.5 px-4 rounded-2xl shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 mb-2 flex items-center justify-center text-base">
+                            <i class="fa-solid fa-paper-plane mr-2"></i> <span data-i18n="btnContact">ติดต่อสั่งงาน (Contact)</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -998,7 +1001,7 @@
     </footer>
 
     <script>
-        // Override alert and confirm to avoid UI blocking issues and crashes in environments
+        // Override alert and confirm
         window.alert = function(message) {
             console.log("ALERT:", message);
             const toast = document.createElement('div');
@@ -1010,7 +1013,7 @@
 
         window.confirm = function(message) {
             console.log("CONFIRM intercepted:", message);
-            return true; // Auto-confirm logic wrapper for sync methods. For real confirm use custom modal logic.
+            return true; 
         };
         
         async function customConfirm(msg) {
@@ -1037,7 +1040,6 @@
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJva2p2Z3Jnc2V6b2hzbXdianh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEyODA2NTMsImV4cCI6MjEwNjg1NjY1M30.Hi3iZxDYVAbZBN8SAQUugXq0tKlyegkPgz3trZj7I1I';
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // Security Helper
         function escapeHTML(str) {
             if (!str) return '';
             return String(str).replace(/[&<>'"]/g, tag => ({
@@ -1053,7 +1055,6 @@
             } catch(e) { console.error('Storage delete error:', e); }
         }
 
-        // Bilingual Data Helpers
         function parseBi(str) {
             try { 
                 const obj = JSON.parse(str); 
@@ -1064,12 +1065,8 @@
             return JSON.stringify({th: th || '', en: en || ''});
         }
 
-        // Global State
         let appState = {
-            currentView: 'home',
-            language: 'th',
-            artistStatus: 'open',
-            isLoggedIn: false,
+            currentView: 'home', language: 'th', artistStatus: 'open', isLoggedIn: false,
             texts: { artistName: '', artistRole: '', artistRoleEn: '', realName: '', realNameEn: '', taxNote: '', taxNoteEn: '', logoUrl: '', profileUrl: '' },
             queues: [], commissions: [], products: [], howToBrief: [], canList: [], cantList: []
         };
@@ -1077,86 +1074,35 @@
         const dict = {
             th: {
                 navHome: 'หน้าหลัก', navQueue: 'คิวงาน', navTerms: 'ข้อตกลง', navShop: 'สินค้า', navAdmin: 'จัดการข้อมูล (Admin)',
-                homeRole: 'Full-time freelance illustrator',
-                homeLinks: 'ช่องทางการติดตาม', btnVgen: 'VGen', btnCom: 'Commission', btnDonate: 'โดเนทขั้นต่ำ 10฿', btnQueue: 'Queue คิวงาน', btnDiscord: 'Discord',
-                homeExp: 'ประสบการณ์ทำงาน', 
-                exp1Title: 'Freelance Illustrator', exp1Date: 'พ.ศ. 2563 – ปัจจุบัน', exp1Desc: 'รับวาดภาพประกอบ ออกแบบคาแรคเตอร์ และงานศิลปะอื่นๆ',
-                exp2Title: 'ขึ้นทะเบียนศิลปินผู้เป็นเจ้าของงานศิลปะด้านทัศนศิลป์', exp2Date: 'ครั้งที่ 14 / 2569', exp2Btn: 'ดูโพสต์ประกาศ',
-                exp3Title: 'Outsource 2D Artist (Unannounced Game)', exp3Date: 'Sunny Syrup Studio | ก.ย. 2569',
-                exp4Title: 'Trainee', exp4Date: 'KP Learning Space | มี.ค. – มิ.ย. 2567',
-                exp5Title: 'คณะสถาปัตยกรรมศาสตร์ สาขาการออกแบบกราฟิกและมัลติมีเดีย', exp5Date: 'มหาวิทยาลัยขอนแก่น | พ.ศ. 2564 – 2568',
-                comIntro: 'ยินดีต้อนรับสู่ส่วนรับงานวาดครับ กรุณาอ่านรายละเอียดและข้อตกลงเบื้องต้นก่อนทำการบรีฟงานนะครับ',
-                htbTitle: 'How to Brief ❓', htbWarn: '*ไม่รับออกแบบตัวละครที่ให้คิดเองทั้งหมดตั้งแต่คอนเซ็ปต์*',
-                canCantTitle: 'Can & Can\'t', canCantSub1: 'Human / Humanoid / Furry Commission', canCantSub2: 'คอมมิชชั่นคน / ครึ่งคนครึ่งสัตว์ / มนุษย์สัตว์',
-                thCan: 'Can (รับวาด)', thCant: 'Can\'t (ไม่รับวาด)',
-                usageTitle: 'Usage Multiply', usage1: '• Commercial use x2', usage2: '• งาน cover เพลง ไม่แสวงผลกำไร x1.5',
-                bgTitle: 'Background Add-on', bg1: '• พื้นหลังสีพื้น, คลุมโทน +50฿', bg2: '• พื้นหลังปกติราคาที่ 300฿ - 2000฿',
-                catTitle: 'Categories', startAt: 'เริ่มต้น', thb: 'THB',
-                queueTitle: 'คิวงาน Rish Studio', queueSubtitle: 'ปริ๊นตัวน้อย กับกองนิยายของเขา', queueTotalText: 'คิวทั้งหมดในระบบ:',
-                qLegend1: '= จ่ายแล้ว / เสร็จแล้ว [ 100% paid / Finished ]', qLegend2: '= มัดจำ / กำลังทำ [ 50% paid / WIP ]', qLegend3: '= ยังไม่จ่าย / ไม่มี / งานช้า [ 0% paid / Lated ]',
-                qNote: 'งานสีต่องานสี งานย่อยต่องานย่อย',
-                qTabMain: 'คิวหลัก', qTabSub: 'คิวย่อย', qTabPending: 'ตกค้าง / บรีฟชำระ',
-                thQ: 'Q', thClient: 'รายชื่อคิว', thClientSub: '(Customer List)', thType: 'ประเภทงาน', thTypeSub: '(Type)', thPiece: 'จำนวน', thPieceSub: '(Piece)', thPay: 'สถานะการจ่ายเงิน', thPaySub: '(Payment Status)', thBrief: 'บรีฟของลูกค้า', thBriefSub: '(Customer brief)', thDead: 'Deadline / หมายเหตุ', thStatus: 'สถานะงาน', thStatusSub: '(Working Status)',
-                termsTitle: 'ข้อตกลงจ้างงาน (T.O.S)', termsSubtitle: 'กรุณาอ่านและทำความเข้าใจก่อนทำการจ้างงาน เพื่อความสบายใจของทั้งสองฝ่าย',
-                t1Title: '1. ขั้นตอนการทำงานและการชำระเงิน', t2Title: '2. ลิขสิทธิ์และการนำไปใช้งาน', t3Title: '3. เรทราคา Commercial Use / นำไปใช้ประโยชน์',
-                terms1Content: '<ul class="list-decimal list-inside space-y-2"><li>ส่งบรีฟงานเพื่อประเมินราคา หากตกลงจะแจ้งคิวและวันเริ่มงาน</li><li>เมื่อถึงคิว จะทำการร่างภาพ (Sketch) ให้ตรวจสอบ สามารถแก้ไขได้ 2 ครั้ง</li><li><strong>ชำระเงินเต็มจำนวน</strong> หรือมัดจำ 50% หลังจากยืนยันภาพร่างก่อนลงสีจริง</li><li>อัปเดตงานในขั้นตอนลงสีพื้น (Base Color) และเก็บรายละเอียด</li><li>ส่งมอบงานไฟล์ดิจิทัล (PNG/JPG) ทาง Google Drive</li></ul>',
-                terms2Content: '<ul class="list-disc list-inside space-y-2"><li><strong>ลิขสิทธิ์ภาพยังคงเป็นของนักวาด (RishmaStu)</strong> เสมอ เว้นแต่จะตกลงซื้อขาด (Commercial x3 ขึ้นไป)</li><li>ไม่อนุญาตให้นำไปดัดแปลง ลบเครดิต หรือแอบอ้างว่าเป็นผลงานของตนเอง</li><li>ไม่อนุญาตให้นำผลงานไปใช้ฝึก AI (AI Training) ในทุกกรณี</li><li>นักวาดมีสิทธิ์นำผลงานไปลงเป็นพอร์ตโฟลิโอ (หากต้องการให้ปกปิด หรือกำหนดวันเผยแพร่ กรุณาแจ้งล่วงหน้า)</li></ul>',
-                terms3Content: '<div class="bg-secondary p-4 rounded-xl mb-3"><p class="font-semibold text-sky-800 mb-1">Commercial Use (เชิงพาณิชย์) : ราคาเริ่มต้น x 2</p><p class="text-xs text-sky-600">เช่น นำไปทำสินค้าขาย, โปรโมทนิยายติดเหรียญ, โปรโมทแบรนด์, ปกคลิป Youtube ที่เปิดสร้างรายได้, Vtube Model</p></div><div class="bg-secondary p-4 rounded-xl"><p class="font-semibold text-sky-800 mb-1">Music Cover (ไม่แสวงผลกำไร) : ราคาเริ่มต้น x 1.5</p><p class="text-xs text-sky-600">สำหรับทำปกเพลง Cover ลง Youtube แต่ไม่ได้เปิดสร้างรายได้ (หากเปิดรายได้นับเป็น Commercial)</p></div>',
-                shopTitle: 'สินค้า (Shop)', shopSubtitle: 'สินค้าพร้อมส่งและพรีออเดอร์จาก RishmaStu',
-                modalStart: 'เริ่มต้น', modalDur: 'ระยะเวลาทำงาน', modalDesc: 'รายละเอียด', btnContact: 'ติดต่อสั่งงาน (Contact)',
-                btnBuy: 'สั่งซื้อสินค้า', outOfStock: 'สินค้าหมด', inStock: 'มีสินค้า (In Stock :',
-                statusOpen: '🟢 เปิดรับงาน (Open)', statusClosed: '🔴 ปิดรับงาน (Closed)', statusBusy: '🟡 คิวเต็ม (Full)'
+                homeRole: 'Full-time freelance illustrator', homeLinks: 'ช่องทางการติดตาม', btnVgen: 'VGen', btnCom: 'Commission', btnDonate: 'โดเนทขั้นต่ำ 10฿', btnQueue: 'Queue คิวงาน', btnDiscord: 'Discord',
+                homeExp: 'ประสบการณ์ทำงาน', exp1Title: 'Freelance Illustrator', exp1Date: 'พ.ศ. 2563 – ปัจจุบัน', exp1Desc: 'รับวาดภาพประกอบ ออกแบบคาแรคเตอร์ และงานศิลปะอื่นๆ', exp2Title: 'ขึ้นทะเบียนศิลปินผู้เป็นเจ้าของงานศิลปะด้านทัศนศิลป์', exp2Date: 'ครั้งที่ 14 / 2569', exp2Btn: 'ดูโพสต์ประกาศ', exp3Title: 'Outsource 2D Artist (Unannounced Game)', exp3Date: 'Sunny Syrup Studio | ก.ย. 2569', exp4Title: 'Trainee', exp4Date: 'KP Learning Space | มี.ค. – มิ.ย. 2567', exp5Title: 'คณะสถาปัตยกรรมศาสตร์ สาขาการออกแบบกราฟิกและมัลติมีเดีย', exp5Date: 'มหาวิทยาลัยขอนแก่น | พ.ศ. 2564 – 2568',
+                comIntro: 'ยินดีต้อนรับสู่ส่วนรับงานวาดครับ กรุณาอ่านรายละเอียดและข้อตกลงเบื้องต้นก่อนทำการบรีฟงานนะครับ', htbTitle: 'How to Brief ❓', htbWarn: '*ไม่รับออกแบบตัวละครที่ให้คิดเองทั้งหมดตั้งแต่คอนเซ็ปต์*', canCantTitle: 'Can & Can\'t', canCantSub1: 'Human / Humanoid / Furry Commission', canCantSub2: 'คอมมิชชั่นคน / ครึ่งคนครึ่งสัตว์ / มนุษย์สัตว์', thCan: 'Can (รับวาด)', thCant: 'Can\'t (ไม่รับวาด)', usageTitle: 'Usage Multiply', usage1: '• Commercial use x2', usage2: '• งาน cover เพลง ไม่แสวงผลกำไร x1.5', bgTitle: 'Background Add-on', bg1: '• พื้นหลังสีพื้น, คลุมโทน +50฿', bg2: '• พื้นหลังปกติราคาที่ 300฿ - 2000฿', catTitle: 'Categories', startAt: 'เริ่มต้น', thb: 'THB',
+                queueTitle: 'คิวงาน Rish Studio', queueSubtitle: 'ปริ๊นตัวน้อย กับกองนิยายของเขา', queueTotalText: 'คิวทั้งหมดในระบบ:', qLegend1: '= จ่ายแล้ว / เสร็จแล้ว [ 100% paid / Finished ]', qLegend2: '= มัดจำ / กำลังทำ [ 50% paid / WIP ]', qLegend3: '= ยังไม่จ่าย / ไม่มี / งานช้า [ 0% paid / Lated ]', qNote: 'งานสีต่องานสี งานย่อยต่องานย่อย', qTabMain: 'คิวหลัก', qTabSub: 'คิวย่อย', qTabPending: 'ตกค้าง / บรีฟชำระ', thQ: 'Q', thClient: 'รายชื่อคิว', thClientSub: '(Customer List)', thType: 'ประเภทงาน', thTypeSub: '(Type)', thPiece: 'จำนวน', thPieceSub: '(Piece)', thPay: 'สถานะการจ่ายเงิน', thPaySub: '(Payment Status)', thBrief: 'บรีฟของลูกค้า', thBriefSub: '(Customer brief)', thDead: 'Deadline / หมายเหตุ', thStatus: 'สถานะงาน', thStatusSub: '(Working Status)',
+                termsTitle: 'ข้อตกลงจ้างงาน (T.O.S)', termsSubtitle: 'กรุณาอ่านและทำความเข้าใจก่อนทำการจ้างงาน เพื่อความสบายใจของทั้งสองฝ่าย', t1Title: '1. ขั้นตอนการทำงานและการชำระเงิน', t2Title: '2. ลิขสิทธิ์และการนำไปใช้งาน', t3Title: '3. เรทราคา Commercial Use / นำไปใช้ประโยชน์', terms1Content: '<ul class="list-decimal list-inside space-y-2"><li>ส่งบรีฟงานเพื่อประเมินราคา หากตกลงจะแจ้งคิวและวันเริ่มงาน</li><li>เมื่อถึงคิว จะทำการร่างภาพ (Sketch) ให้ตรวจสอบ สามารถแก้ไขได้ 2 ครั้ง</li><li><strong>ชำระเงินเต็มจำนวน</strong> หรือมัดจำ 50% หลังจากยืนยันภาพร่างก่อนลงสีจริง</li><li>อัปเดตงานในขั้นตอนลงสีพื้น (Base Color) และเก็บรายละเอียด</li><li>ส่งมอบงานไฟล์ดิจิทัล (PNG/JPG) ทาง Google Drive</li></ul>', terms2Content: '<ul class="list-disc list-inside space-y-2"><li><strong>ลิขสิทธิ์ภาพยังคงเป็นของนักวาด (RishmaStu)</strong> เสมอ เว้นแต่จะตกลงซื้อขาด (Commercial x3 ขึ้นไป)</li><li>ไม่อนุญาตให้นำไปดัดแปลง ลบเครดิต หรือแอบอ้างว่าเป็นผลงานของตนเอง</li><li>ไม่อนุญาตให้นำผลงานไปใช้ฝึก AI (AI Training) ในทุกกรณี</li><li>นักวาดมีสิทธิ์นำผลงานไปลงเป็นพอร์ตโฟลิโอ (หากต้องการให้ปกปิด หรือกำหนดวันเผยแพร่ กรุณาแจ้งล่วงหน้า)</li></ul>', terms3Content: '<div class="bg-secondary p-4 rounded-xl mb-3"><p class="font-semibold text-sky-800 mb-1">Commercial Use (เชิงพาณิชย์) : ราคาเริ่มต้น x 2</p><p class="text-xs text-sky-600">เช่น นำไปทำสินค้าขาย, โปรโมทนิยายติดเหรียญ, โปรโมทแบรนด์, ปกคลิป Youtube ที่เปิดสร้างรายได้, Vtube Model</p></div><div class="bg-secondary p-4 rounded-xl"><p class="font-semibold text-sky-800 mb-1">Music Cover (ไม่แสวงผลกำไร) : ราคาเริ่มต้น x 1.5</p><p class="text-xs text-sky-600">สำหรับทำปกเพลง Cover ลง Youtube แต่ไม่ได้เปิดสร้างรายได้ (หากเปิดรายได้นับเป็น Commercial)</p></div>',
+                shopTitle: 'สินค้า (Shop)', shopSubtitle: 'สินค้าพร้อมส่งและพรีออเดอร์จาก RishmaStu', modalStart: 'เริ่มต้น', modalDur: 'ระยะเวลาทำงาน', modalDesc: 'รายละเอียด', btnContact: 'ติดต่อสั่งงาน (Contact)', btnBuy: 'สั่งซื้อสินค้า', outOfStock: 'สินค้าหมด', inStock: 'มีสินค้า (In Stock :', statusOpen: '🟢 เปิดรับงาน (Open)', statusClosed: '🔴 ปิดรับงาน (Closed)', statusBusy: '🟡 คิวเต็ม (Full)'
             },
             en: {
                 navHome: 'Home', navQueue: 'Queue', navTerms: 'Terms', navShop: 'Shop', navAdmin: 'Admin Setting',
-                homeRole: 'Full-time freelance illustrator',
-                homeLinks: 'Social Links', btnVgen: 'VGen', btnCom: 'Commission', btnDonate: 'Donate min 10฿', btnQueue: 'Queue List', btnDiscord: 'Discord',
-                homeExp: 'Work Experience',
-                exp1Title: 'Freelance Illustrator', exp1Date: '2020 – Present', exp1Desc: 'Illustrations, character designs, and other artworks.',
-                exp2Title: 'Registered Visual Artist', exp2Date: 'No. 14 / 2026', exp2Btn: 'View Announcement',
-                exp3Title: 'Outsource 2D Artist (Unannounced Game)', exp3Date: 'Sunny Syrup Studio | Sep 2026',
-                exp4Title: 'Trainee', exp4Date: 'KP Learning Space | Mar – Jun 2024',
-                exp5Title: 'Faculty of Architecture, Graphic & Multimedia Design', exp5Date: 'Khon Kaen University | 2021 – 2025',
-                comIntro: 'Welcome to my commission page. Please read the terms and details before briefing.',
-                htbTitle: 'How to Brief ❓', htbWarn: '*Do not accept character design from scratch*',
-                canCantTitle: 'Can & Can\'t', canCantSub1: 'Human / Humanoid / Furry Commission', canCantSub2: 'Human / Kemonomimi / Furry commissions',
-                thCan: 'Can Draw', thCant: 'Can\'t Draw',
-                usageTitle: 'Usage Multiply', usage1: '• Commercial use x2', usage2: '• Non-profit Music Cover x1.5',
-                bgTitle: 'Background Add-on', bg1: '• Solid/Simple color +50฿', bg2: '• Normal background 300฿ - 2000฿',
-                catTitle: 'Categories', startAt: 'Starts at', thb: 'THB',
-                queueTitle: 'Rish Studio Queue', queueSubtitle: 'Little Prin and his novels', queueTotalText: 'Total Queues:',
-                qLegend1: '= 100% paid / Finished', qLegend2: '= 50% paid / WIP', qLegend3: '= 0% paid / Lated',
-                qNote: 'Color queues followed by color, sub by sub',
-                qTabMain: 'Main Queue', qTabSub: 'Sub Queue', qTabPending: 'Pending / Late',
-                thQ: 'Q', thClient: 'Client Name', thClientSub: '(Customer List)', thType: 'Job Type', thTypeSub: '(Type)', thPiece: 'Pieces', thPieceSub: '(Piece)', thPay: 'Payment Status', thPaySub: '(Payment Status)', thBrief: 'Client Brief', thBriefSub: '(Customer brief)', thDead: 'Deadline / Note', thStatus: 'Working Status', thStatusSub: '(Working Status)',
-                termsTitle: 'Terms of Service (T.O.S)', termsSubtitle: 'Please read and understand before commissioning to ensure comfort for both parties.',
-                t1Title: '1. Workflow & Payment', t2Title: '2. Copyright & Usage', t3Title: '3. Commercial Use Rates',
-                terms1Content: '<ul class="list-decimal list-inside space-y-2"><li>Send brief for price estimation. If agreed, queue and start date will be provided.</li><li>When queue arrives, a sketch will be provided. Can be revised 2 times.</li><li><strong>Pay full amount</strong> or 50% deposit after sketch approval before coloring.</li><li>Work update during base color and detailing stages.</li><li>Deliver digital files (PNG/JPG) via Google Drive.</li></ul>',
-                terms2Content: '<ul class="list-disc list-inside space-y-2"><li><strong>Copyright remains with the artist (RishmaStu)</strong> unless bought out (Commercial x3+).</li><li>Do not modify, remove credits, or claim as your own.</li><li>Strictly prohibited to use artworks for AI Training in all cases.</li><li>Artist has the right to use artworks for portfolio (inform in advance if you want it private or delayed).</li></ul>',
-                terms3Content: '<div class="bg-secondary p-4 rounded-xl mb-3"><p class="font-semibold text-sky-800 mb-1">Commercial Use : Base price x 2</p><p class="text-xs text-sky-600">e.g., merchandise, promoting paid novels, brand promotion, monetized Youtube covers, Vtube Model</p></div><div class="bg-secondary p-4 rounded-xl"><p class="font-semibold text-sky-800 mb-1">Non-profit Music Cover : Base price x 1.5</p><p class="text-xs text-sky-600">For Youtube covers without monetization (monetized counts as Commercial)</p></div>',
-                shopTitle: 'Shop', shopSubtitle: 'In-stock and Pre-order items from RishmaStu',
-                modalStart: 'Starts at', modalDur: 'Duration', modalDesc: 'Details', btnContact: 'Contact for Commission',
-                btnBuy: 'Order Item', outOfStock: 'Out of Stock', inStock: 'In Stock :',
-                statusOpen: '🟢 Commissions Open', statusClosed: '🔴 Commissions Closed', statusBusy: '🟡 Waitlist Full'
+                homeRole: 'Full-time freelance illustrator', homeLinks: 'Social Links', btnVgen: 'VGen', btnCom: 'Commission', btnDonate: 'Donate min 10฿', btnQueue: 'Queue List', btnDiscord: 'Discord',
+                homeExp: 'Work Experience', exp1Title: 'Freelance Illustrator', exp1Date: '2020 – Present', exp1Desc: 'Illustrations, character designs, and other artworks.', exp2Title: 'Registered Visual Artist', exp2Date: 'No. 14 / 2026', exp2Btn: 'View Announcement', exp3Title: 'Outsource 2D Artist (Unannounced Game)', exp3Date: 'Sunny Syrup Studio | Sep 2026', exp4Title: 'Trainee', exp4Date: 'KP Learning Space | Mar – Jun 2024', exp5Title: 'Faculty of Architecture, Graphic & Multimedia Design', exp5Date: 'Khon Kaen University | 2021 – 2025',
+                comIntro: 'Welcome to my commission page. Please read the terms and details before briefing.', htbTitle: 'How to Brief ❓', htbWarn: '*Do not accept character design from scratch*', canCantTitle: 'Can & Can\'t', canCantSub1: 'Human / Humanoid / Furry Commission', canCantSub2: 'Human / Kemonomimi / Furry commissions', thCan: 'Can Draw', thCant: 'Can\'t Draw', usageTitle: 'Usage Multiply', usage1: '• Commercial use x2', usage2: '• Non-profit Music Cover x1.5', bgTitle: 'Background Add-on', bg1: '• Solid/Simple color +50฿', bg2: '• Normal background 300฿ - 2000฿', catTitle: 'Categories', startAt: 'Starts at', thb: 'THB',
+                queueTitle: 'Rish Studio Queue', queueSubtitle: 'Little Prin and his novels', queueTotalText: 'Total Queues:', qLegend1: '= 100% paid / Finished', qLegend2: '= 50% paid / WIP', qLegend3: '= 0% paid / Lated', qNote: 'Color queues followed by color, sub by sub', qTabMain: 'Main Queue', qTabSub: 'Sub Queue', qTabPending: 'Pending / Late', thQ: 'Q', thClient: 'Client Name', thClientSub: '(Customer List)', thType: 'Job Type', thTypeSub: '(Type)', thPiece: 'Pieces', thPieceSub: '(Piece)', thPay: 'Payment Status', thPaySub: '(Payment Status)', thBrief: 'Client Brief', thBriefSub: '(Customer brief)', thDead: 'Deadline / Note', thStatus: 'Working Status', thStatusSub: '(Working Status)',
+                termsTitle: 'Terms of Service (T.O.S)', termsSubtitle: 'Please read and understand before commissioning to ensure comfort for both parties.', t1Title: '1. Workflow & Payment', t2Title: '2. Copyright & Usage', t3Title: '3. Commercial Use Rates', terms1Content: '<ul class="list-decimal list-inside space-y-2"><li>Send brief for price estimation. If agreed, queue and start date will be provided.</li><li>When queue arrives, a sketch will be provided. Can be revised 2 times.</li><li><strong>Pay full amount</strong> or 50% deposit after sketch approval before coloring.</li><li>Work update during base color and detailing stages.</li><li>Deliver digital files (PNG/JPG) via Google Drive.</li></ul>', terms2Content: '<ul class="list-disc list-inside space-y-2"><li><strong>Copyright remains with the artist (RishmaStu)</strong> unless bought out (Commercial x3+).</li><li>Do not modify, remove credits, or claim as your own.</li><li>Strictly prohibited to use artworks for AI Training in all cases.</li><li>Artist has the right to use artworks for portfolio (inform in advance if you want it private or delayed).</li></ul>', terms3Content: '<div class="bg-secondary p-4 rounded-xl mb-3"><p class="font-semibold text-sky-800 mb-1">Commercial Use : Base price x 2</p><p class="text-xs text-sky-600">e.g., merchandise, promoting paid novels, brand promotion, monetized Youtube covers, Vtube Model</p></div><div class="bg-secondary p-4 rounded-xl"><p class="font-semibold text-sky-800 mb-1">Non-profit Music Cover : Base price x 1.5</p><p class="text-xs text-sky-600">For Youtube covers without monetization (monetized counts as Commercial)</p></div>',
+                shopTitle: 'Shop', shopSubtitle: 'In-stock and Pre-order items from RishmaStu', modalStart: 'Starts at', modalDur: 'Duration', modalDesc: 'Details', btnContact: 'Contact for Commission', btnBuy: 'Order Item', outOfStock: 'Out of Stock', inStock: 'In Stock :', statusOpen: '🟢 Commissions Open', statusClosed: '🔴 Commissions Closed', statusBusy: '🟡 Waitlist Full'
             }
         };
 
-        // --- Data Fetching (Supabase) ---
         async function fetchAllData() {
             try {
-                const { data: settings, error: errSet } = await supabaseClient.from('settings').select('*').eq('id', 1).maybeSingle();
-                if (errSet && errSet.code !== 'PGRST116') console.error("Settings error:", errSet.message);
+                const { data: settings } = await supabaseClient.from('settings').select('*').eq('id', 1).maybeSingle();
                 if(settings) {
                     appState.artistStatus = settings.status;
                     appState.texts.artistName = settings.artist_name || 'RishmaStu';
                     appState.texts.logoUrl = settings.logo_url || '';
                     appState.texts.profileUrl = settings.profile_url || '';
-                    const role = parseBi(settings.artist_role);
-                    appState.texts.artistRole = role.th; appState.texts.artistRoleEn = role.en;
-                    const realName = parseBi(settings.real_name);
-                    appState.texts.realName = realName.th; appState.texts.realNameEn = realName.en;
-                    const taxNote = parseBi(settings.tax_note);
-                    appState.texts.taxNote = taxNote.th; appState.texts.taxNoteEn = taxNote.en;
+                    const role = parseBi(settings.artist_role); appState.texts.artistRole = role.th; appState.texts.artistRoleEn = role.en;
+                    const realName = parseBi(settings.real_name); appState.texts.realName = realName.th; appState.texts.realNameEn = realName.en;
+                    const taxNote = parseBi(settings.tax_note); appState.texts.taxNote = taxNote.th; appState.texts.taxNoteEn = taxNote.en;
                 }
 
                 const { data: commissions } = await supabaseClient.from('commissions').select('*').order('created_at');
@@ -1165,8 +1111,10 @@
                         const nameObj = parseBi(c.name);
                         const durObj = parseBi(c.duration);
                         const descObj = parseBi(c.description);
+                        let gal = [];
+                        try { gal = c.gallery_urls ? JSON.parse(c.gallery_urls) : []; } catch(e) {}
                         return {
-                            id: c.id, price: c.price, img: c.image_url, isVideo: c.is_video, videoUrl: c.video_url,
+                            id: c.id, price: c.price, img: c.image_url, isVideo: c.is_video, videoUrl: c.video_url, gallery: gal,
                             name: nameObj.th, nameEn: nameObj.en, duration: durObj.th, durationEn: durObj.en, desc: descObj.th, descEn: descObj.en
                         };
                     });
@@ -1175,58 +1123,36 @@
                 const { data: products } = await supabaseClient.from('products').select('*').order('created_at');
                 if(products) {
                     appState.products = products.map(p => {
-                        const nameObj = parseBi(p.name);
-                        const descObj = parseBi(p.description);
-                        return {
-                            id: p.id, price: p.price, stock: p.stock, img: p.image_url,
-                            name: nameObj.th, nameEn: nameObj.en, desc: descObj.th, descEn: descObj.en
-                        };
+                        const nameObj = parseBi(p.name); const descObj = parseBi(p.description);
+                        return { id: p.id, price: p.price, stock: p.stock, img: p.image_url, name: nameObj.th, nameEn: nameObj.en, desc: descObj.th, descEn: descObj.en };
                     });
                 }
 
                 const { data: queues } = await supabaseClient.from('queues').select('*').order('created_at');
                 if(queues) {
                     appState.queues = queues.map(q => {
-                        const jtObj = parseBi(q.job_type);
-                        const ptObj = parseBi(q.pay_text);
-                        const btObj = parseBi(q.brief_text);
-                        const wtObj = parseBi(q.work_text);
-                        const dlObj = parseBi(q.deadline);
-                        return {
-                            id: q.id, type: q.queue_type, client: q.client_name, pieces: q.pieces,
-                            payColor: q.pay_color, briefColor: q.brief_color, workColor: q.work_color,
-                            jobType: jtObj.th, jobTypeEn: jtObj.en,
-                            payText: ptObj.th, payTextEn: ptObj.en,
-                            briefText: btObj.th, briefTextEn: btObj.en,
-                            workText: wtObj.th, workTextEn: wtObj.en,
-                            deadline: dlObj.th, deadlineEn: dlObj.en
-                        };
+                        const jtObj = parseBi(q.job_type); const ptObj = parseBi(q.pay_text); const btObj = parseBi(q.brief_text); const wtObj = parseBi(q.work_text); const dlObj = parseBi(q.deadline);
+                        return { id: q.id, type: q.queue_type, client: q.client_name, pieces: q.pieces, payColor: q.pay_color, briefColor: q.brief_color, workColor: q.work_color, jobType: jtObj.th, jobTypeEn: jtObj.en, payText: ptObj.th, payTextEn: ptObj.en, briefText: btObj.th, briefTextEn: btObj.en, workText: wtObj.th, workTextEn: wtObj.en, deadline: dlObj.th, deadlineEn: dlObj.en };
                     });
                 }
 
                 const { data: bRules } = await supabaseClient.from('brief_rules').select('*').order('created_at');
-                if(bRules) {
-                    appState.howToBrief = bRules.map(r => {
-                        const mObj = parseBi(r.main_text);
-                        const dObj = parseBi(r.desc_text);
-                        return { id: r.id, mainText: mObj.th, mainTextEn: mObj.en, descText: dObj.th, descTextEn: dObj.en };
-                    });
-                }
+                if(bRules) appState.howToBrief = bRules.map(r => { const mObj = parseBi(r.main_text); const dObj = parseBi(r.desc_text); return { id: r.id, mainText: mObj.th, mainTextEn: mObj.en, descText: dObj.th, descTextEn: dObj.en }; });
 
                 const { data: dRules } = await supabaseClient.from('drawing_rules').select('*').order('created_at');
                 if(dRules) {
-                    appState.canList = dRules.filter(r => r.rule_type === 'can').map(r => {
-                        const mObj = parseBi(r.main_text); const sObj = parseBi(r.sub_text);
-                        return { id: r.id, mainText: mObj.th, mainTextEn: mObj.en, subText: sObj.th, subTextEn: sObj.en };
-                    });
-                    appState.cantList = dRules.filter(r => r.rule_type === 'cant').map(r => {
-                        const mObj = parseBi(r.main_text); const sObj = parseBi(r.sub_text);
-                        return { id: r.id, mainText: mObj.th, mainTextEn: mObj.en, subText: sObj.th, subTextEn: sObj.en };
-                    });
+                    appState.canList = dRules.filter(r => r.rule_type === 'can').map(r => { const mObj = parseBi(r.main_text); const sObj = parseBi(r.sub_text); return { id: r.id, mainText: mObj.th, mainTextEn: mObj.en, subText: sObj.th, subTextEn: sObj.en }; });
+                    appState.cantList = dRules.filter(r => r.rule_type === 'cant').map(r => { const mObj = parseBi(r.main_text); const sObj = parseBi(r.sub_text); return { id: r.id, mainText: mObj.th, mainTextEn: mObj.en, subText: sObj.th, subTextEn: sObj.en }; });
                 }
-            } catch(e) {
-                console.error(e);
-            }
+                
+                // Fallback Seeding for specific categories if DB empty
+                if(appState.commissions.length === 0) {
+                    const fallbackNames = ['Pencil Style', 'Full Coloring', 'Animation Loop', 'Chibi Pencil Style', 'Chibi Full Coloring', 'Background', 'YCH'];
+                    appState.commissions = fallbackNames.map((n, i) => ({
+                        id: `mock_${i}`, name: n, nameEn: n, price: '300', duration: '3-5 วัน', durationEn: '3-5 days', desc: '-', descEn: '-', img: 'https://placehold.co/600x600/f3f4f6/9ca3af?text='+encodeURIComponent(n), gallery: []
+                    }));
+                }
+            } catch(e) { console.error(e); }
         }
 
         async function initApp() {
@@ -1249,17 +1175,8 @@
             document.getElementById('adminTaxNote').value = appState.texts.taxNote;
             document.getElementById('adminTaxNoteEn').value = appState.texts.taxNoteEn;
             
-            if (appState.texts.logoUrl) {
-                document.getElementById('adminLogoPreview').src = appState.texts.logoUrl;
-                document.getElementById('adminLogoPreview').classList.remove('hidden');
-                document.getElementById('adminRemoveLogoBtn').classList.remove('hidden');
-            }
-            
-            if (appState.texts.profileUrl) {
-                document.getElementById('adminProfilePreview').src = appState.texts.profileUrl;
-                document.getElementById('adminProfilePreview').classList.remove('hidden');
-                document.getElementById('adminRemoveProfileBtn').classList.remove('hidden');
-            }
+            if (appState.texts.logoUrl) { document.getElementById('adminLogoPreview').src = appState.texts.logoUrl; document.getElementById('adminLogoPreview').classList.remove('hidden'); document.getElementById('adminRemoveLogoBtn').classList.remove('hidden'); }
+            if (appState.texts.profileUrl) { document.getElementById('adminProfilePreview').src = appState.texts.profileUrl; document.getElementById('adminProfilePreview').classList.remove('hidden'); document.getElementById('adminRemoveProfileBtn').classList.remove('hidden'); }
             
             renderAdminContentLists(); 
             renderAdminRulesLists();
@@ -1289,72 +1206,52 @@
         function navigate(viewId) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
             document.getElementById(`view-${viewId}`).classList.remove('hidden');
-            appState.currentView = viewId;
-            window.scrollTo(0, 0);
+            appState.currentView = viewId; window.scrollTo(0, 0);
         }
 
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            menu.classList.toggle('hidden');
-        }
+        function toggleMobileMenu() { document.getElementById('mobileMenu').classList.toggle('hidden'); }
         
         async function checkAdminAccess() {
             const { data: { session } } = await supabaseClient.auth.getSession();
-            if (!session) {
-                navigate('login');
-                return;
-            }
-            const { data: isAdmin, error } = await supabaseClient.rpc('is_admin');
-            if (isAdmin) {
-                appState.isLoggedIn = true;
-                navigate('admin');
-            } else {
-                alert('บัญชีนี้ไม่มีสิทธิ์เข้าถึงหน้าผู้ดูแลระบบ');
-                await supabaseClient.auth.signOut();
-                navigate('home');
-            }
+            if (!session) { navigate('login'); return; }
+            const { data: isAdmin } = await supabaseClient.rpc('is_admin');
+            if (isAdmin) { appState.isLoggedIn = true; navigate('admin'); } 
+            else { await customConfirm('บัญชีนี้ไม่มีสิทธิ์เข้าถึงหน้าผู้ดูแลระบบ'); await supabaseClient.auth.signOut(); navigate('home'); }
         }
         
         async function handleLogin(e) {
             e.preventDefault();
             const btn = document.getElementById('btnLogin');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-2"></i>ตรวจสอบ...';
+            btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-2"></i>ตรวจสอบ...';
             
             const user = document.getElementById('loginUser').value;
             const pass = document.getElementById('loginPass').value;
             const email = user.includes('@') ? user : user + '@admin.com';
 
             const { data, error } = await supabaseClient.auth.signInWithPassword({ email: email, password: pass });
-            
             if(error) {
                 document.getElementById('loginError').innerText = "เข้าสู่ระบบล้มเหลว: " + error.message;
                 document.getElementById('loginError').classList.remove('hidden');
-                btn.disabled = false;
-                btn.innerText = 'เข้าสู่ระบบ';
             } else {
                 const { data: isAdmin } = await supabaseClient.rpc('is_admin');
                 if(isAdmin) {
                     appState.isLoggedIn = true;
                     document.getElementById('loginError').classList.add('hidden');
-                    document.getElementById('loginUser').value = '';
-                    document.getElementById('loginPass').value = '';
+                    document.getElementById('loginUser').value = ''; document.getElementById('loginPass').value = '';
                     navigate('admin');
                 } else {
-                    document.getElementById('loginError').innerText = "บัญชีนี้ไม่ใช่แอดมิน ไม่มีสิทธิ์เข้าถึง";
+                    document.getElementById('loginError').innerText = "ไม่มีสิทธิ์เข้าถึง";
                     document.getElementById('loginError').classList.remove('hidden');
                     await supabaseClient.auth.signOut();
                 }
-                btn.disabled = false;
-                btn.innerText = 'เข้าสู่ระบบ';
             }
+            btn.disabled = false; btn.innerText = 'เข้าสู่ระบบ';
         }
         
         async function handleLogout() {
             if(await customConfirm('ต้องการออกจากระบบใช่หรือไม่?')) {
                 await supabaseClient.auth.signOut();
-                appState.isLoggedIn = false;
-                navigate('home');
+                appState.isLoggedIn = false; navigate('home');
             }
         }
 
@@ -1362,63 +1259,40 @@
             appState.language = appState.language === 'th' ? 'en' : 'th';
             document.getElementById('langText').innerText = appState.language.toUpperCase();
             document.getElementById('langTextMobile').innerText = appState.language.toUpperCase();
-            applyLanguage();
-            renderStatus(); 
-            updateHomeTexts();
-            renderCommissionRules();
-            renderCommissions();
-            renderQueues();
-            renderShop();
+            applyLanguage(); renderStatus(); updateHomeTexts(); renderCommissionRules(); renderCommissions(); renderQueues(); renderShop();
         }
 
         function applyLanguage() {
             const d = dict[appState.language];
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
-                if (d[key]) {
-                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.placeholder = d[key];
-                    else el.innerHTML = d[key];
-                }
+                if (d[key]) { if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.placeholder = d[key]; else el.innerHTML = d[key]; }
             });
         }
 
         function renderStatus() {
             const badge = document.getElementById('commissionStatusBadge');
             let bgClass = '', textKey = '';
-            if (appState.artistStatus === 'open') {
-                bgClass = 'bg-green-100 text-green-800 border border-green-200'; textKey = 'statusOpen';
-            } else if (appState.artistStatus === 'closed') {
-                bgClass = 'bg-red-100 text-red-800 border border-red-200'; textKey = 'statusClosed';
-            } else {
-                bgClass = 'bg-yellow-100 text-yellow-800 border border-yellow-200'; textKey = 'statusBusy';
-            }
+            if (appState.artistStatus === 'open') { bgClass = 'bg-green-100 text-green-800 border border-green-200'; textKey = 'statusOpen'; } 
+            else if (appState.artistStatus === 'closed') { bgClass = 'bg-red-100 text-red-800 border border-red-200'; textKey = 'statusClosed'; } 
+            else { bgClass = 'bg-yellow-100 text-yellow-800 border border-yellow-200'; textKey = 'statusBusy'; }
             badge.className = `inline-flex items-center px-4 py-2 rounded-full font-medium text-sm mb-4 shadow-sm ${bgClass}`;
             badge.innerText = dict[appState.language][textKey];
         }
 
         function renderCommissionRules() {
             const briefList = document.getElementById('howToBriefList');
-            briefList.innerHTML = '';
-            const lang = appState.language;
-            
+            briefList.innerHTML = ''; const lang = appState.language;
             appState.howToBrief.forEach(item => {
                 const main = (lang === 'en' && item.mainTextEn) ? item.mainTextEn : item.mainText;
                 const desc = (lang === 'en' && item.descTextEn) ? item.descTextEn : item.descText;
-                
-                let html = `<span class="font-medium">${escapeHTML(main)}</span>`;
-                let bullets = [];
-                
+                let html = `<span class="font-medium">${escapeHTML(main)}</span>`; let bullets = [];
                 if(desc) {
-                    const lines = desc.split('\n');
-                    lines.forEach(line => {
+                    desc.split('\n').forEach(line => {
                         let l = escapeHTML(line.trim());
-                        if(l.startsWith('-')) {
-                            bullets.push(`<li>${l.substring(1).trim()}</li>`);
-                        } else if (l.startsWith('*') && l.endsWith('*') && l.length > 2) {
-                            html += ` <span class="text-red-500 font-medium">${l.substring(1, l.length-1)}</span>`;
-                        } else if (l !== '') {
-                            html += ` ${l}`;
-                        }
+                        if(l.startsWith('-')) bullets.push(`<li>${l.substring(1).trim()}</li>`);
+                        else if (l.startsWith('*') && l.endsWith('*') && l.length > 2) html += ` <span class="text-red-500 font-medium">${l.substring(1, l.length-1)}</span>`;
+                        else if (l !== '') html += ` ${l}`;
                     });
                 }
                 if(bullets.length > 0) html += `<ul class="list-disc list-outside ml-5 mt-1 text-textMuted">${bullets.join('')}</ul>`;
@@ -1428,22 +1302,11 @@
             const canCantBody = document.getElementById('canCantTableBody');
             canCantBody.innerHTML = '';
             const maxLen = Math.max(appState.canList.length, appState.cantList.length);
-            
             for(let i = 0; i < maxLen; i++) {
-                const can = appState.canList[i];
-                const cant = appState.cantList[i];
-                
+                const can = appState.canList[i]; const cant = appState.cantList[i];
                 let canHtml = '', cantHtml = '';
-                if(can) {
-                    const cMain = (lang === 'en' && can.mainTextEn) ? can.mainTextEn : can.mainText;
-                    const cSub = (lang === 'en' && can.subTextEn) ? can.subTextEn : can.subText;
-                    canHtml = `${escapeHTML(cMain)} ${cSub ? `<span class="text-textMuted text-xs ml-1">${escapeHTML(cSub)}</span>` : ''}`;
-                }
-                if(cant) {
-                    const cMain = (lang === 'en' && cant.mainTextEn) ? cant.mainTextEn : cant.mainText;
-                    const cSub = (lang === 'en' && cant.subTextEn) ? cant.subTextEn : cant.subText;
-                    cantHtml = `${escapeHTML(cMain)} ${cSub ? `<span class="text-textMuted text-xs ml-1">${escapeHTML(cSub)}</span>` : ''}`;
-                }
+                if(can) { const cMain = (lang === 'en' && can.mainTextEn) ? can.mainTextEn : can.mainText; const cSub = (lang === 'en' && can.subTextEn) ? can.subTextEn : can.subText; canHtml = `${escapeHTML(cMain)} ${cSub ? `<span class="text-textMuted text-xs ml-1">${escapeHTML(cSub)}</span>` : ''}`; }
+                if(cant) { const cMain = (lang === 'en' && cant.mainTextEn) ? cant.mainTextEn : cant.mainText; const cSub = (lang === 'en' && cant.subTextEn) ? cant.subTextEn : cant.subText; cantHtml = `${escapeHTML(cMain)} ${cSub ? `<span class="text-textMuted text-xs ml-1">${escapeHTML(cSub)}</span>` : ''}`; }
                 canCantBody.innerHTML += `<tr><td>${canHtml}</td><td>${cantHtml}</td></tr>`;
             }
         }
@@ -1456,20 +1319,20 @@
             
             appState.commissions.forEach(com => {
                 const card = document.createElement('div');
-                card.className = 'bg-white/90 backdrop-blur rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all transform hover:-translate-y-1 border border-accent cursor-pointer group';
+                card.className = 'bg-white/90 backdrop-blur rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all transform hover:-translate-y-1 border border-accent cursor-pointer group flex flex-col';
                 card.onclick = () => openCommissionModal(com);
                 
                 const mediaIcon = com.isVideo ? '<div class="absolute top-3 right-3 bg-black/60 backdrop-blur-sm text-white rounded-full p-2 w-8 h-8 flex items-center justify-center"><i class="fa-solid fa-video text-xs"></i></div>' : '';
                 const title = escapeHTML((lang === 'en' && com.nameEn) ? com.nameEn : com.name);
 
                 card.innerHTML = `
-                    <div class="h-48 overflow-hidden relative border-b border-gray-50">
+                    <div class="h-48 overflow-hidden relative border-b border-gray-50 bg-gray-100 flex-shrink-0">
                         <img src="${escapeHTML(com.img)}" alt="${title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x600/f3f4f6/9ca3af?text=No+Image'">
                         ${mediaIcon}
                     </div>
-                    <div class="p-5">
-                        <h3 class="font-bold text-lg text-textMain mb-1 group-hover:text-sky-600 transition-colors">${title}</h3>
-                        <p class="text-sky-600 font-bold text-sm"><span data-i18n="startAt">${l.startAt}</span> ${escapeHTML(com.price)} <span data-i18n="thb">${l.thb}</span></p>
+                    <div class="p-5 flex-1 flex flex-col justify-center">
+                        <h3 class="font-bold text-lg text-textMain mb-1 group-hover:text-sky-600 transition-colors text-center">${title}</h3>
+                        <p class="text-sky-600 font-bold text-sm text-center"><span data-i18n="startAt">${l.startAt}</span> ${escapeHTML(com.price)} <span data-i18n="thb">${l.thb}</span></p>
                     </div>
                 `;
                 container.appendChild(card);
@@ -1477,83 +1340,123 @@
             if(appState.commissions.length === 0) container.innerHTML = '<div class="col-span-full py-12 text-center text-gray-400 font-medium">ไม่มีข้อมูล / No data</div>';
         }
 
+        // ================= NEW COMMISSION MODAL (Gallery Grid) ================= //
+        function openCommissionModal(com) {
+            const lang = appState.language;
+            document.getElementById('modalComTitle').textContent = (lang === 'en' && com.nameEn) ? com.nameEn : com.name;
+            document.getElementById('modalComPrice').textContent = com.price;
+            document.getElementById('modalComDuration').textContent = (lang === 'en' && com.durationEn) ? com.durationEn : com.duration;
+            
+            const desc = (lang === 'en' && com.descEn) ? com.descEn : com.desc;
+            document.getElementById('modalComDesc').innerHTML = escapeHTML(desc).replace(/\n/g, '<br>');
+            
+            // Build Gallery 
+            const galleryContainer = document.getElementById('modalComGallery');
+            galleryContainer.innerHTML = '';
+            
+            // Always show main cover image first in gallery
+            let fullGallery = [com.img];
+            if(com.gallery && Array.isArray(com.gallery)) {
+                fullGallery = fullGallery.concat(com.gallery);
+            }
+            
+            fullGallery.forEach((url, idx) => {
+                if(!url || url.includes('No+Image')) return;
+                const div = document.createElement('div');
+                div.className = 'aspect-square rounded-xl overflow-hidden cursor-pointer shadow-sm border border-gray-100 hover:border-sky-300 hover:shadow-md transition-all';
+                div.onclick = () => { if(idx === 0 && com.isVideo) openLightbox(com.videoUrl, true); else openLightbox(url, false); };
+                
+                const icon = (idx === 0 && com.isVideo) ? '<div class="absolute inset-0 flex items-center justify-center bg-black/20"><i class="fa-solid fa-play text-white text-3xl drop-shadow-md"></i></div>' : '';
+                
+                div.innerHTML = `
+                    <div class="w-full h-full relative">
+                        <img src="${escapeHTML(url)}" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300">
+                        ${icon}
+                    </div>
+                `;
+                galleryContainer.appendChild(div);
+            });
+
+            document.getElementById('modal-commission').classList.remove('hidden');
+        }
+        // ===================================================================== //
+
+        function openProductModal(prod) {
+            const l = dict[appState.language]; const lang = appState.language;
+            document.getElementById('modalProdTitle').textContent = (lang === 'en' && prod.nameEn) ? prod.nameEn : prod.name;
+            document.getElementById('modalProdPrice').textContent = `฿${prod.price}`;
+            const desc = (lang === 'en' && prod.descEn) ? prod.descEn : prod.desc;
+            document.getElementById('modalProdDesc').innerHTML = escapeHTML(desc).replace(/\n/g, '<br>');
+            document.getElementById('modalProdImage').src = prod.img;
+            
+            const stockEl = document.getElementById('modalProdStock'); const btn = document.getElementById('modalProdBuyBtn');
+            if(prod.stock === 0) {
+                stockEl.innerHTML = `<span class="inline-flex items-center px-3.5 py-1.5 rounded-xl text-sm font-bold bg-red-50 text-red-600 border border-red-100"><i class="fa-solid fa-box-open mr-2"></i> <span data-i18n="outOfStock">${l.outOfStock}</span></span>`;
+                btn.disabled = true; btn.innerHTML = `<i class="fa-solid fa-ban mr-2"></i><span data-i18n="outOfStock">${l.outOfStock}</span>`; btn.classList.replace('bg-sky-500', 'bg-gray-400'); btn.onclick = null;
+            } else {
+                stockEl.innerHTML = `<span class="inline-flex items-center px-3.5 py-1.5 rounded-xl text-sm font-bold bg-green-50 text-green-600 border border-green-100"><i class="fa-solid fa-check mr-2"></i> <span data-i18n="inStock">${l.inStock}</span> ${prod.stock}</span>`;
+                btn.disabled = false; btn.innerHTML = `<i class="fa-solid fa-cart-shopping mr-2"></i> <span data-i18n="btnBuy">${l.btnBuy}</span>`; btn.classList.replace('bg-gray-400', 'bg-sky-500'); btn.onclick = () => window.open('https://docs.google.com/forms', '_blank'); 
+            }
+            document.getElementById('modal-product').classList.remove('hidden');
+        }
+
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+        function openLightbox(url, isVideo = false) {
+            const modal = document.getElementById('lightbox');
+            const img = document.getElementById('lightboxImg'); const vid = document.getElementById('lightboxVid');
+            modal.classList.remove('hidden'); modal.style.zIndex = '9999';
+            if(isVideo) { img.classList.add('hidden'); vid.src = url; vid.classList.remove('hidden'); vid.play(); } 
+            else { vid.classList.add('hidden'); vid.pause(); img.src = url; img.classList.remove('hidden'); }
+        }
+
+        function closeLightbox() { document.getElementById('lightbox').classList.add('hidden'); document.getElementById('lightboxVid').pause(); }
+
+        window.onclick = function(event) { if (event.target.classList.contains('fixed') && event.target.id.startsWith('modal-')) event.target.classList.add('hidden'); }
+
         function switchQueueTab(tabId) {
             document.querySelectorAll('.queue-tab-content').forEach(el => { el.classList.add('hidden'); el.classList.remove('block'); });
             document.querySelectorAll('.queue-tab-btn').forEach(el => { el.classList.remove('bg-sky-500', 'text-white', 'shadow-sm'); el.classList.add('bg-transparent', 'text-gray-500', 'hover:bg-gray-100'); });
             document.getElementById(`qTab-${tabId}`).classList.remove('hidden'); document.getElementById(`qTab-${tabId}`).classList.add('block');
-            const activeBtn = document.getElementById(`qTabBtn-${tabId}`);
-            activeBtn.classList.remove('bg-transparent', 'text-gray-500', 'hover:bg-gray-100'); activeBtn.classList.add('bg-sky-500', 'text-white', 'shadow-sm');
+            document.getElementById(`qTabBtn-${tabId}`).classList.remove('bg-transparent', 'text-gray-500', 'hover:bg-gray-100'); document.getElementById(`qTabBtn-${tabId}`).classList.add('bg-sky-500', 'text-white', 'shadow-sm');
         }
 
         function getStatusCellClass(colorStr) {
-            switch(colorStr) {
-                case 'green': return 'bg-statusGreen text-green-900 border-green-300 font-bold';
-                case 'yellow': return 'bg-statusYellow text-yellow-900 border-yellow-400 font-bold';
-                case 'red': return 'bg-statusRed text-red-900 border-red-400 font-bold';
-                default: return 'bg-transparent text-gray-800';
-            }
+            if(colorStr==='green') return 'bg-statusGreen text-green-900 border-green-300 font-bold';
+            if(colorStr==='yellow') return 'bg-statusYellow text-yellow-900 border-yellow-400 font-bold';
+            if(colorStr==='red') return 'bg-statusRed text-red-900 border-red-400 font-bold';
+            return 'bg-transparent text-gray-800';
         }
 
         function renderQueues() {
             const totalQueueEl = document.getElementById('totalQueueCount');
             if (totalQueueEl) totalQueueEl.innerText = appState.queues.length;
-            
-            const tbodyMain = document.getElementById('tableBody-main');
-            const tbodySub = document.getElementById('tableBody-sub');
-            const tbodyPend = document.getElementById('tableBody-pending');
-            
+            const tbodyMain = document.getElementById('tableBody-main'); const tbodySub = document.getElementById('tableBody-sub'); const tbodyPend = document.getElementById('tableBody-pending');
             tbodyMain.innerHTML = ''; tbodySub.innerHTML = ''; tbodyPend.innerHTML = '';
-            let mainIdx = 1, subIdx = 1, pendIdx = 1;
-            const lang = appState.language;
+            let mainIdx = 1, subIdx = 1, pendIdx = 1; const lang = appState.language;
 
             appState.queues.forEach(q => {
-                const tr = document.createElement('tr');
-                tr.className = "border-b border-gray-100 hover:bg-sky-50/50 transition-colors";
+                const tr = document.createElement('tr'); tr.className = "border-b border-gray-100 hover:bg-sky-50/50 transition-colors";
                 if(q.workColor === 'yellow') tr.classList.add('bg-yellow-50/70');
+                let numStr = ''; if(q.type === 'main') numStr = mainIdx++; else if (q.type === 'sub') numStr = subIdx++; else numStr = pendIdx++;
 
-                let numStr = '';
-                if(q.type === 'main') numStr = mainIdx++;
-                else if (q.type === 'sub') numStr = subIdx++;
-                else numStr = pendIdx++;
-
-                const payClass = getStatusCellClass(q.payColor);
-                const briefClass = getStatusCellClass(q.briefColor);
-                const workClass = getStatusCellClass(q.workColor);
-
-                const jType = escapeHTML((lang === 'en' && q.jobTypeEn) ? q.jobTypeEn : q.jobType);
-                const pText = escapeHTML((lang === 'en' && q.payTextEn) ? q.payTextEn : q.payText);
-                const bText = escapeHTML((lang === 'en' && q.briefTextEn) ? q.briefTextEn : q.briefText);
-                const wText = escapeHTML((lang === 'en' && q.workTextEn) ? q.workTextEn : q.workText);
-                const deadL = escapeHTML((lang === 'en' && q.deadlineEn) ? q.deadlineEn : q.deadline);
-                const clientName = escapeHTML(q.client);
-                const pieces = escapeHTML(q.pieces);
+                const payClass = getStatusCellClass(q.payColor); const briefClass = getStatusCellClass(q.briefColor); const workClass = getStatusCellClass(q.workColor);
+                const jType = escapeHTML((lang === 'en' && q.jobTypeEn) ? q.jobTypeEn : q.jobType); const pText = escapeHTML((lang === 'en' && q.payTextEn) ? q.payTextEn : q.payText); const bText = escapeHTML((lang === 'en' && q.briefTextEn) ? q.briefTextEn : q.briefText); const wText = escapeHTML((lang === 'en' && q.workTextEn) ? q.workTextEn : q.workText); const deadL = escapeHTML((lang === 'en' && q.deadlineEn) ? q.deadlineEn : q.deadline);
 
                 tr.innerHTML = `
-                    <td class="p-3 font-bold text-gray-400">${numStr}</td>
-                    <td class="p-3 text-left font-bold text-textMain">${clientName || '-'}</td>
-                    <td class="p-3 text-gray-600">${jType || '-'}</td>
-                    <td class="p-3">${pieces || '-'}</td>
-                    <td class="p-3 ${payClass} shadow-inner">${pText || ''}</td>
-                    <td class="p-3 ${briefClass} shadow-inner">${bText || ''}</td>
-                    <td class="p-3 text-gray-500 text-xs md:text-sm">${deadL || '-'}</td>
-                    <td class="p-3 ${workClass} shadow-inner ${q.workColor==='yellow' ? 'animate-pulse' : ''}">${wText || ''}</td>
+                    <td class="p-3 font-bold text-gray-400">${numStr}</td><td class="p-3 text-left font-bold text-textMain">${escapeHTML(q.client) || '-'}</td><td class="p-3 text-gray-600">${jType || '-'}</td><td class="p-3">${escapeHTML(q.pieces) || '-'}</td><td class="p-3 ${payClass} shadow-inner">${pText || ''}</td><td class="p-3 ${briefClass} shadow-inner">${bText || ''}</td><td class="p-3 text-gray-500 text-xs md:text-sm">${deadL || '-'}</td><td class="p-3 ${workClass} shadow-inner ${q.workColor==='yellow' ? 'animate-pulse' : ''}">${wText || ''}</td>
                 `;
-
-                if(q.type === 'main') tbodyMain.appendChild(tr);
-                else if(q.type === 'sub') tbodySub.appendChild(tr);
-                else tbodyPend.appendChild(tr);
+                if(q.type === 'main') tbodyMain.appendChild(tr); else if(q.type === 'sub') tbodySub.appendChild(tr); else tbodyPend.appendChild(tr);
             });
 
             const emptyRow = (colSpan) => `<tr><td colspan="${colSpan}" class="p-8 text-center text-gray-400 font-medium">ไม่มีรายการ / No items</td></tr>`;
-            if(tbodyMain.innerHTML === '') tbodyMain.innerHTML = emptyRow(8);
-            if(tbodySub.innerHTML === '') tbodySub.innerHTML = emptyRow(8);
-            if(tbodyPend.innerHTML === '') tbodyPend.innerHTML = emptyRow(8);
-            
+            if(tbodyMain.innerHTML === '') tbodyMain.innerHTML = emptyRow(8); if(tbodySub.innerHTML === '') tbodySub.innerHTML = emptyRow(8); if(tbodyPend.innerHTML === '') tbodyPend.innerHTML = emptyRow(8);
             renderAdminQueueTable();
         }
 
         function renderShop() {
             const container = document.getElementById('productGrid');
+            if (!container) return;
             container.innerHTML = '';
             const l = dict[appState.language];
             const lang = appState.language;
@@ -1593,116 +1496,35 @@
             else { content.classList.add('hidden'); icon.classList.remove('rotate-180'); }
         }
 
-        function openCommissionModal(com) {
-            const lang = appState.language;
-            document.getElementById('modalComTitle').textContent = (lang === 'en' && com.nameEn) ? com.nameEn : com.name;
-            document.getElementById('modalComPrice').textContent = com.price;
-            document.getElementById('modalComDuration').textContent = (lang === 'en' && com.durationEn) ? com.durationEn : com.duration;
-            
-            const desc = (lang === 'en' && com.descEn) ? com.descEn : com.desc;
-            document.getElementById('modalComDesc').innerHTML = escapeHTML(desc).replace(/\n/g, '<br>');
-            
-            const imgEl = document.getElementById('modalComImage');
-            imgEl.src = com.img;
-            imgEl.onclick = () => { if(com.isVideo) openLightbox(com.videoUrl, true); else openLightbox(com.img, false); };
-            document.getElementById('modal-commission').classList.remove('hidden');
-        }
-
-        function openProductModal(prod) {
-            const l = dict[appState.language];
-            const lang = appState.language;
-            document.getElementById('modalProdTitle').textContent = (lang === 'en' && prod.nameEn) ? prod.nameEn : prod.name;
-            document.getElementById('modalProdPrice').textContent = `฿${prod.price}`;
-            
-            const desc = (lang === 'en' && prod.descEn) ? prod.descEn : prod.desc;
-            document.getElementById('modalProdDesc').innerHTML = escapeHTML(desc).replace(/\n/g, '<br>');
-            document.getElementById('modalProdImage').src = prod.img;
-            
-            const stockEl = document.getElementById('modalProdStock');
-            const btn = document.getElementById('modalProdBuyBtn');
-            if(prod.stock === 0) {
-                stockEl.innerHTML = `<span class="inline-flex items-center px-3.5 py-1.5 rounded-xl text-sm font-bold bg-red-50 text-red-600 border border-red-100"><i class="fa-solid fa-box-open mr-2"></i> <span data-i18n="outOfStock">${l.outOfStock}</span></span>`;
-                btn.disabled = true; btn.innerHTML = `<i class="fa-solid fa-ban mr-2"></i><span data-i18n="outOfStock">${l.outOfStock}</span>`;
-                btn.classList.replace('bg-sky-500', 'bg-gray-400'); btn.onclick = null;
-            } else {
-                stockEl.innerHTML = `<span class="inline-flex items-center px-3.5 py-1.5 rounded-xl text-sm font-bold bg-green-50 text-green-600 border border-green-100"><i class="fa-solid fa-check mr-2"></i> <span data-i18n="inStock">${l.inStock}</span> ${prod.stock}</span>`;
-                btn.disabled = false; btn.innerHTML = `<i class="fa-solid fa-cart-shopping mr-2"></i> <span data-i18n="btnBuy">${l.btnBuy}</span>`;
-                btn.classList.replace('bg-gray-400', 'bg-sky-500'); btn.onclick = () => window.open('https://docs.google.com/forms', '_blank'); 
-            }
-            document.getElementById('modal-product').classList.remove('hidden');
-        }
-
-        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
-
-        function openLightbox(url, isVideo = false) {
-            const modal = document.getElementById('lightbox');
-            const img = document.getElementById('lightboxImg');
-            const vid = document.getElementById('lightboxVid');
-            modal.classList.remove('hidden');
-            modal.style.zIndex = '9999';
-            if(isVideo) { img.classList.add('hidden'); vid.src = url; vid.classList.remove('hidden'); vid.play(); } 
-            else { vid.classList.add('hidden'); vid.pause(); img.src = url; img.classList.remove('hidden'); }
-        }
-
-        function closeLightbox() {
-            document.getElementById('lightbox').classList.add('hidden');
-            document.getElementById('lightboxVid').pause();
-        }
-
-        window.onclick = function(event) {
-            if (event.target.classList.contains('fixed') && event.target.id.startsWith('modal-')) event.target.classList.add('hidden');
-        }
-
         function switchAdminTab(tabId) {
             document.querySelectorAll('.admin-tab-content').forEach(el => { el.classList.add('hidden'); el.classList.remove('block'); });
             document.querySelectorAll('.admin-tab-btn').forEach(el => { el.classList.remove('text-sky-600', 'border-sky-600'); el.classList.add('text-gray-500', 'border-transparent'); });
             document.getElementById(`adminTab-${tabId}`).classList.remove('hidden'); document.getElementById(`adminTab-${tabId}`).classList.add('block');
-            const activeBtn = document.getElementById(`tabBtn-${tabId}`);
-            activeBtn.classList.remove('text-gray-500', 'border-transparent'); activeBtn.classList.add('text-sky-600', 'border-sky-600');
+            document.getElementById(`tabBtn-${tabId}`).classList.remove('text-gray-500', 'border-transparent'); document.getElementById(`tabBtn-${tabId}`).classList.add('text-sky-600', 'border-sky-600');
         }
 
         async function adminSaveStatus(e) {
-            const btn = e.currentTarget;
-            const originalHTML = btn.innerHTML;
-            btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-2"></i>กำลังบันทึก...';
-            
+            const btn = e.currentTarget; const originalHTML = btn.innerHTML; btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-2"></i>กำลังบันทึก...';
             const val = document.getElementById('adminStatusSelect').value;
             const { error } = await supabaseClient.from('settings').update({ status: val }).eq('id', 1);
-            if (error) alert("Error: " + error.message);
-            else { appState.artistStatus = val; renderStatus(); alert('อัปเดตสถานะการรับงานเรียบร้อย'); }
-            
+            if (error) await customConfirm("Error: " + error.message); else { appState.artistStatus = val; renderStatus(); await customConfirm('อัปเดตสถานะเรียบร้อย'); }
             btn.disabled = false; btn.innerHTML = originalHTML;
         }
         
         async function adminSaveGeneralTexts(e) {
             e.preventDefault();
-            const btn = document.getElementById('btnSaveText');
-            const originalHTML = btn.innerHTML;
-            btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-2"></i>กำลังบันทึก...';
-
+            const btn = document.getElementById('btnSaveText'); const originalHTML = btn.innerHTML; btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-2"></i>กำลังบันทึก...';
             const artistName = document.getElementById('adminArtistName').value;
             const role = stringifyBi(document.getElementById('adminArtistRole').value, document.getElementById('adminArtistRoleEn').value);
             const realName = stringifyBi(document.getElementById('adminRealName').value, document.getElementById('adminRealNameEn').value);
             const taxNote = stringifyBi(document.getElementById('adminTaxNote').value, document.getElementById('adminTaxNoteEn').value);
 
             try {
-                const { error } = await supabaseClient.from('settings').update({
-                    artist_name: artistName, artist_role: role, real_name: realName, tax_note: taxNote
-                }).eq('id', 1);
-
+                const { error } = await supabaseClient.from('settings').update({ artist_name: artistName, artist_role: role, real_name: realName, tax_note: taxNote }).eq('id', 1);
                 if(error) throw error;
-                
-                appState.texts.artistName = artistName;
-                const r = parseBi(role); appState.texts.artistRole = r.th; appState.texts.artistRoleEn = r.en;
-                const rn = parseBi(realName); appState.texts.realName = rn.th; appState.texts.realNameEn = rn.en;
-                const tn = parseBi(taxNote); appState.texts.taxNote = tn.th; appState.texts.taxNoteEn = tn.en;
-                
-                updateHomeTexts();
-                alert('อัปเดตข้อความหน้าเว็บเรียบร้อย');
-            } catch (err) {
-                alert("Error: " + err.message);
-            }
-            
+                appState.texts.artistName = artistName; const r = parseBi(role); appState.texts.artistRole = r.th; appState.texts.artistRoleEn = r.en; const rn = parseBi(realName); appState.texts.realName = rn.th; appState.texts.realNameEn = rn.en; const tn = parseBi(taxNote); appState.texts.taxNote = tn.th; appState.texts.taxNoteEn = tn.en;
+                updateHomeTexts(); await customConfirm('อัปเดตข้อความเรียบร้อย');
+            } catch (err) { await customConfirm("Error: " + err.message); }
             btn.disabled = false; btn.innerHTML = originalHTML;
         }
 
@@ -1712,74 +1534,32 @@
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     document.getElementById('adminLogoPreview').src = e.target.result;
-                    document.getElementById('adminLogoPreview').classList.remove('hidden');
-                    document.getElementById('adminRemoveLogoBtn').classList.remove('hidden');
-                    document.getElementById('adminSaveLogoBtn').classList.remove('hidden');
-                }
-                reader.readAsDataURL(file);
+                    document.getElementById('adminLogoPreview').classList.remove('hidden'); document.getElementById('adminRemoveLogoBtn').classList.remove('hidden'); document.getElementById('adminSaveLogoBtn').classList.remove('hidden');
+                }; reader.readAsDataURL(file);
             }
         });
 
         async function adminSaveLogo(btn) {
-            const fileInput = document.getElementById('adminLogoInput');
-            const file = fileInput.files[0];
-            if (!file) return;
-
-            const originalHTML = btn.innerHTML;
-            btn.disabled = true; 
-            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-1"></i>กำลังบันทึก...';
-
+            const fileInput = document.getElementById('adminLogoInput'); const file = fileInput.files[0]; if (!file) return;
+            const originalHTML = btn.innerHTML; btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-1"></i>บันทึก...';
             try {
-                const oldUrl = appState.texts.logoUrl;
-                const compressedLogo = await compressImage(file);
-                const logoUrl = await uploadImageToStorage(compressedLogo);
-
+                const oldUrl = appState.texts.logoUrl; const compressedLogo = await compressImage(file); const logoUrl = await uploadImageToStorage(compressedLogo);
                 const { error } = await supabaseClient.from('settings').update({ logo_url: logoUrl }).eq('id', 1);
                 if (error) throw error;
-
-                if (oldUrl && oldUrl !== logoUrl) {
-                    await deleteImageFromStorage(oldUrl);
-                }
-
-                appState.texts.logoUrl = logoUrl;
-                updateHomeTexts();
-                
-                alert('บันทึกรูปโลโก้เรียบร้อยแล้ว!');
-                btn.classList.add('hidden'); // ซ่อนปุ่มอัปโหลดหลังจากบันทึกเสร็จ
-                document.getElementById('adminRemoveLogoBtn').classList.remove('hidden');
-            } catch (err) {
-                alert("Error: " + err.message);
-            }
-            
-            btn.disabled = false; 
-            btn.innerHTML = originalHTML;
+                if (oldUrl && oldUrl !== logoUrl) await deleteImageFromStorage(oldUrl);
+                appState.texts.logoUrl = logoUrl; updateHomeTexts(); btn.classList.add('hidden'); document.getElementById('adminRemoveLogoBtn').classList.remove('hidden'); await customConfirm('บันทึกรูปโลโก้เรียบร้อยแล้ว!');
+            } catch (err) { await customConfirm("Error: " + err.message); }
+            btn.disabled = false; btn.innerHTML = originalHTML;
         }
 
         async function adminRemoveLogo() {
-            if(!await customConfirm('ต้องการลบโลโก้นี้ใช่หรือไม่? (ไฟล์รูปจะถูกลบทิ้งอย่างถาวร)')) return;
-            
+            if(!await customConfirm('ต้องการลบโลโก้นี้ใช่หรือไม่? (ลบไฟล์ถาวร)')) return;
             try {
-                const oldUrl = appState.texts.logoUrl;
-                const { error } = await supabaseClient.from('settings').update({ logo_url: '' }).eq('id', 1);
+                const oldUrl = appState.texts.logoUrl; const { error } = await supabaseClient.from('settings').update({ logo_url: '' }).eq('id', 1);
                 if (error) throw error;
-                
-                if (oldUrl) {
-                    await deleteImageFromStorage(oldUrl);
-                }
-
-                appState.texts.logoUrl = '';
-                updateHomeTexts();
-                
-                document.getElementById('adminLogoInput').value = '';
-                document.getElementById('adminLogoPreview').src = '';
-                document.getElementById('adminLogoPreview').classList.add('hidden');
-                document.getElementById('adminRemoveLogoBtn').classList.add('hidden');
-                document.getElementById('adminSaveLogoBtn').classList.add('hidden');
-                
-                alert('ลบโลโก้เรียบร้อยแล้ว');
-            } catch (err) {
-                alert("Error: " + err.message);
-            }
+                if (oldUrl) await deleteImageFromStorage(oldUrl);
+                appState.texts.logoUrl = ''; updateHomeTexts(); document.getElementById('adminLogoInput').value = ''; document.getElementById('adminLogoPreview').src = ''; document.getElementById('adminLogoPreview').classList.add('hidden'); document.getElementById('adminRemoveLogoBtn').classList.add('hidden'); document.getElementById('adminSaveLogoBtn').classList.add('hidden'); await customConfirm('ลบโลโก้เรียบร้อยแล้ว');
+            } catch (err) { await customConfirm("Error: " + err.message); }
         }
 
         document.getElementById('adminProfileInput').addEventListener('change', function(e) {
@@ -1788,74 +1568,32 @@
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     document.getElementById('adminProfilePreview').src = e.target.result;
-                    document.getElementById('adminProfilePreview').classList.remove('hidden');
-                    document.getElementById('adminRemoveProfileBtn').classList.remove('hidden');
-                    document.getElementById('adminSaveProfileBtn').classList.remove('hidden');
-                }
-                reader.readAsDataURL(file);
+                    document.getElementById('adminProfilePreview').classList.remove('hidden'); document.getElementById('adminRemoveProfileBtn').classList.remove('hidden'); document.getElementById('adminSaveProfileBtn').classList.remove('hidden');
+                }; reader.readAsDataURL(file);
             }
         });
 
         async function adminSaveProfileImage(btn) {
-            const fileInput = document.getElementById('adminProfileInput');
-            const file = fileInput.files[0];
-            if (!file) return;
-
-            const originalHTML = btn.innerHTML;
-            btn.disabled = true; 
-            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-1"></i>กำลังบันทึก...';
-
+            const fileInput = document.getElementById('adminProfileInput'); const file = fileInput.files[0]; if (!file) return;
+            const originalHTML = btn.innerHTML; btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-1"></i>บันทึก...';
             try {
-                const oldUrl = appState.texts.profileUrl;
-                const compressedProfile = await compressImage(file);
-                const profileUrl = await uploadImageToStorage(compressedProfile);
-
+                const oldUrl = appState.texts.profileUrl; const compressedProfile = await compressImage(file); const profileUrl = await uploadImageToStorage(compressedProfile);
                 const { error } = await supabaseClient.from('settings').update({ profile_url: profileUrl }).eq('id', 1);
                 if (error) throw error;
-
-                if (oldUrl && oldUrl !== profileUrl) {
-                    await deleteImageFromStorage(oldUrl);
-                }
-
-                appState.texts.profileUrl = profileUrl;
-                updateHomeTexts();
-                
-                alert('บันทึกรูปโปรไฟล์เรียบร้อยแล้ว!');
-                btn.classList.add('hidden');
-                document.getElementById('adminRemoveProfileBtn').classList.remove('hidden');
-            } catch (err) {
-                alert("Error: " + err.message);
-            }
-            
-            btn.disabled = false; 
-            btn.innerHTML = originalHTML;
+                if (oldUrl && oldUrl !== profileUrl) await deleteImageFromStorage(oldUrl);
+                appState.texts.profileUrl = profileUrl; updateHomeTexts(); btn.classList.add('hidden'); document.getElementById('adminRemoveProfileBtn').classList.remove('hidden'); await customConfirm('บันทึกรูปโปรไฟล์เรียบร้อยแล้ว!');
+            } catch (err) { await customConfirm("Error: " + err.message); }
+            btn.disabled = false; btn.innerHTML = originalHTML;
         }
 
         async function adminRemoveProfileImage() {
-            if(!await customConfirm('ต้องการลบรูปโปรไฟล์นี้ใช่หรือไม่? (ไฟล์รูปจะถูกลบทิ้งอย่างถาวร)')) return;
-            
+            if(!await customConfirm('ต้องการลบรูปโปรไฟล์นี้ใช่หรือไม่? (ลบไฟล์ถาวร)')) return;
             try {
-                const oldUrl = appState.texts.profileUrl;
-                const { error } = await supabaseClient.from('settings').update({ profile_url: '' }).eq('id', 1);
+                const oldUrl = appState.texts.profileUrl; const { error } = await supabaseClient.from('settings').update({ profile_url: '' }).eq('id', 1);
                 if (error) throw error;
-                
-                if (oldUrl) {
-                    await deleteImageFromStorage(oldUrl);
-                }
-
-                appState.texts.profileUrl = '';
-                updateHomeTexts();
-                
-                document.getElementById('adminProfileInput').value = '';
-                document.getElementById('adminProfilePreview').src = '';
-                document.getElementById('adminProfilePreview').classList.add('hidden');
-                document.getElementById('adminRemoveProfileBtn').classList.add('hidden');
-                document.getElementById('adminSaveProfileBtn').classList.add('hidden');
-                
-                alert('ลบรูปโปรไฟล์เรียบร้อยแล้ว');
-            } catch (err) {
-                alert("Error: " + err.message);
-            }
+                if (oldUrl) await deleteImageFromStorage(oldUrl);
+                appState.texts.profileUrl = ''; updateHomeTexts(); document.getElementById('adminProfileInput').value = ''; document.getElementById('adminProfilePreview').src = ''; document.getElementById('adminProfilePreview').classList.add('hidden'); document.getElementById('adminRemoveProfileBtn').classList.add('hidden'); document.getElementById('adminSaveProfileBtn').classList.add('hidden'); await customConfirm('ลบรูปโปรไฟล์เรียบร้อยแล้ว');
+            } catch (err) { await customConfirm("Error: " + err.message); }
         }
 
         function updateHomeTexts() {
@@ -1866,168 +1604,70 @@
             document.getElementById('homeTaxNote').textContent = (lang === 'en' && appState.texts.taxNoteEn) ? appState.texts.taxNoteEn : appState.texts.taxNote;
             
             const navLogoImg = document.getElementById('navLogoImg');
-            if (appState.texts.logoUrl) {
-                navLogoImg.src = appState.texts.logoUrl;
-                navLogoImg.classList.remove('hidden');
-            } else {
-                navLogoImg.src = '';
-                navLogoImg.classList.add('hidden');
-            }
+            if (appState.texts.logoUrl) { navLogoImg.src = appState.texts.logoUrl; navLogoImg.classList.remove('hidden'); } 
+            else { navLogoImg.src = ''; navLogoImg.classList.add('hidden'); }
             
             const homeProfileImage = document.getElementById('homeProfileImage');
-            if (appState.texts.profileUrl) {
-                homeProfileImage.src = appState.texts.profileUrl;
-            } else {
-                homeProfileImage.src = 'https://placehold.co/400x400/e0f2fe/0369a1?text=RishmaStu';
-            }
+            if (appState.texts.profileUrl) homeProfileImage.src = appState.texts.profileUrl;
+            else homeProfileImage.src = 'https://placehold.co/400x400/e0f2fe/0369a1?text=RishmaStu';
         }
 
         function renderAdminQueueTable() {
-            const tbody = document.getElementById('adminQueueTableBody');
-            tbody.innerHTML = '';
-            if (appState.queues.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" class="px-4 py-8 text-center text-gray-400 font-medium">ยังไม่มีข้อมูลคิว</td></tr>';
-                return;
-            }
-            const colorDot = (c, text) => {
-                let dotCls = 'bg-gray-100 border-gray-200 text-gray-400';
-                if(c==='green') dotCls = 'bg-statusGreen border-green-300 text-green-800';
-                if(c==='yellow') dotCls = 'bg-statusYellow border-yellow-300 text-yellow-800';
-                if(c==='red') dotCls = 'bg-statusRed border-red-300 text-red-800';
-                return `<span class="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-md text-[10px] border ${dotCls} font-bold mr-1" title="${escapeHTML(text || 'ว่าง')}">${escapeHTML(text || '')}</span>`;
-            };
-
+            const tbody = document.getElementById('adminQueueTableBody'); tbody.innerHTML = '';
+            if (appState.queues.length === 0) { tbody.innerHTML = '<tr><td colspan="5" class="px-4 py-8 text-center text-gray-400 font-medium">ยังไม่มีข้อมูลคิว</td></tr>'; return; }
+            const colorDot = (c, text) => { let dotCls = 'bg-gray-100 border-gray-200 text-gray-400'; if(c==='green') dotCls = 'bg-statusGreen border-green-300 text-green-800'; if(c==='yellow') dotCls = 'bg-statusYellow border-yellow-300 text-yellow-800'; if(c==='red') dotCls = 'bg-statusRed border-red-300 text-red-800'; return `<span class="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-md text-[10px] border ${dotCls} font-bold mr-1" title="${escapeHTML(text || 'ว่าง')}">${escapeHTML(text || '')}</span>`; };
             appState.queues.forEach((q) => {
-                const tr = document.createElement('tr');
-                tr.className = `hover:bg-sky-50/50 transition-colors`;
-                let typeLabel = '<span class="px-2 py-1 rounded-lg text-xs font-bold bg-gray-100 text-gray-600">คิวย่อย</span>';
-                if(q.type === 'main') typeLabel = '<span class="px-2 py-1 rounded-lg text-xs font-bold bg-sky-100 text-sky-700">คิวหลัก</span>';
-                if(q.type === 'pending') typeLabel = '<span class="px-2 py-1 rounded-lg text-xs font-bold bg-red-100 text-red-700">ตกค้าง</span>';
-
-                tr.innerHTML = `
-                    <td class="px-4 py-3">${typeLabel}</td>
-                    <td class="px-4 py-3 font-bold text-gray-900 truncate max-w-[120px]">${escapeHTML(q.client)}</td>
-                    <td class="px-4 py-3 text-gray-500 text-xs">${escapeHTML(q.jobType || '-')} ${q.pieces ? `(x${escapeHTML(q.pieces)})` : ''}</td>
-                    <td class="px-4 py-3 text-center whitespace-nowrap">
-                        ${colorDot(q.payColor, q.payText)} ${colorDot(q.briefColor, q.briefText)} ${colorDot(q.workColor, q.workText)}
-                    </td>
-                    <td class="px-4 py-3 text-right whitespace-nowrap">
-                        <button type="button" onclick="adminEditQueue('${q.id}')" class="text-sky-600 hover:bg-sky-100 p-2 rounded-lg transition-colors mr-1" title="แก้ไข"><i class="fa-solid fa-pen"></i></button>
-                        <button type="button" onclick="adminDeleteQueue('${q.id}')" class="text-red-500 hover:bg-red-100 p-2 rounded-lg transition-colors" title="ลบ"><i class="fa-solid fa-trash-can"></i></button>
-                    </td>
-                `;
+                const tr = document.createElement('tr'); tr.className = `hover:bg-sky-50/50 transition-colors`;
+                let typeLabel = '<span class="px-2 py-1 rounded-lg text-xs font-bold bg-gray-100 text-gray-600">คิวย่อย</span>'; if(q.type === 'main') typeLabel = '<span class="px-2 py-1 rounded-lg text-xs font-bold bg-sky-100 text-sky-700">คิวหลัก</span>'; if(q.type === 'pending') typeLabel = '<span class="px-2 py-1 rounded-lg text-xs font-bold bg-red-100 text-red-700">ตกค้าง</span>';
+                tr.innerHTML = `<td class="px-4 py-3">${typeLabel}</td><td class="px-4 py-3 font-bold text-gray-900 truncate max-w-[120px]">${escapeHTML(q.client)}</td><td class="px-4 py-3 text-gray-500 text-xs">${escapeHTML(q.jobType || '-')} ${q.pieces ? `(x${escapeHTML(q.pieces)})` : ''}</td><td class="px-4 py-3 text-center whitespace-nowrap">${colorDot(q.payColor, q.payText)} ${colorDot(q.briefColor, q.briefText)} ${colorDot(q.workColor, q.workText)}</td><td class="px-4 py-3 text-right whitespace-nowrap"><button type="button" onclick="adminEditQueue('${q.id}')" class="text-sky-600 hover:bg-sky-100 p-2 rounded-lg transition-colors mr-1" title="แก้ไข"><i class="fa-solid fa-pen"></i></button><button type="button" onclick="adminDeleteQueue('${q.id}')" class="text-red-500 hover:bg-red-100 p-2 rounded-lg transition-colors" title="ลบ"><i class="fa-solid fa-trash-can"></i></button></td>`;
                 tbody.appendChild(tr);
             });
         }
 
         async function adminSaveQueue(e) {
-            e.preventDefault();
-            const btn = document.getElementById('btnSubmitQueue');
-            const originalHTML = btn.innerHTML;
-            btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-2"></i>กำลังบันทึก...';
-
+            e.preventDefault(); const btn = document.getElementById('btnSubmitQueue'); const originalHTML = btn.innerHTML; btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-2"></i>กำลังบันทึก...';
             const id = document.getElementById('aqId').value;
-            const data = {
-                queue_type: document.getElementById('aqType').value,
-                client_name: document.getElementById('aqClient').value,
-                pieces: document.getElementById('aqPieces').value,
-                job_type: stringifyBi(document.getElementById('aqJobType').value, document.getElementById('aqJobTypeEn').value),
-                pay_color: document.getElementById('aqPayColor').value,
-                pay_text: stringifyBi(document.getElementById('aqPayText').value, document.getElementById('aqPayTextEn').value),
-                brief_color: document.getElementById('aqBriefColor').value,
-                brief_text: stringifyBi(document.getElementById('aqBriefText').value, document.getElementById('aqBriefTextEn').value),
-                work_color: document.getElementById('aqWorkColor').value,
-                work_text: stringifyBi(document.getElementById('aqWorkText').value, document.getElementById('aqWorkTextEn').value),
-                deadline: stringifyBi(document.getElementById('aqDeadline').value, document.getElementById('aqDeadlineEn').value)
-            };
-
-            let error;
-            if (id) {
-                const res = await supabaseClient.from('queues').update(data).eq('id', id); error = res.error;
-            } else {
-                const res = await supabaseClient.from('queues').insert([data]); error = res.error;
-            }
-
-            if(error) alert("Error: " + error.message);
-            else {
-                await fetchAllData(); 
-                adminResetQueueForm();
-            }
+            const data = { queue_type: document.getElementById('aqType').value, client_name: document.getElementById('aqClient').value, pieces: document.getElementById('aqPieces').value, job_type: stringifyBi(document.getElementById('aqJobType').value, document.getElementById('aqJobTypeEn').value), pay_color: document.getElementById('aqPayColor').value, pay_text: stringifyBi(document.getElementById('aqPayText').value, document.getElementById('aqPayTextEn').value), brief_color: document.getElementById('aqBriefColor').value, brief_text: stringifyBi(document.getElementById('aqBriefText').value, document.getElementById('aqBriefTextEn').value), work_color: document.getElementById('aqWorkColor').value, work_text: stringifyBi(document.getElementById('aqWorkText').value, document.getElementById('aqWorkTextEn').value), deadline: stringifyBi(document.getElementById('aqDeadline').value, document.getElementById('aqDeadlineEn').value) };
+            let error; if (id) { const res = await supabaseClient.from('queues').update(data).eq('id', id); error = res.error; } else { const res = await supabaseClient.from('queues').insert([data]); error = res.error; }
+            if(error) await customConfirm("Error: " + error.message); else { await fetchAllData(); adminResetQueueForm(); }
             btn.disabled = false; btn.innerHTML = originalHTML;
         }
 
         function adminEditQueue(id) {
-            const q = appState.queues.find(q => q.id === id);
-            if (!q) return;
-            document.getElementById('aqId').value = q.id;
-            document.getElementById('aqType').value = q.type;
-            document.getElementById('aqClient').value = q.client;
-            document.getElementById('aqPieces').value = q.pieces;
-            
-            document.getElementById('aqJobType').value = q.jobType || ''; document.getElementById('aqJobTypeEn').value = q.jobTypeEn || '';
-            document.getElementById('aqPayColor').value = q.payColor || 'none';
-            document.getElementById('aqPayText').value = q.payText || ''; document.getElementById('aqPayTextEn').value = q.payTextEn || '';
-            document.getElementById('aqBriefColor').value = q.briefColor || 'none';
-            document.getElementById('aqBriefText').value = q.briefText || ''; document.getElementById('aqBriefTextEn').value = q.briefTextEn || '';
-            document.getElementById('aqWorkColor').value = q.workColor || 'none';
-            document.getElementById('aqWorkText').value = q.workText || ''; document.getElementById('aqWorkTextEn').value = q.workTextEn || '';
-            document.getElementById('aqDeadline').value = q.deadline || ''; document.getElementById('aqDeadlineEn').value = q.deadlineEn || '';
-            
-            document.getElementById('aqFormTitle').innerHTML = '<i class="fa-solid fa-pen-to-square mr-2"></i>แก้ไขคิว';
-            const btn = document.getElementById('btnSubmitQueue');
-            btn.innerHTML = '<i class="fa-solid fa-check mr-2"></i>อัปเดตข้อมูลคิว';
-            btn.classList.replace('bg-sky-500', 'bg-yellow-500'); btn.classList.replace('hover:bg-sky-600', 'hover:bg-yellow-600');
-            document.getElementById('aqFormTitle').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            const q = appState.queues.find(q => q.id === id); if (!q) return;
+            document.getElementById('aqId').value = q.id; document.getElementById('aqType').value = q.type; document.getElementById('aqClient').value = q.client; document.getElementById('aqPieces').value = q.pieces;
+            document.getElementById('aqJobType').value = q.jobType || ''; document.getElementById('aqJobTypeEn').value = q.jobTypeEn || ''; document.getElementById('aqPayColor').value = q.payColor || 'none'; document.getElementById('aqPayText').value = q.payText || ''; document.getElementById('aqPayTextEn').value = q.payTextEn || ''; document.getElementById('aqBriefColor').value = q.briefColor || 'none'; document.getElementById('aqBriefText').value = q.briefText || ''; document.getElementById('aqBriefTextEn').value = q.briefTextEn || ''; document.getElementById('aqWorkColor').value = q.workColor || 'none'; document.getElementById('aqWorkText').value = q.workText || ''; document.getElementById('aqWorkTextEn').value = q.workTextEn || ''; document.getElementById('aqDeadline').value = q.deadline || ''; document.getElementById('aqDeadlineEn').value = q.deadlineEn || '';
+            document.getElementById('aqFormTitle').innerHTML = '<i class="fa-solid fa-pen-to-square mr-2"></i>แก้ไขคิว'; const btn = document.getElementById('btnSubmitQueue'); btn.innerHTML = '<i class="fa-solid fa-check mr-2"></i>อัปเดตข้อมูลคิว'; btn.classList.replace('bg-sky-500', 'bg-yellow-500'); btn.classList.replace('hover:bg-sky-600', 'hover:bg-yellow-600'); document.getElementById('aqFormTitle').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         async function adminDeleteQueue(id) {
             if (await customConfirm('คุณแน่ใจหรือไม่ว่าต้องการลบคิวนี้?')) {
                 const { error } = await supabaseClient.from('queues').delete().eq('id', id);
-                if(error) alert("Error: " + error.message);
-                else {
-                    appState.queues = appState.queues.filter(q => q.id !== id);
-                    if (document.getElementById('aqId').value === id) adminResetQueueForm();
-                    renderQueues();
-                }
+                if(error) await customConfirm("Error: " + error.message);
+                else { appState.queues = appState.queues.filter(q => q.id !== id); if (document.getElementById('aqId').value === id) adminResetQueueForm(); renderQueues(); }
             }
         }
 
         function adminResetQueueForm() {
-            document.getElementById('adminQueueForm').reset();
-            document.getElementById('aqId').value = '';
-            document.getElementById('aqBriefColor').value = 'green';
-            document.getElementById('aqFormTitle').innerHTML = '<i class="fa-solid fa-plus-circle mr-2"></i>เพิ่มคิวใหม่';
-            const btn = document.getElementById('btnSubmitQueue');
-            btn.innerHTML = 'บันทึกคิว';
-            btn.classList.replace('bg-yellow-500', 'bg-sky-500'); btn.classList.replace('hover:bg-yellow-600', 'hover:bg-sky-600');
+            document.getElementById('adminQueueForm').reset(); document.getElementById('aqId').value = ''; document.getElementById('aqBriefColor').value = 'green';
+            document.getElementById('aqFormTitle').innerHTML = '<i class="fa-solid fa-plus-circle mr-2"></i>เพิ่มคิวใหม่'; const btn = document.getElementById('btnSubmitQueue'); btn.innerHTML = 'บันทึกคิว'; btn.classList.replace('bg-yellow-500', 'bg-sky-500'); btn.classList.replace('hover:bg-yellow-600', 'hover:bg-sky-600');
         }
 
         function toggleMockFormFields() {
             const type = document.getElementById('mockItemType').value;
-            if (type === 'commission') {
-                document.getElementById('fieldDuration').classList.remove('hidden');
-                document.getElementById('fieldStock').classList.add('hidden');
-            } else {
-                document.getElementById('fieldDuration').classList.add('hidden');
-                document.getElementById('fieldStock').classList.remove('hidden');
-            }
+            if (type === 'commission') { document.getElementById('fieldDuration').classList.remove('hidden'); document.getElementById('fieldStock').classList.add('hidden'); document.getElementById('fieldGallery').classList.remove('hidden'); } 
+            else { document.getElementById('fieldDuration').classList.add('hidden'); document.getElementById('fieldStock').classList.remove('hidden'); document.getElementById('fieldGallery').classList.add('hidden'); }
         }
 
         async function compressImage(file) {
             return new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
+                const reader = new FileReader(); reader.readAsDataURL(file);
                 reader.onload = event => {
-                    const img = new Image();
-                    img.src = event.target.result;
+                    const img = new Image(); img.src = event.target.result;
                     img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        const MAX_WIDTH = 800;
-                        let width = img.width; let height = img.height;
+                        const canvas = document.createElement('canvas'); const MAX_WIDTH = 1200; let width = img.width; let height = img.height;
                         if (width > MAX_WIDTH) { height = Math.round((height * MAX_WIDTH) / width); width = MAX_WIDTH; }
-                        canvas.width = width; canvas.height = height;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, width, height);
+                        canvas.width = width; canvas.height = height; const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, width, height);
                         canvas.toBlob((blob) => resolve(blob), 'image/jpeg', 0.85);
                     };
                 };
@@ -2035,189 +1675,141 @@
         }
 
         async function uploadImageToStorage(fileBlob) {
-            const fileName = `img_${Date.now()}.jpg`;
+            const fileName = `img_${Date.now()}_${Math.floor(Math.random()*1000)}.jpg`;
             const { data, error } = await supabaseClient.storage.from('images').upload(fileName, fileBlob, { contentType: 'image/jpeg' });
             if (error) throw error;
-            const { data: urlData } = supabaseClient.storage.from('images').getPublicUrl(fileName);
-            return urlData.publicUrl;
+            const { data: urlData } = supabaseClient.storage.from('images').getPublicUrl(fileName); return urlData.publicUrl;
         }
 
         async function adminRemoveContentImage() {
-            if (!await customConfirm('ต้องการลบรูปภาพนี้ออกจากระบบใช่หรือไม่? (หากลบแล้วรูปจะหายไปจากหน้าเว็บ)')) return;
-
-            const id = document.getElementById('mockItemId').value;
-            const type = document.getElementById('mockItemType').value;
-            const btn = document.getElementById('btnRemoveContentImage');
-            const originalHTML = btn.innerHTML;
-
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-1"></i>กำลังลบ...';
-
+            if (!await customConfirm('ต้องการลบรูปภาพนี้ออกจากระบบใช่หรือไม่? (ไฟล์รูปจะถูกลบถาวร)')) return;
+            const id = document.getElementById('mockItemId').value; const type = document.getElementById('mockItemType').value;
+            const btn = document.getElementById('btnRemoveContentImage'); const originalHTML = btn.innerHTML; btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-1"></i>กำลังลบ...';
             try {
                 if (id) {
-                    const list = type === 'commission' ? appState.commissions : appState.products;
-                    const item = list.find(x => x.id === id);
-                    
-                    if (item && item.img) {
-                        await deleteImageFromStorage(item.img);
-                    }
-
+                    const list = type === 'commission' ? appState.commissions : appState.products; const item = list.find(x => x.id === id);
+                    if (item && item.img && !item.img.includes('placehold')) await deleteImageFromStorage(item.img);
                     const table = type === 'commission' ? 'commissions' : 'products';
-                    const { error } = await supabaseClient.from(table).update({ image_url: 'https://placehold.co/600x600/f3f4f6/9ca3af?text=No+Image' }).eq('id', id);
+                    const { error } = await supabaseClient.from(table).update({ image_url: '' }).eq('id', id);
                     if (error) throw error;
                 }
+                document.getElementById('imagePreview').src = ''; document.getElementById('imageInput').value = '';
+                document.getElementById('imagePreviewContainer').classList.add('hidden'); document.getElementById('imagePreviewPlaceholder').classList.remove('hidden');
+                await customConfirm('ลบรูปภาพเรียบร้อยแล้ว');
+                if (id) { await fetchAllData(); renderCommissions(); renderShop(); renderAdminContentLists(); }
+            } catch (error) { console.error(error); await customConfirm("เกิดข้อผิดพลาดในการลบรูปภาพ: \n" + (error.message || "โปรดเช็ค Console")); }
+            btn.disabled = false; btn.innerHTML = originalHTML;
+        }
 
-                document.getElementById('imagePreview').src = 'https://placehold.co/600x600/f3f4f6/9ca3af?text=No+Image';
-                document.getElementById('imageInput').value = '';
-                alert('ลบรูปภาพเรียบร้อยแล้ว');
-                
-                if (id) {
-                    await fetchAllData();
-                    renderCommissions();
-                    renderShop();
-                    renderAdminContentLists();
-                }
+        // Preview local gallery files
+        document.getElementById('galleryInput').addEventListener('change', function(e) {
+            const container = document.getElementById('adminGalleryPreview'); container.innerHTML = '';
+            Array.from(this.files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = document.createElement('img'); img.src = e.target.result;
+                    img.className = "w-16 h-16 object-cover rounded-md shadow-sm border border-gray-200 flex-shrink-0";
+                    container.appendChild(img);
+                }; reader.readAsDataURL(file);
+            });
+        });
 
-            } catch (error) {
-                console.error(error);
-                alert("เกิดข้อผิดพลาดในการลบรูปภาพ: \n" + (error.message || "โปรดเช็ค Console"));
-            }
-
-            btn.disabled = false;
-            btn.innerHTML = originalHTML;
+        function adminClearGalleryInput() {
+            document.getElementById('galleryInput').value = ''; document.getElementById('adminGalleryPreview').innerHTML = '';
         }
 
         async function adminSaveMockItem(e) {
-            e.preventDefault();
-            const btn = document.getElementById('btnSubmitContent');
-            const originalHTML = btn.innerHTML;
-            btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-2"></i>กำลังบันทึก...';
-
-            const id = document.getElementById('mockItemId').value;
-            const type = document.getElementById('mockItemType').value;
-            const name = stringifyBi(document.getElementById('mockItemName').value, document.getElementById('mockItemNameEn').value);
-            const price = document.getElementById('mockItemPrice').value;
-            const desc = stringifyBi(document.getElementById('mockItemDesc').value, document.getElementById('mockItemDescEn').value);
+            e.preventDefault(); const btn = document.getElementById('btnSubmitContent'); const originalHTML = btn.innerHTML; btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-2"></i>กำลังบันทึก...';
+            const id = document.getElementById('mockItemId').value; const type = document.getElementById('mockItemType').value;
+            const name = stringifyBi(document.getElementById('mockItemName').value, document.getElementById('mockItemNameEn').value); const price = document.getElementById('mockItemPrice').value; const desc = stringifyBi(document.getElementById('mockItemDesc').value, document.getElementById('mockItemDescEn').value);
             
-            let finalImg = document.getElementById('imagePreview').src;
-            const fileInput = document.getElementById('imageInput').files[0];
-            let oldImg = null;
-
-            if (id) {
-                const list = type === 'commission' ? appState.commissions : appState.products;
-                const item = list.find(x => x.id === id);
-                if (item) oldImg = item.img;
-            }
+            let finalImg = document.getElementById('imagePreview').src; const fileInput = document.getElementById('imageInput').files[0]; let oldImg = null;
+            if (id) { const list = type === 'commission' ? appState.commissions : appState.products; const item = list.find(x => x.id === id); if (item) oldImg = item.img; }
             
             try {
                 if (fileInput) {
-                    const compressedBlob = await compressImage(fileInput);
-                    finalImg = await uploadImageToStorage(compressedBlob);
-                    
-                    if (oldImg && oldImg !== finalImg) {
-                        await deleteImageFromStorage(oldImg);
-                    }
-                } else if (!finalImg || finalImg.endsWith('index.html')) {
-                    finalImg = 'https://placehold.co/600x600/f3f4f6/9ca3af?text=No+Image';
-                }
+                    const compressedBlob = await compressImage(fileInput); finalImg = await uploadImageToStorage(compressedBlob);
+                    if (oldImg && oldUrl !== finalImg && !oldUrl.includes('placehold')) await deleteImageFromStorage(oldImg);
+                } else if (!finalImg || finalImg.endsWith('index.html')) finalImg = 'https://placehold.co/600x600/f3f4f6/9ca3af?text=No+Image';
 
                 let dbError = null;
 
                 if (type === 'commission') {
-                    const duration = stringifyBi(document.getElementById('mockItemDuration').value, document.getElementById('mockItemDurationEn').value);
-                    const data = { name, price, duration, description: desc, image_url: finalImg, is_video: false };
-                    
-                    if (id) {
-                        const res = await supabaseClient.from('commissions').update(data).eq('id', id);
-                        dbError = res.error;
-                    } else {
-                        const res = await supabaseClient.from('commissions').insert([data]);
-                        dbError = res.error;
+                    // Upload Gallery Images if any
+                    let finalGallery = [];
+                    if (id) { const existing = appState.commissions.find(c => c.id === id); if (existing && existing.gallery) finalGallery = [...existing.gallery]; }
+                    const galleryInput = document.getElementById('galleryInput');
+                    if (galleryInput.files.length > 0) {
+                        finalGallery = []; // Replace old gallery if new files selected (simplest UX)
+                        for(let i=0; i < galleryInput.files.length; i++) {
+                            const comp = await compressImage(galleryInput.files[i]);
+                            const gUrl = await uploadImageToStorage(comp);
+                            finalGallery.push(gUrl);
+                        }
                     }
+
+                    const duration = stringifyBi(document.getElementById('mockItemDuration').value, document.getElementById('mockItemDurationEn').value);
+                    const data = { name, price, duration, description: desc, image_url: finalImg, is_video: false, gallery_urls: JSON.stringify(finalGallery) };
+                    if (id) { const res = await supabaseClient.from('commissions').update(data).eq('id', id); dbError = res.error; } 
+                    else { const res = await supabaseClient.from('commissions').insert([data]); dbError = res.error; }
                 } else {
                     const stock = document.getElementById('mockItemStock').value || 0;
                     const data = { name, price, stock: parseInt(stock), description: desc, image_url: finalImg };
-                    
-                    if (id) {
-                        const res = await supabaseClient.from('products').update(data).eq('id', id);
-                        dbError = res.error;
-                    } else {
-                        const res = await supabaseClient.from('products').insert([data]);
-                        dbError = res.error;
-                    }
+                    if (id) { const res = await supabaseClient.from('products').update(data).eq('id', id); dbError = res.error; } 
+                    else { const res = await supabaseClient.from('products').insert([data]); dbError = res.error; }
                 }
                 
                 if (dbError) throw dbError;
-                
-                await fetchAllData();
-                renderAdminContentLists(); 
-                renderCommissions(); 
-                renderShop(); 
-                adminResetContentForm();
-                alert("บันทึกข้อมูลเรียบร้อยแล้ว!");
-                
-            } catch(error) {
-                console.error(error);
-                alert("เกิดข้อผิดพลาดในการบันทึก: \n" + (error.message || "โปรดเช็ค Console"));
-            }
+                await fetchAllData(); renderAdminContentLists(); renderCommissions(); renderShop(); adminResetContentForm();
+                await customConfirm("บันทึกข้อมูลเรียบร้อยแล้ว!");
+            } catch(error) { console.error(error); await customConfirm("เกิดข้อผิดพลาดในการบันทึก: \n" + (error.message || "โปรดเช็ค Console")); }
             btn.disabled = false; btn.innerHTML = originalHTML;
         }
 
         function renderAdminContentLists() {
-            const comContainer = document.getElementById('adminManageCommissions');
-            comContainer.innerHTML = '';
-            if (appState.commissions.length === 0) {
-                 comContainer.innerHTML = '<p class="text-sm text-gray-400 p-4 text-center bg-white/50 rounded-2xl border border-dashed border-gray-200">ไม่มีข้อมูล Commission</p>';
-            } else {
+            const comContainer = document.getElementById('adminManageCommissions'); comContainer.innerHTML = '';
+            if (appState.commissions.length === 0) comContainer.innerHTML = '<p class="text-sm text-gray-400 p-4 text-center bg-white/50 rounded-2xl border border-dashed border-gray-200">ไม่มีข้อมูล Commission</p>';
+            else {
                 appState.commissions.forEach(item => {
                     comContainer.innerHTML += `
                         <div class="flex items-center p-3 bg-white rounded-2xl border border-gray-100 hover:border-sky-300 hover:shadow-sm transition-all">
                             <img src="${escapeHTML(item.img)}" class="w-14 h-14 object-cover rounded-xl mr-4 bg-gray-100 border border-gray-100" onerror="this.src='https://placehold.co/600x600/f3f4f6/9ca3af?text=Image'">
-                            <div class="flex-1 min-w-0">
-                                <h4 class="font-bold text-sm text-gray-900 truncate">${escapeHTML(item.name)}</h4>
-                                <p class="text-xs text-sky-600 font-bold">${escapeHTML(item.price)} THB</p>
-                            </div>
-                            <div class="flex space-x-1 ml-2">
-                                <button type="button" onclick="adminEditContent('commission', '${item.id}')" class="text-sky-500 hover:bg-sky-100 p-2 rounded-lg transition-colors" title="แก้ไข"><i class="fa-solid fa-pen"></i></button>
-                                <button type="button" onclick="adminDeleteContent('commission', '${item.id}')" class="text-red-500 hover:bg-red-100 p-2 rounded-lg transition-colors" title="ลบ"><i class="fa-solid fa-trash-can"></i></button>
-                            </div>
-                        </div>
-                    `;
+                            <div class="flex-1 min-w-0"><h4 class="font-bold text-sm text-gray-900 truncate">${escapeHTML(item.name)}</h4><p class="text-xs text-sky-600 font-bold">${escapeHTML(item.price)} THB</p></div>
+                            <div class="flex space-x-1 ml-2"><button type="button" onclick="adminEditContent('commission', '${item.id}')" class="text-sky-500 hover:bg-sky-100 p-2 rounded-lg transition-colors" title="แก้ไข"><i class="fa-solid fa-pen"></i></button><button type="button" onclick="adminDeleteContent('commission', '${item.id}')" class="text-red-500 hover:bg-red-100 p-2 rounded-lg transition-colors" title="ลบ"><i class="fa-solid fa-trash-can"></i></button></div>
+                        </div>`;
                 });
             }
 
-            const prodContainer = document.getElementById('adminManageProducts');
-            prodContainer.innerHTML = '';
-            if (appState.products.length === 0) {
-                 prodContainer.innerHTML = '<p class="text-sm text-gray-400 p-4 text-center bg-white/50 rounded-2xl border border-dashed border-gray-200">ไม่มีข้อมูลสินค้า</p>';
-            } else {
+            const prodContainer = document.getElementById('adminManageProducts'); prodContainer.innerHTML = '';
+            if (appState.products.length === 0) prodContainer.innerHTML = '<p class="text-sm text-gray-400 p-4 text-center bg-white/50 rounded-2xl border border-dashed border-gray-200">ไม่มีข้อมูลสินค้า</p>';
+            else {
                 appState.products.forEach(item => {
                     prodContainer.innerHTML += `
                         <div class="flex items-center p-3 bg-white rounded-2xl border border-gray-100 hover:border-yellow-300 hover:shadow-sm transition-all">
                             <img src="${escapeHTML(item.img)}" class="w-14 h-14 object-cover rounded-xl mr-4 bg-gray-100 border border-gray-100" onerror="this.src='https://placehold.co/600x600/f3f4f6/9ca3af?text=Image'">
-                            <div class="flex-1 min-w-0">
-                                <h4 class="font-bold text-sm text-gray-900 truncate">${escapeHTML(item.name)}</h4>
-                                <p class="text-xs text-sky-600 font-bold">฿${escapeHTML(item.price)} <span class="text-gray-400 font-normal ml-1 bg-gray-100 px-2 py-0.5 rounded-md">Stock: ${item.stock}</span></p>
-                            </div>
-                            <div class="flex space-x-1 ml-2">
-                                <button type="button" onclick="adminEditContent('product', '${item.id}')" class="text-sky-500 hover:bg-sky-100 p-2 rounded-lg transition-colors" title="แก้ไข"><i class="fa-solid fa-pen"></i></button>
-                                <button type="button" onclick="adminDeleteContent('product', '${item.id}')" class="text-red-500 hover:bg-red-100 p-2 rounded-lg transition-colors" title="ลบ"><i class="fa-solid fa-trash-can"></i></button>
-                            </div>
-                        </div>
-                    `;
+                            <div class="flex-1 min-w-0"><h4 class="font-bold text-sm text-gray-900 truncate">${escapeHTML(item.name)}</h4><p class="text-xs text-sky-600 font-bold">฿${escapeHTML(item.price)} <span class="text-gray-400 font-normal ml-1 bg-gray-100 px-2 py-0.5 rounded-md">Stock: ${item.stock}</span></p></div>
+                            <div class="flex space-x-1 ml-2"><button type="button" onclick="adminEditContent('product', '${item.id}')" class="text-sky-500 hover:bg-sky-100 p-2 rounded-lg transition-colors" title="แก้ไข"><i class="fa-solid fa-pen"></i></button><button type="button" onclick="adminDeleteContent('product', '${item.id}')" class="text-red-500 hover:bg-red-100 p-2 rounded-lg transition-colors" title="ลบ"><i class="fa-solid fa-trash-can"></i></button></div>
+                        </div>`;
                 });
             }
         }
 
         function adminEditContent(type, id) {
-            document.getElementById('mockItemType').value = type;
-            toggleMockFormFields();
-            
+            document.getElementById('mockItemType').value = type; toggleMockFormFields();
             let item;
             if (type === 'commission') {
                 item = appState.commissions.find(c => c.id === id);
-                document.getElementById('mockItemDuration').value = item.duration || '';
-                document.getElementById('mockItemDurationEn').value = item.durationEn || '';
+                document.getElementById('mockItemDuration').value = item.duration || ''; document.getElementById('mockItemDurationEn').value = item.durationEn || '';
+                
+                // Show existing gallery in preview
+                const container = document.getElementById('adminGalleryPreview'); container.innerHTML = '';
+                if(item.gallery && item.gallery.length > 0) {
+                    item.gallery.forEach(url => {
+                        const img = document.createElement('img'); img.src = url;
+                        img.className = "w-16 h-16 object-cover rounded-md shadow-sm border border-gray-200 flex-shrink-0 opacity-70";
+                        container.appendChild(img);
+                    });
+                }
             } else {
                 item = appState.products.find(p => p.id === id);
                 document.getElementById('mockItemStock').value = item.stock;
@@ -2230,239 +1822,101 @@
             document.getElementById('mockItemPrice').value = item.price;
             document.getElementById('mockItemDesc').value = item.desc; document.getElementById('mockItemDescEn').value = item.descEn || '';
             
-            document.getElementById('imagePreview').src = item.img;
-            document.getElementById('imagePreviewContainer').classList.remove('hidden');
-            document.getElementById('imagePreviewPlaceholder').classList.add('hidden');
+            if(item.img && !item.img.includes('No+Image')) {
+                document.getElementById('imagePreview').src = item.img;
+                document.getElementById('imagePreviewContainer').classList.remove('hidden'); document.getElementById('imagePreviewPlaceholder').classList.add('hidden');
+            } else clearImagePreview();
             
-            document.getElementById('mockItemName').dispatchEvent(new Event('input'));
-            document.getElementById('mockItemPrice').dispatchEvent(new Event('input'));
+            document.getElementById('mockItemName').dispatchEvent(new Event('input')); document.getElementById('mockItemPrice').dispatchEvent(new Event('input'));
 
             document.getElementById('contentFormTitle').innerHTML = '<i class="fa-solid fa-pen-to-square mr-2"></i>แก้ไขข้อมูล';
             document.getElementById('btnSubmitContent').innerHTML = '<i class="fa-solid fa-check mr-2"></i>อัปเดตข้อมูล';
-            document.getElementById('btnSubmitContent').classList.replace('bg-sky-500', 'bg-yellow-500');
-            document.getElementById('btnSubmitContent').classList.replace('hover:bg-sky-600', 'hover:bg-yellow-600');
+            document.getElementById('btnSubmitContent').classList.replace('bg-sky-500', 'bg-yellow-500'); document.getElementById('btnSubmitContent').classList.replace('hover:bg-sky-600', 'hover:bg-yellow-600');
             document.getElementById('btnCancelEdit').classList.remove('hidden');
             document.getElementById('adminTab-content').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         async function adminDeleteContent(type, id) {
-            if (!await customConfirm('คุณแน่ใจหรือไม่ว่าต้องการลบรายการนี้?')) return;
+            if (!await customConfirm('คุณแน่ใจหรือไม่ว่าต้องการลบรายการนี้? (ลบไฟล์ถาวร)')) return;
             if (document.getElementById('mockItemId').value === id) adminResetContentForm();
             
-            const list = type === 'commission' ? appState.commissions : appState.products;
-            const item = list.find(x => x.id === id);
-
+            const list = type === 'commission' ? appState.commissions : appState.products; const item = list.find(x => x.id === id);
             const table = type === 'commission' ? 'commissions' : 'products';
             const { error } = await supabaseClient.from(table).delete().eq('id', id);
-            
-            if(error) alert("Error: " + error.message);
+            if(error) await customConfirm("Error: " + error.message);
             else {
-                if (item && item.img) {
-                    await deleteImageFromStorage(item.img);
+                if (item) {
+                    if(item.img && !item.img.includes('placehold')) await deleteImageFromStorage(item.img);
+                    if(item.gallery && item.gallery.length > 0) {
+                        for(const gUrl of item.gallery) { if(gUrl && !gUrl.includes('placehold')) await deleteImageFromStorage(gUrl); }
+                    }
                 }
-                await fetchAllData();
-                renderAdminContentLists();
-                renderCommissions();
-                renderShop();
+                await fetchAllData(); renderAdminContentLists(); renderCommissions(); renderShop();
             }
         }
 
         function adminResetContentForm() {
-            document.getElementById('adminContentForm').reset();
-            document.getElementById('mockItemId').value = '';
-            document.getElementById('imageInput').value = '';
-            clearImagePreview();
-            
+            document.getElementById('adminContentForm').reset(); document.getElementById('mockItemId').value = ''; document.getElementById('imageInput').value = ''; clearImagePreview(); adminClearGalleryInput();
             document.getElementById('contentFormTitle').innerHTML = '<i class="fa-solid fa-plus-circle mr-2"></i>เพิ่มข้อมูลใหม่';
             document.getElementById('btnSubmitContent').innerHTML = '<i class="fa-solid fa-save mr-2"></i>บันทึกข้อมูล';
-            document.getElementById('btnSubmitContent').classList.replace('bg-yellow-500', 'bg-sky-500');
-            document.getElementById('btnSubmitContent').classList.replace('hover:bg-yellow-600', 'hover:bg-sky-600');
-            document.getElementById('btnCancelEdit').classList.add('hidden');
-            
-            document.getElementById('previewTitle').innerText = 'ชื่อรายการ...';
-            document.getElementById('previewPrice').innerText = '0 THB';
+            document.getElementById('btnSubmitContent').classList.replace('bg-yellow-500', 'bg-sky-500'); document.getElementById('btnSubmitContent').classList.replace('hover:bg-yellow-600', 'hover:bg-sky-600');
+            document.getElementById('btnCancelEdit').classList.add('hidden'); document.getElementById('previewTitle').innerText = 'ชื่อรายการ...'; document.getElementById('previewPrice').innerText = '0 THB';
         }
 
         document.getElementById('imageInput').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('imagePreview').src = e.target.result;
-                    document.getElementById('imagePreviewContainer').classList.remove('hidden');
-                    document.getElementById('imagePreviewPlaceholder').classList.add('hidden');
-                }
+                reader.onload = function(e) { document.getElementById('imagePreview').src = e.target.result; document.getElementById('imagePreviewContainer').classList.remove('hidden'); document.getElementById('imagePreviewPlaceholder').classList.add('hidden'); }
                 reader.readAsDataURL(file);
             }
         });
 
-        function clearImagePreview() {
-            document.getElementById('imageInput').value = '';
-            document.getElementById('imagePreview').src = '';
-            document.getElementById('imagePreviewContainer').classList.add('hidden');
-            document.getElementById('imagePreviewPlaceholder').classList.remove('hidden');
-        }
-
-        document.getElementById('mockItemName').addEventListener('input', (e) => {
-            document.getElementById('previewTitle').innerText = e.target.value || 'ชื่อรายการ...';
-        });
-        document.getElementById('mockItemPrice').addEventListener('input', (e) => {
-            const type = document.getElementById('mockItemType').value;
-            const prefix = type === 'commission' ? 'Starts at ' : '฿';
-            const suffix = type === 'commission' ? ' THB' : '';
-            document.getElementById('previewPrice').innerText = e.target.value ? `${prefix}${e.target.value}${suffix}` : '0 THB';
-        });
-        document.getElementById('mockItemType').addEventListener('change', (e) => {
-            document.getElementById('mockItemPrice').dispatchEvent(new Event('input'));
-        });
+        function clearImagePreview() { document.getElementById('imageInput').value = ''; document.getElementById('imagePreview').src = ''; document.getElementById('imagePreviewContainer').classList.add('hidden'); document.getElementById('imagePreviewPlaceholder').classList.remove('hidden'); }
+        document.getElementById('mockItemName').addEventListener('input', (e) => { document.getElementById('previewTitle').innerText = e.target.value || 'ชื่อรายการ...'; });
+        document.getElementById('mockItemPrice').addEventListener('input', (e) => { const type = document.getElementById('mockItemType').value; const prefix = type === 'commission' ? 'Starts at ' : '฿'; const suffix = type === 'commission' ? ' THB' : ''; document.getElementById('previewPrice').innerText = e.target.value ? `${prefix}${e.target.value}${suffix}` : '0 THB'; });
+        document.getElementById('mockItemType').addEventListener('change', (e) => { document.getElementById('mockItemPrice').dispatchEvent(new Event('input')); });
 
         function renderAdminRulesLists() {
-            const briefListContainer = document.getElementById('adminManageBriefList');
-            briefListContainer.innerHTML = '';
-            appState.howToBrief.forEach(item => {
-                briefListContainer.innerHTML += `
-                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl border border-gray-200">
-                        <div class="flex-1 truncate pr-4">
-                            <p class="font-bold text-sm text-gray-800 truncate">${escapeHTML(item.mainText)}</p>
-                        </div>
-                        <div class="flex space-x-1 shrink-0">
-                            <button type="button" onclick="adminEditBrief('${item.id}')" class="text-sky-500 hover:bg-sky-100 p-1.5 rounded transition-colors"><i class="fa-solid fa-pen"></i></button>
-                            <button type="button" onclick="adminDeleteBrief('${item.id}')" class="text-red-500 hover:bg-red-100 p-1.5 rounded transition-colors"><i class="fa-solid fa-trash-can"></i></button>
-                        </div>
-                    </div>
-                `;
-            });
-
-            const canListContainer = document.getElementById('adminManageCanList');
-            canListContainer.innerHTML = '';
-            appState.canList.forEach(item => {
-                canListContainer.innerHTML += `
-                    <div class="flex items-center justify-between p-2.5 bg-white rounded-lg border border-green-100">
-                        <div class="flex-1 truncate pr-4">
-                            <p class="font-bold text-xs text-green-900 truncate">${escapeHTML(item.mainText)} <span class="font-normal text-gray-500">${escapeHTML(item.subText)}</span></p>
-                        </div>
-                        <div class="flex space-x-1 shrink-0">
-                            <button type="button" onclick="adminEditCan('${item.id}', 'can')" class="text-green-600 hover:bg-green-50 p-1 rounded transition-colors"><i class="fa-solid fa-pen text-[10px]"></i></button>
-                            <button type="button" onclick="adminDeleteCan('${item.id}', 'can')" class="text-red-500 hover:bg-red-50 p-1 rounded transition-colors"><i class="fa-solid fa-trash-can text-[10px]"></i></button>
-                        </div>
-                    </div>
-                `;
-            });
-
-            const cantListContainer = document.getElementById('adminManageCantList');
-            cantListContainer.innerHTML = '';
-            appState.cantList.forEach(item => {
-                cantListContainer.innerHTML += `
-                    <div class="flex items-center justify-between p-2.5 bg-white rounded-lg border border-red-100">
-                        <div class="flex-1 truncate pr-4">
-                            <p class="font-bold text-xs text-red-900 truncate">${escapeHTML(item.mainText)} <span class="font-normal text-gray-500">${escapeHTML(item.subText)}</span></p>
-                        </div>
-                        <div class="flex space-x-1 shrink-0">
-                            <button type="button" onclick="adminEditCan('${item.id}', 'cant')" class="text-red-600 hover:bg-red-50 p-1 rounded transition-colors"><i class="fa-solid fa-pen text-[10px]"></i></button>
-                            <button type="button" onclick="adminDeleteCan('${item.id}', 'cant')" class="text-red-500 hover:bg-red-50 p-1 rounded transition-colors"><i class="fa-solid fa-trash-can text-[10px]"></i></button>
-                        </div>
-                    </div>
-                `;
-            });
+            const briefListContainer = document.getElementById('adminManageBriefList'); briefListContainer.innerHTML = '';
+            appState.howToBrief.forEach(item => { briefListContainer.innerHTML += `<div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl border border-gray-200"><div class="flex-1 truncate pr-4"><p class="font-bold text-sm text-gray-800 truncate">${escapeHTML(item.mainText)}</p></div><div class="flex space-x-1 shrink-0"><button type="button" onclick="adminEditBrief('${item.id}')" class="text-sky-500 hover:bg-sky-100 p-1.5 rounded transition-colors"><i class="fa-solid fa-pen"></i></button><button type="button" onclick="adminDeleteBrief('${item.id}')" class="text-red-500 hover:bg-red-100 p-1.5 rounded transition-colors"><i class="fa-solid fa-trash-can"></i></button></div></div>`; });
+            const canListContainer = document.getElementById('adminManageCanList'); canListContainer.innerHTML = '';
+            appState.canList.forEach(item => { canListContainer.innerHTML += `<div class="flex items-center justify-between p-2.5 bg-white rounded-lg border border-green-100"><div class="flex-1 truncate pr-4"><p class="font-bold text-xs text-green-900 truncate">${escapeHTML(item.mainText)} <span class="font-normal text-gray-500">${escapeHTML(item.subText)}</span></p></div><div class="flex space-x-1 shrink-0"><button type="button" onclick="adminEditCan('${item.id}', 'can')" class="text-green-600 hover:bg-green-50 p-1 rounded transition-colors"><i class="fa-solid fa-pen text-[10px]"></i></button><button type="button" onclick="adminDeleteCan('${item.id}', 'can')" class="text-red-500 hover:bg-red-50 p-1 rounded transition-colors"><i class="fa-solid fa-trash-can text-[10px]"></i></button></div></div>`; });
+            const cantListContainer = document.getElementById('adminManageCantList'); cantListContainer.innerHTML = '';
+            appState.cantList.forEach(item => { cantListContainer.innerHTML += `<div class="flex items-center justify-between p-2.5 bg-white rounded-lg border border-red-100"><div class="flex-1 truncate pr-4"><p class="font-bold text-xs text-red-900 truncate">${escapeHTML(item.mainText)} <span class="font-normal text-gray-500">${escapeHTML(item.subText)}</span></p></div><div class="flex space-x-1 shrink-0"><button type="button" onclick="adminEditCan('${item.id}', 'cant')" class="text-red-600 hover:bg-red-50 p-1 rounded transition-colors"><i class="fa-solid fa-pen text-[10px]"></i></button><button type="button" onclick="adminDeleteCan('${item.id}', 'cant')" class="text-red-500 hover:bg-red-50 p-1 rounded transition-colors"><i class="fa-solid fa-trash-can text-[10px]"></i></button></div></div>`; });
         }
 
         async function adminSaveBrief(e) {
-            e.preventDefault();
-            const btn = document.getElementById('btnSubmitBrief');
-            const originalHTML = btn.innerHTML;
-            btn.disabled = true; btn.innerHTML = '...';
-
-            const id = document.getElementById('abId').value;
-            const mainText = stringifyBi(document.getElementById('abMainText').value, document.getElementById('abMainTextEn').value);
-            const descText = stringifyBi(document.getElementById('abDescText').value, document.getElementById('abDescTextEn').value);
-
-            let error;
-            if (id) {
-                const res = await supabaseClient.from('brief_rules').update({main_text: mainText, desc_text: descText}).eq('id', id); error = res.error;
-            } else {
-                const res = await supabaseClient.from('brief_rules').insert([{main_text: mainText, desc_text: descText}]); error = res.error;
-            }
-
-            if(error) alert("Error: " + error.message);
-            else { await fetchAllData(); adminResetBriefForm(); }
+            e.preventDefault(); const btn = document.getElementById('btnSubmitBrief'); const originalHTML = btn.innerHTML; btn.disabled = true; btn.innerHTML = '...';
+            const id = document.getElementById('abId').value; const mainText = stringifyBi(document.getElementById('abMainText').value, document.getElementById('abMainTextEn').value); const descText = stringifyBi(document.getElementById('abDescText').value, document.getElementById('abDescTextEn').value);
+            let error; if (id) { const res = await supabaseClient.from('brief_rules').update({main_text: mainText, desc_text: descText}).eq('id', id); error = res.error; } else { const res = await supabaseClient.from('brief_rules').insert([{main_text: mainText, desc_text: descText}]); error = res.error; }
+            if(error) await customConfirm("Error: " + error.message); else { await fetchAllData(); adminResetBriefForm(); }
             btn.disabled = false; btn.innerHTML = originalHTML;
         }
 
         function adminEditBrief(id) {
-            const item = appState.howToBrief.find(x => x.id === id);
-            if(!item) return;
-            document.getElementById('abId').value = item.id;
-            document.getElementById('abMainText').value = item.mainText; document.getElementById('abMainTextEn').value = item.mainTextEn || '';
-            document.getElementById('abDescText').value = item.descText || ''; document.getElementById('abDescTextEn').value = item.descTextEn || '';
-            const btn = document.getElementById('btnSubmitBrief');
-            btn.innerHTML = '<i class="fa-solid fa-check mr-1"></i> อัปเดตข้อความ';
-            btn.classList.replace('bg-sky-500', 'bg-yellow-500');
+            const item = appState.howToBrief.find(x => x.id === id); if(!item) return;
+            document.getElementById('abId').value = item.id; document.getElementById('abMainText').value = item.mainText; document.getElementById('abMainTextEn').value = item.mainTextEn || ''; document.getElementById('abDescText').value = item.descText || ''; document.getElementById('abDescTextEn').value = item.descTextEn || '';
+            const btn = document.getElementById('btnSubmitBrief'); btn.innerHTML = '<i class="fa-solid fa-check mr-1"></i> อัปเดตข้อความ'; btn.classList.replace('bg-sky-500', 'bg-yellow-500');
         }
 
         async function adminDeleteBrief(id) {
-            if(await customConfirm('ลบหัวข้อ How to brief นี้?')) {
-                const { error } = await supabaseClient.from('brief_rules').delete().eq('id', id);
-                if(error) alert("Error: " + error.message);
-                else { await fetchAllData(); if(document.getElementById('abId').value === id) adminResetBriefForm(); }
-            }
+            if(await customConfirm('ลบหัวข้อ How to brief นี้?')) { const { error } = await supabaseClient.from('brief_rules').delete().eq('id', id); if(error) await customConfirm("Error: " + error.message); else { await fetchAllData(); if(document.getElementById('abId').value === id) adminResetBriefForm(); } }
         }
 
-        function adminResetBriefForm() {
-            document.getElementById('adminBriefForm').reset();
-            document.getElementById('abId').value = '';
-            const btn = document.getElementById('btnSubmitBrief');
-            btn.innerHTML = '<i class="fa-solid fa-plus mr-1"></i> บันทึกข้อความ';
-            btn.classList.replace('bg-yellow-500', 'bg-sky-500');
-        }
+        function adminResetBriefForm() { document.getElementById('adminBriefForm').reset(); document.getElementById('abId').value = ''; const btn = document.getElementById('btnSubmitBrief'); btn.innerHTML = '<i class="fa-solid fa-plus mr-1"></i> บันทึกข้อความ'; btn.classList.replace('bg-yellow-500', 'bg-sky-500'); }
 
         async function adminSaveCan(e, type) {
-            e.preventDefault();
-            const prefix = type === 'can' ? 'acan' : 'acant';
-            const btn = document.getElementById(`btnSubmit${type === 'can' ? 'Can' : 'Cant'}`);
-            const originalHTML = btn.innerHTML;
-            btn.disabled = true; btn.innerHTML = '...';
-
-            const id = document.getElementById(`${prefix}Id`).value;
-            const mainText = stringifyBi(document.getElementById(`${prefix}Main`).value, document.getElementById(`${prefix}MainEn`).value);
-            const subText = stringifyBi(document.getElementById(`${prefix}Sub`).value, document.getElementById(`${prefix}SubEn`).value);
-
-            let error;
-            if (id) {
-                const res = await supabaseClient.from('drawing_rules').update({main_text: mainText, sub_text: subText}).eq('id', id); error = res.error;
-            } else {
-                const res = await supabaseClient.from('drawing_rules').insert([{rule_type: type, main_text: mainText, sub_text: subText}]); error = res.error;
-            }
-
-            if(error) alert("Error: " + error.message);
-            else { 
-                await fetchAllData(); 
-                document.getElementById(`admin${type === 'can' ? 'Can' : 'Cant'}Form`).reset();
-                document.getElementById(`${prefix}Id`).value = '';
-            }
+            e.preventDefault(); const prefix = type === 'can' ? 'acan' : 'acant'; const btn = document.getElementById(`btnSubmit${type === 'can' ? 'Can' : 'Cant'}`); const originalHTML = btn.innerHTML; btn.disabled = true; btn.innerHTML = '...';
+            const id = document.getElementById(`${prefix}Id`).value; const mainText = stringifyBi(document.getElementById(`${prefix}Main`).value, document.getElementById(`${prefix}MainEn`).value); const subText = stringifyBi(document.getElementById(`${prefix}Sub`).value, document.getElementById(`${prefix}SubEn`).value);
+            let error; if (id) { const res = await supabaseClient.from('drawing_rules').update({main_text: mainText, sub_text: subText}).eq('id', id); error = res.error; } else { const res = await supabaseClient.from('drawing_rules').insert([{rule_type: type, main_text: mainText, sub_text: subText}]); error = res.error; }
+            if(error) await customConfirm("Error: " + error.message); else { await fetchAllData(); document.getElementById(`admin${type === 'can' ? 'Can' : 'Cant'}Form`).reset(); document.getElementById(`${prefix}Id`).value = ''; }
             btn.disabled = false; btn.innerHTML = originalHTML;
         }
 
-        function adminEditCan(id, type) {
-            const prefix = type === 'can' ? 'acan' : 'acant';
-            const list = type === 'can' ? appState.canList : appState.cantList;
-            const item = list.find(x => x.id === id);
-            if(!item) return;
-            document.getElementById(`${prefix}Id`).value = item.id;
-            document.getElementById(`${prefix}Main`).value = item.mainText; document.getElementById(`${prefix}MainEn`).value = item.mainTextEn || '';
-            document.getElementById(`${prefix}Sub`).value = item.subText || ''; document.getElementById(`${prefix}SubEn`).value = item.subTextEn || '';
-        }
-
-        async function adminDeleteCan(id, type) {
-            if(await customConfirm('ลบข้อตกลงนี้?')) {
-                const { error } = await supabaseClient.from('drawing_rules').delete().eq('id', id);
-                if(error) alert("Error: " + error.message);
-                else {
-                    await fetchAllData();
-                    const prefix = type === 'can' ? 'acan' : 'acant';
-                    if(document.getElementById(`${prefix}Id`).value === id) document.getElementById(`admin${type === 'can' ? 'Can' : 'Cant'}Form`).reset();
-                }
-            }
-        }
+        function adminEditCan(id, type) { const prefix = type === 'can' ? 'acan' : 'acant'; const list = type === 'can' ? appState.canList : appState.cantList; const item = list.find(x => x.id === id); if(!item) return; document.getElementById(`${prefix}Id`).value = item.id; document.getElementById(`${prefix}Main`).value = item.mainText; document.getElementById(`${prefix}MainEn`).value = item.mainTextEn || ''; document.getElementById(`${prefix}Sub`).value = item.subText || ''; document.getElementById(`${prefix}SubEn`).value = item.subTextEn || ''; }
+        
+        async function adminDeleteCan(id, type) { if(await customConfirm('ลบข้อตกลงนี้?')) { const { error } = await supabaseClient.from('drawing_rules').delete().eq('id', id); if(error) await customConfirm("Error: " + error.message); else { await fetchAllData(); const prefix = type === 'can' ? 'acan' : 'acant'; if(document.getElementById(`${prefix}Id`).value === id) document.getElementById(`admin${type === 'can' ? 'Can' : 'Cant'}Form`).reset(); } } }
 
         window.onload = initApp;
 
