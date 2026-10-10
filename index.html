@@ -758,7 +758,7 @@
                                     <span><i class="fa-solid fa-images mr-1"></i> รูปตัวอย่างแกลเลอรี่ (เลือกได้หลายรูป)</span>
                                     <button type="button" onclick="adminClearGalleryInput()" class="text-xs bg-red-50 hover:bg-red-100 text-red-600 px-2 py-1 rounded-md font-bold border border-red-100">เคลียร์แกลเลอรี่</button>
                                 </label>
-                                <input type="file" id="galleryInput" accept="image/*" multiple class="block w-full text-sm text-yellow-800 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-white file:text-yellow-700 hover:file:bg-yellow-100 cursor-pointer border border-yellow-200 rounded-xl bg-white shadow-sm transition-colors">
+                                <input type="file" id="galleryInput" accept="image/*,video/*" multiple class="block w-full text-sm text-yellow-800 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-white file:text-yellow-700 hover:file:bg-yellow-100 cursor-pointer border border-yellow-200 rounded-xl bg-white shadow-sm transition-colors">
                                 <div id="adminGalleryPreview" class="flex gap-2 mt-3 overflow-x-auto py-1"></div>
                             </div>
 
@@ -1342,7 +1342,16 @@
             
             const stockEl = document.getElementById('modalProdStock'); 
             const btn = document.getElementById('modalProdBuyBtn');
+            const extLinkContainer = document.getElementById('modalProdExtLinkContainer');
+            const extLinkBtn = document.getElementById('modalProdExtLinkBtn');
             
+            if (prod.videoUrl) {
+                extLinkContainer.classList.remove('hidden');
+                extLinkBtn.href = prod.videoUrl;
+            } else {
+                extLinkContainer.classList.add('hidden');
+            }
+
             if(prod.stock === 0) { 
                 stockEl.innerHTML = `<span class="inline-flex items-center px-3.5 py-1.5 rounded-xl text-sm font-bold bg-red-50 text-red-600 border border-red-100"><i class="fa-solid fa-box-open mr-2"></i> <span data-i18n="outOfStock">${l.outOfStock}</span></span>`; 
                 btn.removeAttribute('href');
@@ -1555,10 +1564,25 @@
         function renderShop() {
             const container = document.getElementById('productGrid'); if (!container) return; container.innerHTML = ''; const l = dict[appState.language]; const lang = appState.language;
             appState.products.forEach(prod => {
-                const card = document.createElement('div'); card.className = 'bg-white/90 backdrop-blur rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all transform hover:-translate-y-1 border border-sky-100 cursor-pointer group flex flex-col'; card.onclick = () => openProductModal(prod);
-                let stockBadge = ''; if(prod.stock === 0) stockBadge = `<span class="absolute top-3 left-3 bg-red-500/90 backdrop-blur-sm text-white text-xs font-bold px-2.5 py-1.5 rounded-xl shadow-sm" data-i18n="outOfStock">${l.outOfStock}</span>`; else if(prod.stock < 5) stockBadge = `<span class="absolute top-3 left-3 bg-yellow-400/90 backdrop-blur-sm text-yellow-900 text-xs font-bold px-2.5 py-1.5 rounded-xl shadow-sm">Stock: ${escapeHTML(prod.stock)}</span>`;
+                const card = document.createElement('div'); card.className = 'bg-white/90 backdrop-blur rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all transform hover:-translate-y-1 border border-sky-100 cursor-pointer group flex flex-col relative'; card.onclick = () => openProductModal(prod);
+                
+                const isVideoUpload = prod.img && (prod.img.toLowerCase().endsWith('.mp4') || prod.img.includes('video'));
+                
+                let mediaElement = '';
+                if(isVideoUpload) {
+                    mediaElement = `<video src="${escapeHTML(prod.img)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${prod.stock===0 ? 'grayscale opacity-60':''}" autoplay loop muted playsinline></video><div class="absolute top-3 right-3 bg-black/60 text-white rounded-full p-2 w-8 h-8 flex items-center justify-center"><i class="fa-solid fa-video text-xs"></i></div>`;
+                } else {
+                    mediaElement = `<img src="${escapeHTML(prod.img)}" alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${prod.stock===0 ? 'grayscale opacity-60':''}" onerror="this.src='https://placehold.co/600x600/e0f2fe/0369a1?text=No+Image'">`;
+                }
+                
+                if (prod.videoUrl) {
+                    mediaElement += `<div class="absolute top-3 right-3 bg-indigo-500 text-white rounded-full px-2.5 py-1 flex items-center justify-center text-[10px] font-bold shadow-sm z-10"><i class="fa-solid fa-link mr-1"></i> Link</div>`;
+                }
+                
+                let stockBadge = ''; if(prod.stock === 0) stockBadge = `<span class="absolute top-3 left-3 bg-red-500/90 backdrop-blur-sm text-white text-xs font-bold px-2.5 py-1.5 rounded-xl shadow-sm z-10" data-i18n="outOfStock">${l.outOfStock}</span>`; else if(prod.stock < 5) stockBadge = `<span class="absolute top-3 left-3 bg-yellow-400/90 backdrop-blur-sm text-yellow-900 text-xs font-bold px-2.5 py-1.5 rounded-xl shadow-sm z-10">Stock: ${escapeHTML(prod.stock)}</span>`;
+                
                 const title = escapeHTML((lang === 'en' && prod.nameEn) ? prod.nameEn : prod.name);
-                card.innerHTML = `<div class="aspect-square overflow-hidden relative bg-sky-50/50 border-b border-sky-50"><img src="${escapeHTML(prod.img)}" alt="${title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${prod.stock===0 ? 'grayscale opacity-60':''}" onerror="this.src='https://placehold.co/400x400/e0f2fe/0369a1?text=No+Image'">${stockBadge}</div><div class="p-5 flex-1 flex flex-col justify-between"><h3 class="font-semibold text-sm text-sky-950 line-clamp-2 mb-2 group-hover:text-sky-600 transition-colors">${title}</h3><p class="text-sky-600 font-bold text-lg">฿${escapeHTML(prod.price)}</p></div>`;
+                card.innerHTML = `<div class="aspect-square overflow-hidden relative bg-sky-50/50 border-b border-sky-50">${mediaElement}${stockBadge}</div><div class="p-5 flex-1 flex flex-col justify-between"><h3 class="font-semibold text-sm text-sky-950 line-clamp-2 mb-2 group-hover:text-sky-600 transition-colors">${title}</h3><p class="text-sky-600 font-bold text-lg">฿${escapeHTML(prod.price)}</p></div>`;
                 container.appendChild(card);
             });
             if(appState.products.length === 0) container.innerHTML = '<div class="col-span-full py-12 text-center text-sky-700/50 font-medium">ไม่มีสินค้าในขณะนี้ / Empty</div>';
@@ -1724,7 +1748,7 @@
         function toggleMockFormFields() {
             const type = document.getElementById('mockItemType').value;
             if (type === 'commission') { document.getElementById('fieldDuration').classList.remove('hidden'); document.getElementById('fieldStock').classList.add('hidden'); document.getElementById('fieldGallery').classList.remove('hidden'); document.getElementById('fieldExtLink').classList.remove('hidden'); } 
-            else { document.getElementById('fieldDuration').classList.add('hidden'); document.getElementById('fieldStock').classList.remove('hidden'); document.getElementById('fieldGallery').classList.add('hidden'); document.getElementById('fieldExtLink').classList.add('hidden'); }
+            else { document.getElementById('fieldDuration').classList.add('hidden'); document.getElementById('fieldStock').classList.remove('hidden'); document.getElementById('fieldGallery').classList.add('hidden'); document.getElementById('fieldExtLink').classList.remove('hidden'); } // Ensure ExtLink is visible for product too
         }
 
         async function compressImage(file) {
@@ -1787,12 +1811,23 @@
         document.getElementById('galleryInput').addEventListener('change', function(e) {
             const container = document.getElementById('adminGalleryPreview'); container.innerHTML = '';
             Array.from(this.files).forEach(file => {
+                const isVid = file.type.includes('video') || file.name.toLowerCase().endsWith('.mp4');
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    const img = document.createElement('img'); img.src = e.target.result;
-                    img.className = "w-16 h-16 object-cover rounded-md shadow-sm border border-sky-100 flex-shrink-0";
-                    container.appendChild(img);
-                }; reader.readAsDataURL(file);
+                    const wrapper = document.createElement('div');
+                    wrapper.className = "w-16 h-16 relative flex-shrink-0";
+                    if(isVid) {
+                         wrapper.innerHTML = `<div class="w-full h-full bg-slate-800 rounded-md flex items-center justify-center border border-gray-200 shadow-sm"><i class="fa-solid fa-video text-white"></i></div>`;
+                    } else {
+                         wrapper.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover rounded-md shadow-sm border border-gray-200">`;
+                    }
+                    container.appendChild(wrapper);
+                }; 
+                if(!isVid) {
+                    reader.readAsDataURL(file);
+                } else {
+                    reader.dispatchEvent(new ProgressEvent('load'));
+                }
             });
         });
 
@@ -1840,7 +1875,7 @@
                     else { const res = await supabaseClient.from('commissions').insert([data]); dbError = res.error; }
                 } else {
                     const stock = document.getElementById('mockItemStock').value || 0;
-                    const data = { name, price, stock: parseInt(stock), description: desc, image_url: finalImg };
+                    const data = { name, price, stock: parseInt(stock), description: desc, image_url: finalImg, video_url: extLink };
                     if (id) { const res = await supabaseClient.from('products').update(data).eq('id', id); dbError = res.error; } 
                     else { const res = await supabaseClient.from('products').insert([data]); dbError = res.error; }
                 }
@@ -1857,9 +1892,12 @@
             if (appState.commissions.length === 0) comContainer.innerHTML = '<p class="text-sm text-sky-700/50 p-4 text-center bg-white/50 rounded-2xl border border-dashed border-sky-100">ไม่มีข้อมูล Commission</p>';
             else {
                 appState.commissions.forEach(item => {
+                    let thumb = `<img src="${escapeHTML(item.img)}" class="w-14 h-14 object-cover rounded-xl mr-4 bg-sky-50 border border-sky-100" onerror="this.src='https://placehold.co/600x600/e0f2fe/0369a1?text=Image'">`;
+                    if (item.img && item.img.endsWith('.mp4')) thumb = `<div class="w-14 h-14 bg-slate-800 rounded-xl mr-4 flex items-center justify-center border border-sky-100 shrink-0"><i class="fa-solid fa-video text-white"></i></div>`;
+                    
                     comContainer.innerHTML += `
                         <div class="flex items-center p-3 bg-white rounded-2xl border border-sky-50 hover:border-sky-300 hover:shadow-sm transition-all">
-                            <img src="${escapeHTML(item.img)}" class="w-14 h-14 object-cover rounded-xl mr-4 bg-sky-50 border border-sky-100" onerror="this.src='https://placehold.co/600x600/e0f2fe/0369a1?text=Image'">
+                            ${thumb}
                             <div class="flex-1 min-w-0"><h4 class="font-bold text-sm text-sky-900 truncate">${escapeHTML(item.name)}</h4><p class="text-xs text-sky-600 font-bold">${escapeHTML(item.price)} THB</p></div>
                             <div class="flex space-x-1 ml-2"><button type="button" onclick="adminEditContent('commission', '${item.id}')" class="text-sky-500 hover:bg-sky-100 p-2 rounded-lg transition-colors" title="แก้ไข"><i class="fa-solid fa-pen"></i></button><button type="button" onclick="adminDeleteContent('commission', '${item.id}')" class="text-red-500 hover:bg-red-100 p-2 rounded-lg transition-colors" title="ลบ"><i class="fa-solid fa-trash-can"></i></button></div>
                         </div>`;
@@ -1870,9 +1908,12 @@
             if (appState.products.length === 0) prodContainer.innerHTML = '<p class="text-sm text-sky-700/50 p-4 text-center bg-white/50 rounded-2xl border border-dashed border-sky-100">ไม่มีข้อมูลสินค้า</p>';
             else {
                 appState.products.forEach(item => {
+                    let thumb = `<img src="${escapeHTML(item.img)}" class="w-14 h-14 object-cover rounded-xl mr-4 bg-sky-50 border border-sky-100" onerror="this.src='https://placehold.co/600x600/e0f2fe/0369a1?text=Image'">`;
+                    if (item.img && item.img.endsWith('.mp4')) thumb = `<div class="w-14 h-14 bg-slate-800 rounded-xl mr-4 flex items-center justify-center border border-sky-100 shrink-0"><i class="fa-solid fa-video text-white"></i></div>`;
+
                     prodContainer.innerHTML += `
                         <div class="flex items-center p-3 bg-white rounded-2xl border border-sky-50 hover:border-yellow-300 hover:shadow-sm transition-all">
-                            <img src="${escapeHTML(item.img)}" class="w-14 h-14 object-cover rounded-xl mr-4 bg-sky-50 border border-sky-100" onerror="this.src='https://placehold.co/600x600/e0f2fe/0369a1?text=Image'">
+                            ${thumb}
                             <div class="flex-1 min-w-0"><h4 class="font-bold text-sm text-sky-900 truncate">${escapeHTML(item.name)}</h4><p class="text-xs text-sky-600 font-bold">฿${escapeHTML(item.price)} <span class="text-slate-400 font-normal ml-1 bg-sky-50 px-2 py-0.5 rounded-md">Stock: ${item.stock}</span></p></div>
                             <div class="flex space-x-1 ml-2"><button type="button" onclick="adminEditContent('product', '${item.id}')" class="text-sky-500 hover:bg-sky-100 p-2 rounded-lg transition-colors" title="แก้ไข"><i class="fa-solid fa-pen"></i></button><button type="button" onclick="adminDeleteContent('product', '${item.id}')" class="text-red-500 hover:bg-red-100 p-2 rounded-lg transition-colors" title="ลบ"><i class="fa-solid fa-trash-can"></i></button></div>
                         </div>`;
@@ -1891,14 +1932,21 @@
                 const container = document.getElementById('adminGalleryPreview'); container.innerHTML = '';
                 if(item.gallery && item.gallery.length > 0) {
                     item.gallery.forEach(url => {
-                        const img = document.createElement('img'); img.src = url;
-                        img.className = "w-16 h-16 object-cover rounded-md shadow-sm border border-sky-100 flex-shrink-0 opacity-70";
-                        container.appendChild(img);
+                        const isVid = url.endsWith('.mp4');
+                        const wrapper = document.createElement('div');
+                        wrapper.className = "w-16 h-16 relative flex-shrink-0 opacity-70";
+                        if(isVid) {
+                             wrapper.innerHTML = `<div class="w-full h-full bg-slate-800 rounded-md flex items-center justify-center border border-gray-200 shadow-sm"><i class="fa-solid fa-video text-white"></i></div>`;
+                        } else {
+                             wrapper.innerHTML = `<img src="${url}" class="w-full h-full object-cover rounded-md shadow-sm border border-gray-200">`;
+                        }
+                        container.appendChild(wrapper);
                     });
                 }
             } else {
                 item = appState.products.find(p => p.id === id);
                 document.getElementById('mockItemStock').value = item.stock;
+                if(document.getElementById('mockItemExtLink')) document.getElementById('mockItemExtLink').value = item.videoUrl || '';
             }
 
             if (!item) return;
@@ -1909,8 +1957,18 @@
             document.getElementById('mockItemDesc').value = item.desc; document.getElementById('mockItemDescEn').value = item.descEn || '';
             
             if(item.img && !item.img.includes('No+Image')) {
-                document.getElementById('imagePreview').src = item.img;
-                document.getElementById('imagePreviewContainer').classList.remove('hidden'); document.getElementById('imagePreviewPlaceholder').classList.add('hidden');
+                // If it's a video, hide preview image since we can't easily set video preview without extra HTML structure, just rely on file name or simple icon
+                if(item.img.endsWith('.mp4')) {
+                    document.getElementById('imagePreview').src = '';
+                    document.getElementById('imagePreviewContainer').classList.remove('hidden'); 
+                    document.getElementById('imagePreviewPlaceholder').classList.add('hidden');
+                    document.getElementById('imagePreviewContainer').querySelector('.bg-sky-50').innerHTML = '<div class="w-full h-full bg-slate-800 flex flex-col items-center justify-center text-white"><i class="fa-solid fa-video text-4xl mb-2"></i><span class="text-xs">Video Uploaded</span></div>';
+                } else {
+                    // Reset to img tag if it was changed to video icon
+                    document.getElementById('imagePreviewContainer').querySelector('.bg-sky-50').innerHTML = '<img id="imagePreview" src="" alt="Preview" class="w-full h-full object-cover">';
+                    document.getElementById('imagePreview').src = item.img;
+                    document.getElementById('imagePreviewContainer').classList.remove('hidden'); document.getElementById('imagePreviewPlaceholder').classList.add('hidden');
+                }
             } else clearImagePreview();
             
             document.getElementById('mockItemName').dispatchEvent(new Event('input')); document.getElementById('mockItemPrice').dispatchEvent(new Event('input'));
@@ -1948,18 +2006,40 @@
             document.getElementById('btnSubmitContent').innerHTML = '<i class="fa-solid fa-save mr-2"></i>บันทึกข้อมูล';
             document.getElementById('btnSubmitContent').classList.replace('bg-yellow-500', 'bg-sky-500'); document.getElementById('btnSubmitContent').classList.replace('hover:bg-yellow-600', 'hover:bg-sky-600');
             document.getElementById('btnCancelEdit').classList.add('hidden'); document.getElementById('previewTitle').innerText = 'ชื่อรายการ...'; document.getElementById('previewPrice').innerText = '0 THB';
+            // Reset preview area to default img tag
+            const previewArea = document.getElementById('imagePreviewContainer').querySelector('.bg-sky-50');
+            if(previewArea && !previewArea.querySelector('img')) {
+                previewArea.innerHTML = '<img id="imagePreview" src="" alt="Preview" class="w-full h-full object-cover">';
+            }
         }
 
         document.getElementById('imageInput').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) { document.getElementById('imagePreview').src = e.target.result; document.getElementById('imagePreviewContainer').classList.remove('hidden'); document.getElementById('imagePreviewPlaceholder').classList.add('hidden'); }
-                reader.readAsDataURL(file);
+                const isVid = file.type.includes('video') || file.name.toLowerCase().endsWith('.mp4');
+                const previewArea = document.getElementById('imagePreviewContainer').querySelector('.bg-sky-50');
+                
+                if (isVid) {
+                    previewArea.innerHTML = '<div class="w-full h-full bg-slate-800 flex flex-col items-center justify-center text-white"><i class="fa-solid fa-video text-4xl mb-2"></i><span class="text-xs">Video Selected</span></div>';
+                    document.getElementById('imagePreviewContainer').classList.remove('hidden'); 
+                    document.getElementById('imagePreviewPlaceholder').classList.add('hidden');
+                } else {
+                    // Make sure img tag exists
+                    if(!previewArea.querySelector('img')) {
+                        previewArea.innerHTML = '<img id="imagePreview" src="" alt="Preview" class="w-full h-full object-cover">';
+                    }
+                    const reader = new FileReader();
+                    reader.onload = function(e) { 
+                        document.getElementById('imagePreview').src = e.target.result; 
+                        document.getElementById('imagePreviewContainer').classList.remove('hidden'); 
+                        document.getElementById('imagePreviewPlaceholder').classList.add('hidden'); 
+                    }
+                    reader.readAsDataURL(file);
+                }
             }
         });
 
-        function clearImagePreview() { document.getElementById('imageInput').value = ''; document.getElementById('imagePreview').src = ''; document.getElementById('imagePreviewContainer').classList.add('hidden'); document.getElementById('imagePreviewPlaceholder').classList.remove('hidden'); }
+        function clearImagePreview() { document.getElementById('imageInput').value = ''; document.getElementById('imagePreviewContainer').classList.add('hidden'); document.getElementById('imagePreviewPlaceholder').classList.remove('hidden'); }
         document.getElementById('mockItemName').addEventListener('input', (e) => { document.getElementById('previewTitle').innerText = e.target.value || 'ชื่อรายการ...'; });
         document.getElementById('mockItemPrice').addEventListener('input', (e) => { const type = document.getElementById('mockItemType').value; const prefix = type === 'commission' ? 'Starts at ' : '฿'; const suffix = type === 'commission' ? ' THB' : ''; document.getElementById('previewPrice').innerText = e.target.value ? `${prefix}${e.target.value}${suffix}` : '0 THB'; });
         document.getElementById('mockItemType').addEventListener('change', (e) => { document.getElementById('mockItemPrice').dispatchEvent(new Event('input')); });
